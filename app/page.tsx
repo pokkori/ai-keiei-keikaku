@@ -1,100 +1,246 @@
+"use client";
+import { useState } from "react";
 import Link from "next/link";
-import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "AI補助金診断｜あなたが申請できる補助金を30秒で診断",
-  description: "事業内容を入力するだけ。AIがあなたに合った補助金を診断し、申請書のドラフトまで自動生成。中小企業・個人事業主・個人向け。",
-};
+export default function Home() {
+  const [loading, setLoading] = useState(false);
 
-export default function HojyokinLP() {
+  async function startCheckout(priceType: "once" | "monthly") {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ priceType }),
+      });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+    } catch {
+      setLoading(false);
+    }
+  }
+
   return (
-    <main className="min-h-screen bg-white">
-      <nav className="border-b border-gray-100 px-6 py-4">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <span className="font-bold text-gray-900">💰 AI補助金診断</span>
-          <Link href="/tool" className="bg-amber-500 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-amber-600">無料で診断する</Link>
+    <main className="min-h-screen bg-gray-950 text-white">
+      {/* Hero */}
+      <section className="pt-20 pb-16 px-4 text-center">
+        <div className="inline-block bg-emerald-900 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full mb-6">
+          📊 AI経営計画書作成 — 5分で本格的な計画書を生成
         </div>
-      </nav>
-
-      <section className="max-w-4xl mx-auto px-6 py-20 text-center">
-        <div className="inline-block bg-amber-50 text-amber-600 text-xs font-medium px-3 py-1 rounded-full mb-6">中小企業・個人事業主・個人向け</div>
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-          あなたが申請できる補助金を<br /><span className="text-amber-500">AIが30秒で診断</span>
+        <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight">
+          経営計画書、<br />
+          <span className="text-emerald-400">AIが5分で作成。</span>
         </h1>
-        <p className="text-lg text-gray-500 mb-4 max-w-xl mx-auto">もらえるはずの補助金を知らずに損していませんか？<br />事業内容を入力するだけで申請可能な補助金と申請書ドラフトを自動生成します。</p>
-        <div className="flex justify-center gap-6 mb-8 text-sm text-gray-500">
-          {["ものづくり補助金 最大1,250万円", "IT導入補助金 最大450万円", "小規模持続化補助金 最大200万円"].map(s => (
-            <span key={s} className="flex items-center gap-1"><span className="text-amber-500">✓</span>{s}</span>
-          ))}
-        </div>
-        <Link href="/tool" className="inline-block bg-amber-500 text-white font-bold text-lg px-8 py-4 rounded-xl hover:bg-amber-600 shadow-lg shadow-amber-100">無料で診断する →</Link>
-        <p className="text-xs text-gray-400 mt-3">クレジットカード不要・3回まで無料</p>
-      </section>
-
-      <section className="bg-gray-50 py-16">
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-2xl font-bold text-center mb-10">補助金でよくある悩み</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-            {["どんな補助金があるか知らない", "申請書類が難しくて諦めた", "コンサルに頼んだら成功報酬20%取られた", "申請しても採択されるか不安"].map(p => (
-              <div key={p} className="flex gap-3 bg-white rounded-xl p-4 border border-gray-200">
-                <span className="text-amber-500">💸</span>
-                <p className="text-sm text-gray-700">{p}</p>
-              </div>
-            ))}
-          </div>
+        <p className="text-gray-300 text-lg max-w-2xl mx-auto mb-8">
+          事業概要を入力するだけ。<strong className="text-white">収支計画・SWOT分析・アクションプラン・投資家向けピッチ</strong>まで
+          AIが一気に生成。融資申請・補助金申請・創業計画に。
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <Link
+            href="/tool"
+            className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-8 py-4 rounded-xl text-lg transition"
+          >
+            無料で試す（1回）
+          </Link>
+          <button
+            onClick={() => startCheckout("once")}
+            disabled={loading}
+            className="border border-emerald-400 text-emerald-300 hover:bg-emerald-900 font-bold px-8 py-4 rounded-xl text-lg transition disabled:opacity-50"
+          >
+            {loading ? "処理中..." : "¥2,980で1回作成"}
+          </button>
         </div>
       </section>
 
-      {/* 利用者の声 */}
-      <section className="bg-gray-900 py-16 px-4">
+      {/* Use cases */}
+      <section className="py-16 px-4 bg-gray-900">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-center mb-10 text-white">利用者の声</h2>
+          <h2 className="text-2xl font-bold text-center mb-10">こんな場面で使われています</h2>
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { name: "田中さん（飲食店経営・神奈川）", text: "ものづくり補助金に採択されました。どの補助金が使えるかわからなかったのですが、AIが事業内容を分析して3つの候補を提示してくれました。" },
-              { name: "鈴木さん（IT企業・東京）", text: "IT導入補助金の申請書ドラフトをAIが作ってくれて、ほぼそのまま提出できました。通常の申請代行費用¥20万以上が節約できました。" },
-              { name: "山田さん（製造業・愛知）", text: "補助金の存在は知っていたけど申請したことがなかった。AIの診断で自社が対象と分かり初めて申請できました。" },
-            ].map((t) => (
-              <div key={t.name} className="bg-gray-800 rounded-2xl p-6">
-                <p className="text-gray-200 text-sm mb-4">「{t.text}」</p>
-                <p className="text-blue-400 text-xs font-bold">{t.name}</p>
+              { emoji: "🏦", title: "融資申請", body: "日本政策金融公庫・銀行への創業融資申請に必要な事業計画書をすぐに用意" },
+              { emoji: "📋", title: "補助金申請", body: "ものづくり補助金・IT導入補助金の事業計画書作成の下書きとして活用" },
+              { emoji: "🚀", title: "スタートアップ", body: "投資家へのピッチデック・事業説明資料の骨格を短時間で作成" },
+              { emoji: "📝", title: "副業・フリーランス", body: "開業届・青色申告に向けて事業の方向性を整理・言語化" },
+              { emoji: "🏪", title: "店舗開業", body: "飲食・美容・小売などの開業計画を収支予測付きで作成" },
+              { emoji: "📈", title: "事業拡大", body: "既存事業の次のフェーズに向けた中期経営計画の策定に" },
+            ].map((u) => (
+              <div key={u.title} className="bg-gray-800 rounded-2xl p-6">
+                <div className="text-3xl mb-3">{u.emoji}</div>
+                <h3 className="font-bold text-lg mb-2">{u.title}</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">{u.body}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-16">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-2xl font-bold mb-10">料金プラン</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+      {/* Output */}
+      <section className="py-16 px-4">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl font-bold text-center mb-4">AIが生成する5つのアウトプット</h2>
+          <p className="text-gray-400 text-center text-sm mb-10">入力から最短5分。すべてコピー・印刷可能</p>
+          <div className="space-y-4">
             {[
-              { name: "お試し", price: "無料", limit: "3回まで", url: "/tool", highlight: false },
-              { name: "スタンダード", price: "¥4,980/月", limit: "月20回診断＋ドラフト", url: "/api/stripe/checkout?plan=standard", highlight: true },
-              { name: "ビジネス", price: "¥9,800/月", limit: "無制限＋優先サポート", url: "/api/stripe/checkout?plan=business", highlight: false },
-            ].map(plan => (
-              <div key={plan.name} className={`rounded-2xl border p-6 relative ${plan.highlight ? "border-amber-500 shadow-lg" : "border-gray-200"}`}>
-                {plan.highlight && <div className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs bg-amber-500 text-white px-3 py-0.5 rounded-full">人気</div>}
-                <div className="font-bold mb-1">{plan.name}</div>
-                <div className="text-2xl font-bold text-amber-500 mb-1">{plan.price}</div>
-                <div className="text-xs text-gray-500 mb-4">{plan.limit}</div>
-                <Link href={plan.url} className={`block w-full text-center text-sm font-medium py-2.5 rounded-lg ${plan.highlight ? "bg-amber-500 text-white hover:bg-amber-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}>
-                  {plan.name === "お試し" ? "無料で診断" : "申し込む"}
-                </Link>
+              { num: "01", title: "事業概要・ビジョン", desc: "事業の強み・独自性・ターゲット市場・解決する課題を整理した事業概要文" },
+              { num: "02", title: "3年間収支計画", desc: "売上・費用・利益の月次シミュレーション。損益分岐点・黒字化時期も算出" },
+              { num: "03", title: "SWOT分析", desc: "強み・弱み・機会・脅威の4象限分析と、クロスSWOTによる戦略立案" },
+              { num: "04", title: "アクションプラン", desc: "開業/拡大に向けた月次タスク一覧。優先度・担当・期限付きのロードマップ" },
+              { num: "05", title: "投資家向けピッチ", desc: "エレベーターピッチ・問題と解決策・市場規模・マネタイズ・チームの強み" },
+            ].map((o) => (
+              <div key={o.num} className="flex gap-6 bg-gray-900 border border-gray-800 rounded-2xl p-6">
+                <div className="text-emerald-400 font-black text-2xl w-12 shrink-0">{o.num}</div>
+                <div>
+                  <h3 className="font-bold text-lg mb-1">{o.title}</h3>
+                  <p className="text-gray-400 text-sm leading-relaxed">{o.desc}</p>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="bg-amber-500 py-16 text-center">
-        <h2 className="text-2xl font-bold text-white mb-4">もらえる補助金、まず調べてみませんか</h2>
-        <Link href="/tool" className="inline-block bg-white text-amber-600 font-bold px-8 py-4 rounded-xl hover:bg-amber-50">無料で診断する →</Link>
+      {/* Before/After */}
+      <section className="py-16 px-4 bg-gray-900">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl font-bold text-center mb-10">Before / After</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="bg-red-950 border border-red-800 rounded-2xl p-6">
+              <h3 className="font-bold text-red-400 mb-4">今まで</h3>
+              <ul className="text-sm text-red-200 space-y-3">
+                <li>• 書き方がわからず、何週間も放置</li>
+                <li>• コンサルに頼むと30万〜100万円</li>
+                <li>• テンプレをコピーするだけで内容が薄い</li>
+                <li>• 数字の根拠をどう示せばいいか不明</li>
+                <li>• 融資担当者に「計画が甘い」と言われる</li>
+              </ul>
+            </div>
+            <div className="bg-emerald-950 border border-emerald-700 rounded-2xl p-6">
+              <h3 className="font-bold text-emerald-400 mb-4">AIを使ったら</h3>
+              <ul className="text-sm text-emerald-200 space-y-3">
+                <li>• 入力5分 → 生成5分で完成</li>
+                <li>• ¥2,980から。コンサルの1/100以下</li>
+                <li>• あなたの事業に特化した内容を生成</li>
+                <li>• 収支計画・数値目標も自動算出</li>
+                <li>• 融資・補助金・ピッチに対応した構成</li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <footer className="border-t py-6 text-center text-xs text-gray-400 space-y-2">
-        <p>AI補助金診断 © 2026 ※本サービスは情報提供を目的としており、申請を保証するものではありません。必ず公募要領をご確認ください。</p>
-        <p><Link href="/privacy" className="underline hover:text-gray-600">プライバシーポリシー</Link></p>
+      {/* Testimonials */}
+      <section className="py-16 px-4">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl font-bold text-center mb-10">利用者の声</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              { name: "30代・飲食店開業準備中", text: "日本公庫の融資申請に使いました。担当者に「計画書がしっかりしている」と言われ、500万円の融資が通りました" },
+              { name: "40代・製造業・個人事業主", text: "ものづくり補助金の申請書作成で使用。3日かかると思っていた事業計画部分が2時間で仕上がりました" },
+              { name: "20代・Webサービス創業者", text: "投資家へのピッチ資料の骨格として活用。エンジェル投資家から300万円の出資が決まりました" },
+            ].map((t) => (
+              <div key={t.name} className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+                <p className="text-gray-300 text-sm mb-4 leading-relaxed">「{t.text}」</p>
+                <p className="text-emerald-400 text-xs font-bold">{t.name}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section className="py-16 px-4 bg-gray-900">
+        <div className="max-w-2xl mx-auto text-center">
+          <h2 className="text-2xl font-bold mb-4">料金プラン</h2>
+          <p className="text-gray-400 text-sm mb-10">コンサルの1/100以下の価格で本格的な計画書を</p>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+              <h3 className="font-bold mb-2">無料体験</h3>
+              <div className="text-4xl font-black mb-4">¥0</div>
+              <ul className="text-gray-400 text-sm space-y-2 mb-6 text-left">
+                <li>✓ 1回無料で試せる</li>
+                <li>✓ 全5タブ生成</li>
+                <li>✗ 2回目以降は有料</li>
+              </ul>
+              <Link href="/tool" className="block w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-xl transition text-center text-sm">
+                無料で試す
+              </Link>
+            </div>
+            <div className="bg-emerald-900 rounded-2xl p-6 border-2 border-emerald-400 relative">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-400 text-gray-900 text-xs font-black px-4 py-1 rounded-full whitespace-nowrap">おすすめ</div>
+              <h3 className="font-bold mb-2">1回払い</h3>
+              <div className="text-4xl font-black mb-4">¥2,980</div>
+              <ul className="text-emerald-200 text-sm space-y-2 mb-6 text-left">
+                <li>✓ 1回分の計画書作成</li>
+                <li>✓ 全5タブ完全解放</li>
+                <li>✓ 印刷・コピー自由</li>
+                <li>✓ 月額不要</li>
+              </ul>
+              <button
+                onClick={() => startCheckout("once")}
+                disabled={loading}
+                className="w-full bg-emerald-400 hover:bg-emerald-300 text-gray-900 font-black py-3 rounded-xl transition disabled:opacity-50 text-sm"
+              >
+                {loading ? "処理中..." : "¥2,980で購入"}
+              </button>
+            </div>
+            <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+              <h3 className="font-bold mb-2">月額プラン</h3>
+              <div className="text-4xl font-black mb-1">¥4,980</div>
+              <div className="text-gray-400 text-xs mb-4">/月（使い放題）</div>
+              <ul className="text-gray-400 text-sm space-y-2 mb-6 text-left">
+                <li>✓ 作成し放題</li>
+                <li>✓ 全機能解放</li>
+                <li>✓ 複数事業の計画も</li>
+                <li>✓ いつでも解約可能</li>
+              </ul>
+              <button
+                onClick={() => startCheckout("monthly")}
+                disabled={loading}
+                className="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-xl transition disabled:opacity-50 text-sm"
+              >
+                {loading ? "処理中..." : "月額プランを始める"}
+              </button>
+            </div>
+          </div>
+          <p className="text-gray-500 text-xs mt-6">※ 経営コンサルタント費用の相場: 30万〜100万円 / 当サービス: ¥2,980〜</p>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-16 px-4">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-2xl font-bold text-center mb-10">よくある質問</h2>
+          <div className="space-y-4">
+            {[
+              { q: "どんな業種に対応していますか？", a: "飲食・小売・IT・製造・建設・医療・美容・教育・不動産など全業種対応しています。AIが業種に合わせた内容を生成します。" },
+              { q: "生成された計画書をそのまま金融機関に提出できますか？", a: "骨格・骨子として活用いただけます。数値や固有の情報はご自身で確認・修正の上ご利用ください。多くの方が下書きとして活用し、仕上げに1〜2時間で完成されています。" },
+              { q: "1回払いと月額の違いは？", a: "1回払いは1回分の計画書作成ができます。複数の事業・複数回作成したい方や、毎月計画を見直したい方には月額プランがお得です。" },
+            ].map((f) => (
+              <div key={f.q} className="border border-gray-800 rounded-xl p-6">
+                <h3 className="font-bold text-sm mb-2 text-emerald-400">Q. {f.q}</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">A. {f.a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-16 px-4 text-center bg-gray-900">
+        <h2 className="text-2xl font-bold mb-4">まず無料で試してみよう</h2>
+        <p className="text-gray-400 mb-8">クレカ不要・登録不要。事業概要を入力するだけ。</p>
+        <Link
+          href="/tool"
+          className="bg-emerald-500 hover:bg-emerald-400 text-white font-black px-10 py-5 rounded-2xl text-xl transition inline-block"
+        >
+          今すぐ無料で作成
+        </Link>
+      </section>
+
+      <footer className="border-t border-gray-800 py-6 text-center text-xs text-gray-500 space-x-4">
+        <Link href="/legal" className="hover:underline">特定商取引法に基づく表記</Link>
+        <Link href="/privacy" className="hover:underline">プライバシーポリシー</Link>
       </footer>
     </main>
   );

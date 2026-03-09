@@ -2,263 +2,315 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-const FREE_LIMIT = 3;
-const KEY = "hojyokin_count";
-const PREFECTURES = ["北海道","青森","岩手","宮城","秋田","山形","福島","茨城","栃木","群馬","埼玉","千葉","東京","神奈川","新潟","富山","石川","福井","山梨","長野","岐阜","静岡","愛知","三重","滋賀","京都","大阪","兵庫","奈良","和歌山","鳥取","島根","岡山","広島","山口","徳島","香川","愛媛","高知","福岡","佐賀","長崎","熊本","大分","宮崎","鹿児島","沖縄"];
+type Tab = "overview" | "finance" | "swot" | "action" | "pitch";
 
-type Section = { title: string; icon: string; content: string };
-type ParsedResult = { sections: Section[]; raw: string };
+const TABS: { id: Tab; label: string }[] = [
+  { id: "overview", label: "📋 事業概要" },
+  { id: "finance", label: "💰 収支計画" },
+  { id: "swot", label: "🔍 SWOT分析" },
+  { id: "action", label: "📅 アクションプラン" },
+  { id: "pitch", label: "🚀 投資家ピッチ" },
+];
 
-function parseResult(text: string): ParsedResult {
-  const sectionDefs = [
-    { key: "申請可能な補助金", icon: "🎯" },
-    { key: "申請書ドラフト", icon: "📝" },
-    { key: "申請要件チェックリスト", icon: "✅" },
-    { key: "採択率を上げる", icon: "📈" },
-    { key: "よくある落選理由", icon: "⚠️" },
-  ];
-  const sections: Section[] = [];
-  const parts = text.split(/^---$/m);
-  for (const part of parts) {
-    const trimmed = part.trim();
-    if (!trimmed) continue;
-    const matched = sectionDefs.find(s => trimmed.includes(s.key));
-    if (matched) {
-      const content = trimmed.replace(/^##\s.*$/m, "").trim();
-      sections.push({ title: matched.key, icon: matched.icon, content });
+type Result = Record<Tab, string>;
+
+function parseResult(text: string): Result {
+  const get = (tag: string) => {
+    const m = text.match(new RegExp(`===\\s*${tag}\\s*===\\s*([\\s\\S]*?)(?====|$)`));
+    return m ? m[1].trim() : "";
+  };
+  return {
+    overview: get("OVERVIEW"),
+    finance: get("FINANCE"),
+    swot: get("SWOT"),
+    action: get("ACTION"),
+    pitch: get("PITCH"),
+  };
+}
+
+const INDUSTRIES = [
+  "飲食・カフェ", "小売・EC", "IT・Web・アプリ", "製造業", "建設・不動産",
+  "医療・介護・福祉", "美容・エステ", "教育・スクール", "コンサルティング",
+  "農業・食品", "輸送・物流", "その他",
+];
+
+export default function ToolPage() {
+  const [form, setForm] = useState({
+    businessName: "",
+    industry: "",
+    scale: "個人事業主・フリーランス",
+    overview: "",
+    strengths: "",
+    challenges: "",
+    goal3y: "",
+    initialFund: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<Result | null>(null);
+  const [error, setError] = useState("");
+  const [tab, setTab] = useState<Tab>("overview");
+  const [remaining, setRemaining] = useState<number | null>(null);
+  const [isPremium, setIsPremium] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [copied, setCopied] = useState<Tab | null>(null);
+
+  useEffect(() => {
+    fetch("/api/auth/status").then((r) => r.json()).then((d) => {
+      setIsPremium(d.premium);
+      setRemaining(d.remaining);
+    });
+  }, []);
+
+  function set(key: string, val: string) {
+    setForm((f) => ({ ...f, [key]: val }));
+  }
+
+  async function generate() {
+    if (!form.overview.trim() || !form.industry) return;
+    setLoading(true);
+    setError("");
+    setResult(null);
+    try {
+      const res = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (res.status === 402) { setShowPaywall(true); setLoading(false); return; }
+      const data = await res.json();
+      if (data.error) { setError(data.error); setLoading(false); return; }
+      setResult(parseResult(data.result));
+      setRemaining(data.remaining);
+      setTab("overview");
+    } catch {
+      setError("エラーが発生しました。もう一度お試しください。");
+    }
+    setLoading(false);
+  }
+
+  async function startCheckout(priceType: "once" | "monthly") {
+    setCheckoutLoading(true);
+    try {
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ priceType }),
+      });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+    } catch {
+      setCheckoutLoading(false);
     }
   }
-  if (sections.length === 0) sections.push({ title: "診断結果", icon: "📄", content: text });
-  return { sections, raw: text };
-}
 
-async function startCheckout(plan: string) {
-  const res = await fetch("/api/stripe/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ plan }) });
-  const { url } = await res.json();
-  if (url) window.location.href = url;
-}
+  function copy(content: string, key: Tab) {
+    navigator.clipboard.writeText(content);
+    setCopied(key);
+    setTimeout(() => setCopied(null), 2000);
+  }
 
-function Paywall({ onClose }: { onClose: () => void }) {
+  function print() {
+    window.print();
+  }
+
+  const canGenerate = form.overview.trim() && form.industry && (isPremium || (remaining !== null && remaining > 0));
+
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
-      <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl text-center">
-        <div className="text-3xl mb-3">💰</div>
-        <h2 className="text-lg font-bold mb-2">無料診断回数を使い切りました</h2>
-        <p className="text-sm text-gray-500 mb-1">申請書ドラフトをそのまま提出できるレベルで生成</p>
-        <ul className="text-xs text-gray-400 text-left mb-5 space-y-1 mt-3">
-          <li>✓ 補助金5件の優先度付き診断（採択率順）</li>
-          <li>✓ 申請書ドラフト自動生成（提出ベース）</li>
-          <li>✓ 申請要件チェックリスト付き</li>
-          <li>✓ 採択率を上げる具体的アドバイス</li>
-          <li>✓ 印刷・PDF保存してそのまま使える</li>
-        </ul>
-        <div className="space-y-3 mb-4">
-          <button onClick={() => startCheckout("one_time")} className="block w-full bg-amber-500 text-white font-bold py-3 rounded-xl hover:bg-amber-600">
-            <span className="text-base">¥2,980</span>
-            <span className="text-sm font-normal ml-1">で今回の申請を完成させる（1回限り）</span>
+    <main className="min-h-screen bg-gray-950 text-white">
+      <nav className="bg-gray-900 border-b border-gray-800 px-6 py-4 flex justify-between items-center">
+        <Link href="/" className="font-bold text-emerald-400">📊 AI経営計画書作成</Link>
+        <div className="flex items-center gap-4">
+          {isPremium && <span className="text-xs text-emerald-400 font-bold">✓ プレミアム</span>}
+          {!isPremium && remaining !== null && (
+            <span className="text-xs text-gray-400">残り無料 {remaining}回</span>
+          )}
+          <button
+            onClick={print}
+            className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition"
+          >
+            印刷
           </button>
-          <button onClick={() => startCheckout("standard")} className="block w-full bg-gray-100 text-gray-700 py-2.5 rounded-xl text-sm hover:bg-gray-200">
-            月額プラン ¥4,980/月（複数申請・何度でも）
-          </button>
-        </div>
-        <p className="text-xs text-gray-400 mb-3">行政書士に頼むと10〜30万円。AIなら¥2,980で今すぐ。</p>
-        <button onClick={onClose} className="text-xs text-gray-400">閉じる</button>
-      </div>
-    </div>
-  );
-}
-
-function CopyButton({ text, label = "コピー" }: { text: string; label?: string }) {
-  const [copied, setCopied] = useState(false);
-  return (
-    <button onClick={() => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
-      className="text-xs px-3 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 font-medium transition-colors">
-      {copied ? "✓ コピー済み" : label}
-    </button>
-  );
-}
-
-function ResultTabs({ parsed }: { parsed: ParsedResult }) {
-  const [activeTab, setActiveTab] = useState(0);
-  const section = parsed.sections[activeTab];
-
-  const handlePrint = () => {
-    const html = `<html><head><title>補助金診断結果</title><style>body{font-family:sans-serif;padding:32px;line-height:1.8;white-space:pre-wrap;}</style></head><body>${parsed.raw.replace(/</g, "&lt;")}</body></html>`;
-    const blob = new Blob([html], { type: "text/html" });
-    const url = URL.createObjectURL(blob);
-    const w = window.open(url, "_blank");
-    w?.addEventListener("load", () => { w.print(); URL.revokeObjectURL(url); });
-  };
-
-  return (
-    <div className="flex flex-col gap-3">
-      <div className="flex gap-1 flex-wrap">
-        {parsed.sections.map((s, i) => (
-          <button key={i} onClick={() => setActiveTab(i)}
-            className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${activeTab === i ? "bg-amber-500 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
-            <span>{s.icon}</span><span className="hidden sm:inline">{s.title}</span>
-          </button>
-        ))}
-      </div>
-      <div className="bg-white border border-gray-200 rounded-xl p-4 min-h-[360px]">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-sm font-semibold text-gray-700">{section.icon} {section.title}</span>
-          <CopyButton text={section.content} />
-        </div>
-        <pre className="text-sm text-gray-800 whitespace-pre-wrap font-sans leading-relaxed">{section.content}</pre>
-      </div>
-      <div className="flex gap-2 justify-end">
-        <CopyButton text={parsed.raw} label="全文コピー" />
-        <button onClick={handlePrint} className="text-xs px-3 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 font-medium">
-          印刷・PDF保存
-        </button>
-      </div>
-    </div>
-  );
-}
-
-export default function HojyokinTool() {
-  const [isIndividual, setIsIndividual] = useState(false);
-  const [businessType, setBusinessType] = useState("");
-  const [employees, setEmployees] = useState("");
-  const [prefecture, setPrefecture] = useState("東京");
-  const [purpose, setPurpose] = useState("");
-  const [parsed, setParsed] = useState<ParsedResult | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [count, setCount] = useState(0);
-  const [showPaywall, setShowPaywall] = useState(false);
-  const [error, setError] = useState("");
-
-  useEffect(() => { setCount(parseInt(localStorage.getItem(KEY) || "0")); }, []);
-  const isLimit = count >= FREE_LIMIT;
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (isLimit) { setShowPaywall(true); return; }
-    setLoading(true); setParsed(null); setError("");
-    try {
-      const res = await fetch("/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ isIndividual, businessType, employees, prefecture, purpose }) });
-      if (res.status === 429) { setShowPaywall(true); setLoading(false); return; }
-      const data = await res.json();
-      if (!res.ok) { setError(data.error || "エラーが発生しました"); setLoading(false); return; }
-      const newCount = data.count ?? count + 1;
-      localStorage.setItem(KEY, String(newCount));
-      setCount(newCount);
-      setParsed(parseResult(data.result || ""));
-      if (newCount >= FREE_LIMIT) setTimeout(() => setShowPaywall(true), 1500);
-    } catch { setError("通信エラーが発生しました。インターネット接続を確認してください。"); }
-    finally { setLoading(false); }
-  };
-
-  return (
-    <main className="min-h-screen bg-gray-50">
-      {showPaywall && <Paywall onClose={() => setShowPaywall(false)} />}
-      <nav className="bg-white border-b px-6 py-4">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <Link href="/" className="font-bold text-gray-900">💰 AI補助金診断</Link>
-          <span className={`text-xs px-3 py-1 rounded-full ${isLimit ? "bg-red-100 text-red-600" : "bg-amber-100 text-amber-600"}`}>
-            {isLimit ? "無料枠終了" : `無料あと${FREE_LIMIT - count}回`}
-          </span>
         </div>
       </nav>
 
-      <div className="max-w-5xl mx-auto px-6 py-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <h1 className="text-xl font-bold text-gray-900">あなたの情報を入力</h1>
-            <p className="text-sm text-gray-500 mt-1">入力情報から申請可能な補助金を診断し、申請書ドラフトまで自動生成します。</p>
+      <div className="max-w-3xl mx-auto px-4 py-10 space-y-6">
+        {/* Form */}
+        <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6 space-y-5">
+          <h2 className="font-bold text-lg text-emerald-400">事業情報を入力</h2>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold mb-1 text-gray-400">事業名・屋号（任意）</label>
+              <input
+                type="text"
+                className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
+                placeholder="例：田中食堂 / 株式会社〇〇"
+                value={form.businessName}
+                onChange={(e) => set("businessName", e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold mb-1 text-gray-400">業種 <span className="text-red-400">*</span></label>
+              <select
+                className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500"
+                value={form.industry}
+                onChange={(e) => set("industry", e.target.value)}
+              >
+                <option value="">選択してください</option>
+                {INDUSTRIES.map((i) => <option key={i} value={i}>{i}</option>)}
+              </select>
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold mb-1 text-gray-400">事業規模</label>
+              <select
+                className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500"
+                value={form.scale}
+                onChange={(e) => set("scale", e.target.value)}
+              >
+                {["個人事業主・フリーランス", "法人（1〜5名）", "法人（6〜20名）", "法人（21名以上）"].map((s) => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-bold mb-1 text-gray-400">初期投資・資金調達額（任意）</label>
+              <input
+                type="text"
+                className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
+                placeholder="例：500万円（自己資金200万＋融資300万）"
+                value={form.initialFund}
+                onChange={(e) => set("initialFund", e.target.value)}
+              />
+            </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">事業形態</label>
-            <div className="flex gap-3">
-              {[{ label: "法人・個人事業主", val: false }, { label: "個人（一般）", val: true }].map(opt => (
-                <button key={opt.label} type="button" onClick={() => setIsIndividual(opt.val)}
-                  className={`flex-1 py-2 rounded-lg border text-sm font-medium transition-colors ${isIndividual === opt.val ? "bg-amber-500 text-white border-amber-500" : "bg-white text-gray-700 border-gray-300 hover:border-amber-400"}`}>
-                  {opt.label}
+            <label className="block text-xs font-bold mb-1 text-gray-400">事業概要・やりたいこと <span className="text-red-400">*</span></label>
+            <textarea
+              className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 resize-none focus:outline-none focus:border-emerald-500 h-28"
+              placeholder="例：地元の無農薬野菜を使った健康志向のカフェを開業したい。20〜40代の女性をメインターゲットに、ランチとスイーツを提供。テイクアウトとECサイトでの通販も展開予定。"
+              value={form.overview}
+              onChange={(e) => set("overview", e.target.value)}
+            />
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold mb-1 text-gray-400">強み・差別化ポイント</label>
+              <textarea
+                className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 resize-none focus:outline-none focus:border-emerald-500 h-24"
+                placeholder="例：農家直送で仕入れコスト30%削減。管理栄養士の資格保有。SNSフォロワー5,000人。"
+                value={form.strengths}
+                onChange={(e) => set("strengths", e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold mb-1 text-gray-400">現在の課題・懸念事項</label>
+              <textarea
+                className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 resize-none focus:outline-none focus:border-emerald-500 h-24"
+                placeholder="例：開業資金が不足。競合店が多い立地。スタッフ採用が難しい。"
+                value={form.challenges}
+                onChange={(e) => set("challenges", e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold mb-1 text-gray-400">3年後の目標</label>
+            <input
+              type="text"
+              className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
+              placeholder="例：年商3,000万・2店舗展開・EC売上月100万"
+              value={form.goal3y}
+              onChange={(e) => set("goal3y", e.target.value)}
+            />
+          </div>
+        </div>
+
+        {!isPremium && remaining === 0 && !result && (
+          <div className="bg-emerald-900/30 border border-emerald-700 rounded-xl p-4 text-center">
+            <p className="text-sm text-emerald-200 mb-3">無料回数を使い切りました。</p>
+            <div className="flex gap-3 justify-center">
+              <button onClick={() => startCheckout("once")} disabled={checkoutLoading} className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-5 py-2 rounded-xl text-sm transition disabled:opacity-50">
+                {checkoutLoading ? "処理中..." : "¥2,980 1回払い"}
+              </button>
+              <button onClick={() => startCheckout("monthly")} disabled={checkoutLoading} className="bg-gray-700 hover:bg-gray-600 text-white font-bold px-5 py-2 rounded-xl text-sm transition disabled:opacity-50">
+                {checkoutLoading ? "処理中..." : "¥4,980/月 使い放題"}
+              </button>
+            </div>
+          </div>
+        )}
+
+        <button
+          onClick={generate}
+          disabled={loading || !canGenerate}
+          className="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-black py-4 rounded-xl text-lg transition disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          {loading ? "AIが経営計画書を作成中..." : "経営計画書を生成する"}
+        </button>
+
+        {error && <p className="text-red-400 text-sm text-center">{error}</p>}
+
+        {showPaywall && (
+          <div className="bg-gray-900 border border-emerald-500 rounded-2xl p-8 text-center">
+            <div className="text-4xl mb-4">📊</div>
+            <h3 className="text-xl font-bold mb-2">無料回数が終わりました</h3>
+            <p className="text-gray-400 text-sm mb-6">¥2,980（1回払い）または¥4,980/月（使い放題）</p>
+            <div className="flex gap-4 justify-center">
+              <button onClick={() => startCheckout("once")} disabled={checkoutLoading} className="bg-emerald-500 hover:bg-emerald-400 text-white font-black px-6 py-3 rounded-xl transition disabled:opacity-50">
+                {checkoutLoading ? "処理中..." : "¥2,980で1回作成"}
+              </button>
+              <button onClick={() => startCheckout("monthly")} disabled={checkoutLoading} className="bg-gray-700 hover:bg-gray-600 text-white font-bold px-6 py-3 rounded-xl transition disabled:opacity-50">
+                {checkoutLoading ? "処理中..." : "¥4,980/月"}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {result && (
+          <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
+            <div className="flex overflow-x-auto border-b border-gray-800">
+              {TABS.map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => setTab(t.id)}
+                  className={`px-4 py-3 text-xs font-bold whitespace-nowrap transition ${tab === t.id ? "text-emerald-400 border-b-2 border-emerald-400" : "text-gray-500 hover:text-gray-300"}`}
+                >
+                  {t.label}
                 </button>
               ))}
             </div>
-          </div>
-
-          {!isIndividual && (
-            <>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">業種</label>
-                <input type="text" value={businessType} onChange={e => setBusinessType(e.target.value)}
-                  placeholder="例: 飲食業・IT・製造業・小売業・建設業"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500" />
+            <div className="p-6">
+              <div className="flex justify-end mb-4 gap-2">
+                <button
+                  onClick={() => copy(result[tab], tab)}
+                  className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition"
+                >
+                  {copied === tab ? "コピー済" : "このタブをコピー"}
+                </button>
+                <button
+                  onClick={print}
+                  className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition"
+                >
+                  印刷
+                </button>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">従業員数</label>
-                <input type="number" value={employees} onChange={e => setEmployees(e.target.value)}
-                  placeholder="例: 5"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500" />
-              </div>
-            </>
-          )}
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">都道府県</label>
-            <select value={prefecture} onChange={e => setPrefecture(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
-              {PREFECTURES.map(p => <option key={p} value={p}>{p}</option>)}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">何に使いたいか・やりたいこと <span className="text-red-500">*</span></label>
-            <textarea value={purpose} onChange={e => setPurpose(e.target.value)} rows={5} required
-              placeholder={"例:\n・店舗にPOSレジシステムを導入したい\n・設備を新しくして生産性を上げたい\n・省エネ設備に切り替えたい\n・ECサイトを立ち上げたい"}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none" />
-            <p className="text-xs text-gray-400 mt-1">詳しく書くほど精度が上がります（{purpose.length}/1000文字）</p>
-          </div>
-
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-800">
-            ⚠️ <strong>ご注意</strong>：この診断はAIによる参考情報です。補助金の採択可否は公式審査によります。申請前に必ず各補助金の<strong>公式サイト・所管機関（中小企業庁・経済産業省等）</strong>で最新の要領をご確認ください。
-          </div>
-
-          <button type="submit" disabled={loading}
-            className={`w-full font-bold py-3 rounded-lg text-white transition-colors ${isLimit ? "bg-orange-500 hover:bg-orange-600" : "bg-amber-500 hover:bg-amber-600 disabled:bg-amber-300"}`}>
-            {loading ? "診断中..." : isLimit ? "¥2,980で申請書を完成させる" : "補助金を診断する（無料）"}
-          </button>
-          {error && <p className="text-sm text-red-500 text-center">{error}</p>}
-        </form>
-
-        <div className="flex flex-col">
-          <label className="text-sm font-medium text-gray-700 mb-2">診断結果</label>
-          {loading ? (
-            <div className="flex-1 bg-white border border-gray-200 rounded-xl flex items-center justify-center min-h-[420px]">
-              <div className="text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500 mx-auto mb-3" />
-                <p className="text-sm text-gray-500 font-medium">AIが補助金を診断しています...</p>
-                <p className="text-xs text-gray-400 mt-2">🎯 補助金5件 → 📝 申請書ドラフト → ✅ チェックリスト</p>
-                <p className="text-xs text-gray-300 mt-1">通常20〜30秒かかります</p>
+              <div className="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap">
+                {result[tab] || "このセクションの内容がありません。"}
               </div>
             </div>
-          ) : parsed ? (
-            <ResultTabs parsed={parsed} />
-          ) : (
-            <div className="flex-1 bg-white border border-gray-200 rounded-xl flex flex-col items-center justify-center min-h-[420px] gap-3">
-              <div className="text-4xl">💰</div>
-              <p className="text-sm text-center font-medium text-gray-500">情報を入力して<br />「補助金を診断する」を押してください</p>
-              <div className="bg-gray-50 rounded-lg p-4 text-xs space-y-2 w-full max-w-[260px]">
-                <p className="font-semibold text-gray-600">生成される内容：</p>
-                <p className="text-gray-500">🎯 申請可能な補助金（優先度順5件）</p>
-                <p className="text-gray-500">📝 申請書ドラフト（提出ベース）</p>
-                <p className="text-gray-500">✅ 申請要件チェックリスト</p>
-                <p className="text-gray-500">📈 採択率を上げる3つのポイント</p>
-                <p className="text-gray-500">⚠️ よくある落選理由と対策</p>
-              </div>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
-      <footer className="text-center py-6 text-xs text-gray-400 border-t mt-4 space-x-4">
-        <a href="/legal" className="hover:text-gray-600">特定商取引法に基づく表記</a>
-        <a href="/privacy" className="hover:text-gray-600">プライバシーポリシー</a>
-        <p className="mt-2 text-gray-300">本サービスはAI生成情報を提供します。採択を保証するものではありません。専門家（行政書士・中小企業診断士）への相談を推奨します。</p>
+      <footer className="border-t border-gray-800 py-6 text-center text-xs text-gray-600 space-x-4 mt-10">
+        <Link href="/legal" className="hover:underline">特定商取引法</Link>
+        <Link href="/privacy" className="hover:underline">プライバシーポリシー</Link>
+        <Link href="/" className="hover:underline">トップへ戻る</Link>
       </footer>
     </main>
   );

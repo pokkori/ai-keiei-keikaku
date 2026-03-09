@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+const geist = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 
-const SITE_URL = "https://hojyokin-ai-delta.vercel.app";
-const TITLE = "AI補助金診断｜申請可能な補助金を診断＋申請書ドラフトを自動生成";
-const DESC = "事業内容を入力するだけ。AIが使える補助金5件を優先度順に診断し、申請書ドラフト・チェックリスト・採択率アドバイスまで自動生成。行政書士不要。¥2,980/1申請〜。";
+const SITE_URL = "https://ai-keiei-keikaku.vercel.app";
+const TITLE = "AI経営計画書作成 | 事業概要を入力するだけ。本格的な経営計画書をAIが5分で生成";
+const DESC = "事業概要・強み・課題を入力するだけ。AIが収支計画・SWOT分析・アクションプラン・投資家向けピッチまで自動生成。融資・補助金申請・創業計画に。¥2,980/回〜。";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -17,7 +16,7 @@ export const metadata: Metadata = {
     title: TITLE,
     description: DESC,
     url: SITE_URL,
-    siteName: "AI補助金診断",
+    siteName: "AI経営計画書作成",
     locale: "ja_JP",
     type: "website",
   },
@@ -29,10 +28,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ja">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geist.variable} antialiased`}>
         {children}
         <Analytics />
       </body>

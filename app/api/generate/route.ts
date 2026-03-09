@@ -1,149 +1,178 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
+
+export const dynamic = "force-dynamic";
+
+const FREE_LIMIT = 1;
+const COOKIE_KEY = "keikaku_use_count";
 
 function getClient() {
   return new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 }
-const FREE_LIMIT = 3;
-const COOKIE_KEY = "hojyokin_use_count";
-
-const rateLimit = new Map<string, { count: number; resetAt: number }>();
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimit.get(ip);
-  if (!entry || now > entry.resetAt) { rateLimit.set(ip, { count: 1, resetAt: now + 60000 }); return true; }
-  if (entry.count >= 10) return false;
-  entry.count++;
-  return true;
-}
 
 export async function POST(req: NextRequest) {
-  const ip = req.headers.get("x-forwarded-for") || "unknown";
-  if (!checkRateLimit(ip)) {
-    return NextResponse.json({ error: "リクエストが多すぎます。しばらく待ってから再試行してください。" }, { status: 429 });
-  }
-  const isPremium = req.cookies.get("stripe_premium")?.value === "1";
-  const cookieCount = parseInt(req.cookies.get(COOKIE_KEY)?.value || "0");
+  const cookieStore = await cookies();
+  const isPremium = cookieStore.get("stripe_premium")?.value === "1";
+  const cookieCount = parseInt(cookieStore.get(COOKIE_KEY)?.value || "0", 10);
+
   if (!isPremium && cookieCount >= FREE_LIMIT) {
-    return NextResponse.json({ error: "LIMIT_REACHED" }, { status: 429 });
+    return NextResponse.json({ error: "LIMIT_REACHED" }, { status: 402 });
   }
-  let body: Record<string, unknown>;
-  try { body = await req.json(); }
-  catch { return NextResponse.json({ error: "リクエストの形式が正しくありません" }, { status: 400 }); }
 
-  const { businessType, employees, purpose, prefecture, isIndividual } = body as Record<string, string>;
-  if (!purpose) return NextResponse.json({ error: "活用目的は必須です" }, { status: 400 });
-  if (purpose.length > 1000) return NextResponse.json({ error: "活用目的は1000文字以内で入力してください" }, { status: 400 });
+  let body: Record<string, string>;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "リクエストの形式が正しくありません" }, { status: 400 });
+  }
 
-  const prompt = `あなたは補助金・助成金の専門コンサルタントです。10年以上の実績を持ち、採択率向上のノウハウを熟知しています。以下の情報をもとに、申請可能な補助金の診断と採択を見据えた申請書ドラフトを作成してください。
+  const { businessName, industry, scale, overview, strengths, challenges, goal3y, initialFund } = body;
 
-【依頼者情報】
-事業形態: ${isIndividual ? "個人（一般）" : "法人・個人事業主"}
-業種: ${businessType || "未入力"}
-従業員数: ${employees || "0"}名
-所在地: ${prefecture || "未入力"}
-活用目的・やりたいこと: ${purpose}
+  if (!overview?.trim()) return NextResponse.json({ error: "事業概要は必須です" }, { status: 400 });
+  if (!industry) return NextResponse.json({ error: "業種を選択してください" }, { status: 400 });
 
-以下の構成で詳細に回答してください：
+  const prompt = `あなたは経営コンサルタント・中小企業診断士のAIです。以下の情報をもとに、融資申請・補助金申請・投資家向けに使える本格的な経営計画書を作成してください。
 
----
+【事業情報】
+事業名: ${businessName || "未入力"}
+業種: ${industry}
+事業規模: ${scale}
+事業概要: ${overview}
+強み・差別化: ${strengths || "未入力"}
+現在の課題: ${challenges || "未入力"}
+3年後の目標: ${goal3y || "未入力"}
+初期投資・資金: ${initialFund || "未入力"}
 
-## 🎯 申請可能な補助金・助成金（優先度順 上位5件）
+以下の形式で回答してください：
 
-### ◆ 第1位: [補助金名]
-- **補助上限額**:
-- **補助率**:
-- **申請期間**: （次回公募の想定時期）
-- **主管省庁**:
-- **採択率（直近）**:
-- **あなたが選ばれる理由**: （具体的に3点）
-- **注意すべき要件**:
+===OVERVIEW===
+## 事業概要・ビジョン
 
-### ◆ 第2位: [補助金名]
-- **補助上限額**:
-- **補助率**:
-- **申請期間**:
-- **主管省庁**:
-- **採択率（直近）**:
-- **あなたが選ばれる理由**: （具体的に3点）
-- **注意すべき要件**:
+### 事業の目的と背景
+（事業を始める理由・社会課題・市場ニーズを具体的に200文字）
 
-### ◆ 第3位: [補助金名]
-- **補助上限額**:
-- **補助率**:
-- **申請期間**:
-- **主管省庁**:
-- **あなたが選ばれる理由**: （具体的に2点）
+### ターゲット市場
+（主要顧客・市場規模・アプローチ方法を具体的に150文字）
 
-### ◆ 第4位・第5位（簡易）
-- [補助金名]: 補助上限額・補助率・一言コメント
-- [補助金名]: 補助上限額・補助率・一言コメント
+### 独自の強み・競合優位性
+（競合との差別化要因を箇条書き3〜5点）
 
----
+### 収益モデル
+（どのように売上を得るか、主要な収益源を明確に）
 
-## 📝 申請書ドラフト（第1位の補助金向け・提出ベース）
+===FINANCE===
+## 3年間収支計画
 
-### 【1】事業計画の概要
-（事業の目的・背景・現状の課題を具体的に記述。300文字程度）
+### 前提条件・想定
+（売上単価・月間顧客数・稼働率などの前提を明記）
 
-### 【2】補助事業の必要性・緊急性
-（なぜ今この補助金が必要か、補助なしではどう困るかを論理的に記述。300文字程度）
+### 年次サマリー
+| 年度 | 売上高 | 原価 | 固定費 | 営業利益 | 利益率 |
+|---|---|---|---|---|---|
+| 1年目 | | | | | |
+| 2年目 | | | | | |
+| 3年目 | | | | | |
 
-### 【3】事業の具体的な実施内容
-（何を購入・導入・実施するか、どんな手順で進めるかを具体的に記述。300文字程度）
+### 損益分岐点
+（月次の損益分岐点売上高と、それを達成するための必要顧客数・稼働率）
 
-### 【4】期待される効果と数値目標
-（売上・生産性・コスト削減など数値で示せる目標を含めて記述。300文字程度）
+### 資金繰り計画
+（初期投資の回収時期・運転資金の推移・資金ショートリスクと対策）
 
-### 【5】補助事業後の展開・持続可能性
-（補助金終了後も事業が継続・発展できる根拠を記述。200文字程度）
+===SWOT===
+## SWOT分析・戦略立案
 
----
+**強み（Strengths）**
+- （具体的な強みを3〜5点）
 
-## ✅ 申請要件チェックリスト（第1位）
+**弱み（Weaknesses）**
+- （正直な弱みを3〜4点と対策）
 
-以下の項目を申請前に確認してください：
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
+**機会（Opportunities）**
+- （市場トレンド・社会変化による追い風を3〜4点）
 
----
+**脅威（Threats）**
+- （競合・規制・経済環境などのリスクを3〜4点）
 
-## 📈 採択率を上げる3つのポイント
+### クロスSWOT戦略
+**SO戦略（強みで機会を掴む）**:
+**ST戦略（強みで脅威を回避）**:
+**WO戦略（弱みを克服して機会を活かす）**:
+**WT戦略（リスク最小化）**:
 
-1.
-2.
-3.
+===ACTION===
+## アクションプラン（12ヶ月ロードマップ）
 
----
+### フェーズ1: 準備期（1〜3ヶ月）
+（具体的なタスクを箇条書き5〜7点）
 
-## ⚠️ よくある落選理由と対策
+### フェーズ2: 立ち上げ期（4〜6ヶ月）
+（具体的なタスクを箇条書き5〜7点）
 
-| 落選理由 | 対策 |
-|---------|------|
-|  |  |
-|  |  |
-|  |  |
+### フェーズ3: 成長期（7〜12ヶ月）
+（具体的なタスクを箇条書き5〜7点）
 
----
+### KPI（重要指標）
+- 月次売上目標（3ヶ月後）:
+- 月次売上目標（6ヶ月後）:
+- 月次売上目標（12ヶ月後）:
+- リピート率目標:
+- 顧客獲得コスト（目標）:
 
-※本情報は参考情報です。補助金の内容は変更される場合があります。実際の申請前に必ず公募要領・所管省庁の最新情報をご確認ください。`;
+===PITCH===
+## 投資家向けピッチ
+
+### エレベーターピッチ（30秒）
+（1〜2文で事業の本質を伝える）
+
+### 解決する問題
+（「〇〇な人は〇〇で困っている」形式で具体的に）
+
+### ソリューション
+（どのようにその課題を解決するか）
+
+### 市場規模
+- TAM（全体市場規模）:
+- SAM（対象市場規模）:
+- SOM（1〜3年で獲得可能な市場）:
+
+### ビジネスモデル
+（単価・顧客数・LTVの想定とマネタイズ方法）
+
+### 競合優位性
+（他社と比べて圧倒的に優れている点3点）
+
+### 1年後のマイルストーン
+（数値で示せる具体的な目標）`;
 
   try {
     const message = await getClient().messages.create({
       model: "claude-haiku-4-5-20251001",
-      max_tokens: 3000,
+      max_tokens: 4000,
       messages: [{ role: "user", content: prompt }],
     });
+
     const text = message.content[0].type === "text" ? message.content[0].text : "";
     const newCount = cookieCount + 1;
-    const res = NextResponse.json({ result: text, count: newCount });
-    res.cookies.set(COOKIE_KEY, String(newCount), { maxAge: 60 * 60 * 24 * 30, sameSite: "lax", httpOnly: true, secure: true });
+    const res = NextResponse.json({
+      result: text,
+      remaining: isPremium ? null : FREE_LIMIT - newCount,
+    });
+
+    if (!isPremium) {
+      res.cookies.set(COOKIE_KEY, String(newCount), {
+        maxAge: 60 * 60 * 24 * 365,
+        httpOnly: true,
+        secure: true,
+        path: "/",
+        sameSite: "lax",
+      });
+    }
+
     return res;
   } catch (err) {
     console.error(err);
-    return NextResponse.json({ error: "AI生成中にエラーが発生しました。しばらく待ってから再試行してください。" }, { status: 500 });
+    return NextResponse.json({ error: "AI生成中にエラーが発生しました" }, { status: 500 });
   }
 }

@@ -1,9 +1,7 @@
 "use client";
-
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Suspense } from "react";
 
 function SuccessContent() {
   const params = useSearchParams();
@@ -13,26 +11,20 @@ function SuccessContent() {
     const sessionId = params.get("session_id");
     if (!sessionId) { setStatus("error"); return; }
     fetch(`/api/stripe/verify?session_id=${sessionId}`)
-      .then(r => r.ok ? setStatus("ok") : setStatus("error"))
-      .catch(() => setStatus("error"));
+      .then((r) => r.json())
+      .then((d) => setStatus(d.ok ? "ok" : "error"));
   }, [params]);
 
-  if (status === "loading") return (
-    <div className="text-center text-gray-500">認証中...</div>
-  );
-  if (status === "error") return (
-    <div className="text-center">
-      <p className="text-red-500 mb-4">認証に失敗しました。</p>
-      <Link href="/" className="text-blue-600 underline">トップへ戻る</Link>
-    </div>
-  );
+  if (status === "loading") return <p className="text-emerald-400">確認中...</p>;
+  if (status === "error") return <p className="text-red-400">確認できませんでした。サポートへお問い合わせください。</p>;
+
   return (
     <div className="text-center">
-      <div className="text-5xl mb-4">🎉</div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-2">ご契約ありがとうございます！</h1>
-      <p className="text-gray-500 mb-6">プレミアムプランが有効になりました。</p>
-      <Link href="/tool" className="inline-block bg-green-600 text-white font-bold px-8 py-3 rounded-xl hover:bg-green-700">
-        ツールを使う →
+      <div className="text-6xl mb-6">🎉</div>
+      <h1 className="text-3xl font-black mb-4">ご購入ありがとうございます！</h1>
+      <p className="text-emerald-300 mb-8">経営計画書の作成が使えるようになりました。</p>
+      <Link href="/tool" className="bg-emerald-500 hover:bg-emerald-400 text-white font-black text-lg px-10 py-4 rounded-xl transition">
+        経営計画書を作成する →
       </Link>
     </div>
   );
@@ -40,8 +32,8 @@ function SuccessContent() {
 
 export default function SuccessPage() {
   return (
-    <main className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
-      <Suspense fallback={<div className="text-center text-gray-500">読み込み中...</div>}>
+    <main className="min-h-screen bg-gray-950 text-white flex items-center justify-center px-4">
+      <Suspense fallback={<p className="text-emerald-400">読み込み中...</p>}>
         <SuccessContent />
       </Suspense>
     </main>
