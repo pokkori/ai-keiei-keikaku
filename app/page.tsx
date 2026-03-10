@@ -1,23 +1,17 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import PayjpModal from "@/components/PayjpModal";
+
+const PAYJP_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYJP_PUBLIC_KEY ?? "";
 
 export default function Home() {
-  const [loading, setLoading] = useState(false);
+  const [showPayjp, setShowPayjp] = useState(false);
+  const [payjpPlan, setPayjpPlan] = useState<"once" | "monthly">("once");
 
-  async function startCheckout(priceType: "once" | "monthly") {
-    setLoading(true);
-    try {
-      const res = await fetch("/api/stripe/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ priceType }),
-      });
-      const data = await res.json();
-      if (data.url) window.location.href = data.url;
-    } catch {
-      setLoading(false);
-    }
+  function startCheckout(priceType: "once" | "monthly") {
+    setPayjpPlan(priceType);
+    setShowPayjp(true);
   }
 
   return (
@@ -44,10 +38,9 @@ export default function Home() {
           </Link>
           <button
             onClick={() => startCheckout("once")}
-            disabled={loading}
-            className="border border-emerald-400 text-emerald-300 hover:bg-emerald-900 font-bold px-8 py-4 rounded-xl text-lg transition disabled:opacity-50"
+            className="border border-emerald-400 text-emerald-300 hover:bg-emerald-900 font-bold px-8 py-4 rounded-xl text-lg transition"
           >
-            {loading ? "処理中..." : "¥2,980で1回作成"}
+            ¥2,980で1回作成
           </button>
         </div>
       </section>
@@ -178,10 +171,9 @@ export default function Home() {
               </ul>
               <button
                 onClick={() => startCheckout("once")}
-                disabled={loading}
-                className="w-full bg-emerald-400 hover:bg-emerald-300 text-gray-900 font-black py-3 rounded-xl transition disabled:opacity-50 text-sm"
+                className="w-full bg-emerald-400 hover:bg-emerald-300 text-gray-900 font-black py-3 rounded-xl transition text-sm"
               >
-                {loading ? "処理中..." : "¥2,980で購入"}
+                ¥2,980で購入
               </button>
             </div>
             <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
@@ -196,10 +188,9 @@ export default function Home() {
               </ul>
               <button
                 onClick={() => startCheckout("monthly")}
-                disabled={loading}
-                className="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-xl transition disabled:opacity-50 text-sm"
+                className="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-xl transition text-sm"
               >
-                {loading ? "処理中..." : "月額プランを始める"}
+                月額プランを始める
               </button>
             </div>
           </div>
@@ -243,6 +234,15 @@ export default function Home() {
         <Link href="/terms" className="hover:underline">利用規約</Link>
         <Link href="/privacy" className="hover:underline">プライバシーポリシー</Link>
       </footer>
+      {showPayjp && (
+        <PayjpModal
+          publicKey={PAYJP_PUBLIC_KEY}
+          planLabel={payjpPlan === "once" ? "1回払い ¥2,980" : "月額プラン ¥4,980/月"}
+          plan={payjpPlan}
+          onSuccess={() => setShowPayjp(false)}
+          onClose={() => setShowPayjp(false)}
+        />
+      )}
     </main>
   );
 }

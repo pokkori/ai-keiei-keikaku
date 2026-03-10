@@ -1,6 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import PayjpModal from "@/components/PayjpModal";
+
+const PAYJP_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYJP_PUBLIC_KEY ?? "";
 
 type Tab = "overview" | "finance" | "swot" | "action" | "pitch";
 
@@ -52,7 +55,8 @@ export default function ToolPage() {
   const [remaining, setRemaining] = useState<number | null>(null);
   const [isPremium, setIsPremium] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [showPayjp, setShowPayjp] = useState(false);
+  const [payjpPlan, setPayjpPlan] = useState("once");
   const [copied, setCopied] = useState<Tab | null>(null);
 
   useEffect(() => {
@@ -89,19 +93,9 @@ export default function ToolPage() {
     setLoading(false);
   }
 
-  async function startCheckout(priceType: "once" | "monthly") {
-    setCheckoutLoading(true);
-    try {
-      const res = await fetch("/api/stripe/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ priceType }),
-      });
-      const data = await res.json();
-      if (data.url) window.location.href = data.url;
-    } catch {
-      setCheckoutLoading(false);
-    }
+  function startCheckout(priceType: "once" | "monthly") {
+    setPayjpPlan(priceType);
+    setShowPayjp(true);
   }
 
   function copy(content: string, key: Tab) {
@@ -118,6 +112,15 @@ export default function ToolPage() {
 
   return (
     <main className="min-h-screen bg-gray-950 text-white">
+      {showPayjp && (
+        <PayjpModal
+          publicKey={PAYJP_PUBLIC_KEY}
+          planLabel={payjpPlan === "once" ? "1回払い ¥2,980" : "月額プラン ¥4,980/月"}
+          plan={payjpPlan}
+          onSuccess={() => { setShowPayjp(false); setIsPremium(true); setRemaining(null); }}
+          onClose={() => setShowPayjp(false)}
+        />
+      )}
       <nav className="bg-gray-900 border-b border-gray-800 px-6 py-4 flex justify-between items-center">
         <Link href="/" className="font-bold text-emerald-400">📊 AI経営計画書作成</Link>
         <div className="flex items-center gap-4">
@@ -235,11 +238,11 @@ export default function ToolPage() {
           <div className="bg-emerald-900/30 border border-emerald-700 rounded-xl p-4 text-center">
             <p className="text-sm text-emerald-200 mb-3">無料回数を使い切りました。</p>
             <div className="flex gap-3 justify-center">
-              <button onClick={() => startCheckout("once")} disabled={checkoutLoading} className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-5 py-2 rounded-xl text-sm transition disabled:opacity-50">
-                {checkoutLoading ? "処理中..." : "¥2,980 1回払い"}
+              <button onClick={() => startCheckout("once")} disabled={false} className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-5 py-2 rounded-xl text-sm transition disabled:opacity-50">
+                ¥2,980 1回払い
               </button>
-              <button onClick={() => startCheckout("monthly")} disabled={checkoutLoading} className="bg-gray-700 hover:bg-gray-600 text-white font-bold px-5 py-2 rounded-xl text-sm transition disabled:opacity-50">
-                {checkoutLoading ? "処理中..." : "¥4,980/月 使い放題"}
+              <button onClick={() => startCheckout("monthly")} disabled={false} className="bg-gray-700 hover:bg-gray-600 text-white font-bold px-5 py-2 rounded-xl text-sm transition disabled:opacity-50">
+                ¥4,980/月 使い放題
               </button>
             </div>
           </div>
@@ -261,11 +264,11 @@ export default function ToolPage() {
             <h3 className="text-xl font-bold mb-2">無料回数が終わりました</h3>
             <p className="text-gray-400 text-sm mb-6">¥2,980（1回払い）または¥4,980/月（使い放題）</p>
             <div className="flex gap-4 justify-center">
-              <button onClick={() => startCheckout("once")} disabled={checkoutLoading} className="bg-emerald-500 hover:bg-emerald-400 text-white font-black px-6 py-3 rounded-xl transition disabled:opacity-50">
-                {checkoutLoading ? "処理中..." : "¥2,980で1回作成"}
+              <button onClick={() => startCheckout("once")} disabled={false} className="bg-emerald-500 hover:bg-emerald-400 text-white font-black px-6 py-3 rounded-xl transition disabled:opacity-50">
+                ¥2,980で1回作成
               </button>
-              <button onClick={() => startCheckout("monthly")} disabled={checkoutLoading} className="bg-gray-700 hover:bg-gray-600 text-white font-bold px-6 py-3 rounded-xl transition disabled:opacity-50">
-                {checkoutLoading ? "処理中..." : "¥4,980/月"}
+              <button onClick={() => startCheckout("monthly")} disabled={false} className="bg-gray-700 hover:bg-gray-600 text-white font-bold px-6 py-3 rounded-xl transition disabled:opacity-50">
+                ¥4,980/月
               </button>
             </div>
           </div>
