@@ -13,7 +13,7 @@ export default function PrivacyPage() {
           ["入力内容の取り扱い", "入力いただいた事業情報は、AI生成のためにAnthropicのAPIに送信されます。個人を特定できる形での保存・利用はしません。"],
           ["Cookieの使用", "本サービスでは、無料試用回数の管理およびログイン状態の維持のためにCookieを使用しています。"],
           ["免責事項", "本サービスが生成する経営計画書はAIによる参考情報です。融資・補助金申請・投資家向け資料として利用する際は、必ずご自身で内容を確認・修正の上ご利用ください。"],
-          ["お問い合わせ", "プライバシーに関するご質問はlevonadesign@gmail.comまでご連絡ください。"],
+          ["お問い合わせ", "プライバシーに関するご質問はX(Twitter) @levona_design へのDMまでご連絡ください。"],
         ].map(([title, body]) => (
           <section key={title}>
             <h2 className="text-white font-bold mb-2">{title}</h2>
