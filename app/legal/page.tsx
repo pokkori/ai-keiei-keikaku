@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 const ITEMS = [
-  { label: "販売業者", value: "個人事業主（pokkori）" },
-  { label: "運営責任者", value: "非公開（請求があれば遅滞なく開示します）" },
+  { label: "販売業者", value: "ポッコリラボ" },
+  { label: "運営責任者", value: "ポッコリラボ 代表 新美" },
   { label: "お問い合わせ", value: "X(Twitter) @levona_design へのDM" },
   { label: "販売価格", value: "¥2,980（一回払い）、¥4,980/月（月額・税込）" },
   { label: "支払方法", value: "クレジットカード（Visa・Mastercard・American Express・JCB）" },
