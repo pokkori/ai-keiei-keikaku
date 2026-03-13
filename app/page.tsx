@@ -122,6 +122,47 @@ export default function Home() {
         </div>
       </section>
 
+      {/* 融資審査担当者が見るポイント — 信頼性・アウトカム訴求 */}
+      <section className="py-16 px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <div className="inline-block bg-emerald-900/60 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full mb-3">融資審査の現実</div>
+            <h2 className="text-2xl font-bold text-white">銀行融資担当者が計画書で見る5つのポイント</h2>
+            <p className="text-gray-400 text-sm mt-2">「計画書が甘い」と言われる理由は、これらが揃っていないから</p>
+          </div>
+          <div className="space-y-3 mb-8">
+            {[
+              { num: "01", point: "「なぜ今、この事業か」が明確か", detail: "市場の変化・タイミング・自分にしかできない理由。「やりたいから」では通らない。", aiHelp: "AIが市場機会・独自性を言語化し、説得力ある事業背景を生成" },
+              { num: "02", point: "数字の根拠が現実的か", detail: "「1年目で黒字」「客単価5,000円」に具体的な根拠があるか。希望的観測は一発NG。", aiHelp: "収支計画・損益分岐点・月次シミュレーションを自動算出" },
+              { num: "03", point: "リスクを認識しているか", detail: "「失敗した場合の対応策」を書ける経営者ほど審査が通りやすい。", aiHelp: "SWOT分析の弱み・脅威→リスク対策プランを自動生成" },
+              { num: "04", point: "返済できる根拠が見えるか", detail: "融資額を何ヶ月で回収できるのか。キャッシュフロー計算書のイメージが必須。", aiHelp: "売上・コスト・返済シミュレーションを3年分で生成" },
+              { num: "05", point: "申請者に実行力があるか", detail: "具体的なアクションプランがあると「本気で実行する人」と判断される。", aiHelp: "月次タスク・マイルストーン・担当者付きロードマップを生成" },
+            ].map((item) => (
+              <div key={item.num} className="flex gap-4 bg-gray-900 border border-gray-800 rounded-2xl p-5 items-start">
+                <div className="text-emerald-400 font-black text-xl w-10 shrink-0">{item.num}</div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-white text-sm mb-1">{item.point}</h3>
+                  <p className="text-gray-400 text-xs mb-2">{item.detail}</p>
+                  <div className="bg-emerald-900/40 border border-emerald-700/30 rounded-lg px-3 py-1.5">
+                    <p className="text-emerald-300 text-xs">🤖 AIの対応: {item.aiHelp}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="bg-emerald-900 border border-emerald-600 rounded-2xl p-5 text-center">
+            <p className="text-white font-bold text-sm mb-1">これ5つ、AIが一括で揃えてくれます</p>
+            <p className="text-emerald-300 text-xs mb-4">融資担当者が「よく書けている」と感じる計画書の要素をすべてカバー</p>
+            <button
+              onClick={() => startCheckout("once")}
+              className="inline-block bg-emerald-400 hover:bg-emerald-300 text-gray-900 font-black py-3 px-8 rounded-xl transition text-sm"
+            >
+              ¥2,980で計画書を作成する →
+            </button>
+          </div>
+        </div>
+      </section>
+
       {/* Testimonials */}
       <section className="py-16 px-4">
         <div className="max-w-3xl mx-auto">
