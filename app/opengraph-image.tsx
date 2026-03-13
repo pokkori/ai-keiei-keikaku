@@ -24,24 +24,25 @@ export default function Image() {
         <div style={{ fontSize: 52, fontWeight: 700, color: "#86efac", marginBottom: 16, textAlign: "center" }}>
           AI経営計画書作成
         </div>
-        <div style={{ fontSize: 28, color: "#bbf7d0", textAlign: "center", maxWidth: 900 }}>
-          事業概要を入力するだけ
+        <div style={{ fontSize: 24, color: "#bbf7d0", textAlign: "center", maxWidth: 900, marginBottom: 4, display: "flex" }}>
+          日本公庫融資・補助金申請用の事業計画書をAIが3分で自動生成
         </div>
-        <div style={{ fontSize: 24, color: "#4ade80", marginTop: 12, textAlign: "center" }}>
-          本格的な経営計画書をAIが5分で生成 ⚡
+        <div style={{ fontSize: 22, color: "#4ade80", textAlign: "center", maxWidth: 900, display: "flex" }}>
+          コンサル費¥10万以上を節約。登録不要で今すぐ使える。
         </div>
         <div
           style={{
-            marginTop: 40,
-            padding: "12px 32px",
+            marginTop: 28,
+            padding: "12px 36px",
             background: "#16a34a",
             borderRadius: 40,
             fontSize: 22,
             color: "#fff",
-            fontWeight: 600,
+            fontWeight: 700,
+            display: "flex",
           }}
         >
-          ¥2,980 / 回〜
+          無料1回 → プレミアム¥980/月〜
         </div>
       </div>
     ),
