@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
   if (email) {
     isPremium = await isActiveSubscription(email, APP_ID);
   } else {
-    isPremium = cookieStore.get("stripe_premium")?.value === "1";
+    isPremium = cookieStore.get("stripe_premium")?.value === "1" || cookieStore.get("premium")?.value === "1";
   }
   const cookieCount = parseInt(cookieStore.get(COOKIE_KEY)?.value || "0", 10);
 
