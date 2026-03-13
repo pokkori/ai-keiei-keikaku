@@ -271,10 +271,22 @@ export default function Home() {
         </Link>
       </section>
 
-      <footer className="border-t border-gray-800 py-6 text-center text-xs text-gray-500 space-x-4">
-        <Link href="/legal" className="hover:underline">特定商取引法に基づく表記</Link>
-        <Link href="/terms" className="hover:underline">利用規約</Link>
-        <Link href="/privacy" className="hover:underline">プライバシーポリシー</Link>
+      <footer className="border-t border-gray-800 py-6 text-center text-xs text-gray-500">
+        <div className="space-x-4 mb-3">
+          <Link href="/legal" className="hover:underline">特定商取引法に基づく表記</Link>
+          <Link href="/terms" className="hover:underline">利用規約</Link>
+          <Link href="/privacy" className="hover:underline">プライバシーポリシー</Link>
+        </div>
+        <div className="border-t border-gray-800 pt-3">
+          <p className="mb-2 text-gray-600">ポッコリラボの他のサービス</p>
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-gray-600">
+            <a href="https://claim-ai-beryl.vercel.app" className="hover:text-gray-400">クレームAI</a>
+            <a href="https://hojyokin-ai-delta.vercel.app" className="hover:text-gray-400">補助金AI</a>
+            <a href="https://keiyakusho-ai.vercel.app" className="hover:text-gray-400">契約書AIレビュー</a>
+            <a href="https://rougo-sim-ai.vercel.app" className="hover:text-gray-400">老後シミュレーターAI</a>
+            <a href="https://uranai-ai-sigma.vercel.app" className="hover:text-gray-400">占いAI</a>
+          </div>
+        </div>
       </footer>
       {showPayjp && (
         <PayjpModal
