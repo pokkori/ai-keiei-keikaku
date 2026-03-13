@@ -108,7 +108,7 @@ export default function ToolPage() {
     window.print();
   }
 
-  const canGenerate = form.overview.trim() && form.industry && (isPremium || (remaining !== null && remaining > 0));
+  const canGenerate = form.overview.trim() && form.industry && (isPremium || remaining === null || remaining > 0);
 
   return (
     <main className="min-h-screen bg-gray-950 text-white">
