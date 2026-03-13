@@ -288,7 +288,7 @@ export default function ToolPage() {
               ))}
             </div>
             <div className="p-6">
-              <div className="flex justify-end mb-4 gap-2">
+              <div className="flex justify-end mb-4 gap-2 flex-wrap">
                 <button
                   onClick={() => copy(result[tab], tab)}
                   className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition"
@@ -301,6 +301,14 @@ export default function ToolPage() {
                 >
                   印刷
                 </button>
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent("AIが経営計画書を自動生成！\n事業計画・資金調達計画・組織計画まで一括作成できました。\n#経営計画 #AI活用 #起業")}&url=${encodeURIComponent("https://ai-keiei-keikaku.vercel.app")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-gray-800 transition-colors"
+                >
+                  𝕏 でシェアする
+                </a>
               </div>
               <div className="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap">
                 {result[tab] || "このセクションの内容がありません。"}
