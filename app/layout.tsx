@@ -29,9 +29,59 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "AI経営計画書作成",
+      "url": SITE_URL,
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "offers": { "@type": "Offer", "price": "980", "priceCurrency": "JPY", "description": "プレミアムプラン ¥980/月" },
+      "description": DESC,
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "どんな経営計画書が作れますか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "日本公庫融資申請・補助金申請（ものづくり補助金・IT導入補助金等）・創業計画書・投資家向けピッチ資料など、幅広いビジネス文書に対応しています。SWOT分析・収支計画・アクションプランも自動生成します。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "融資・補助金申請に実際に使えますか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "日本政策金融公庫の創業計画書フォーマットや各種補助金の事業計画書として活用できます。ただし、AIが生成した内容を必ずご自身で確認・修正してからご提出ください。実際にご利用された方が融資通過・補助金採択されたケースがあります。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "無料で使えますか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "登録不要で1回分の経営計画書生成を無料でお試しいただけます。プレミアムプラン（¥980/月）で無制限生成・PDF出力・複数バージョン保存が可能になります。"
+          }
+        },
+      ],
+    },
+  ],
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ja">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className={`${geist.variable} antialiased`}>
         {children}
         <Analytics />
