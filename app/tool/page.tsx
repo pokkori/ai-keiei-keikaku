@@ -305,6 +305,15 @@ export default function ToolPage() {
               <div className="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap">
                 {result[tab] || "このセクションの内容がありません。"}
               </div>
+              {/* 補助金AIへのクロスセル */}
+              <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                <p className="text-sm font-bold text-blue-800 mb-1">📋 この経営計画書、補助金申請にも使えます</p>
+                <p className="text-xs text-blue-600 mb-3">ものづくり補助金・IT補助金・小規模事業者持続化補助金の申請書を30秒でAI作成</p>
+                <a href="https://hojyokin-ai-delta.vercel.app" target="_blank" rel="noopener noreferrer"
+                  className="inline-block bg-blue-600 text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-blue-700">
+                  補助金AIで申請書を作成 →
+                </a>
+              </div>
             </div>
           </div>
         )}
