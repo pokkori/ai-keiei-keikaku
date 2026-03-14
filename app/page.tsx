@@ -7,9 +7,9 @@ const PAYJP_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYJP_PUBLIC_KEY ?? "";
 
 export default function Home() {
   const [showPayjp, setShowPayjp] = useState(false);
-  const [payjpPlan, setPayjpPlan] = useState<"once" | "monthly">("monthly");
+  const [payjpPlan, setPayjpPlan] = useState<"once" | "monthly" | "premium">("monthly");
 
-  function startCheckout(priceType: "once" | "monthly") {
+  function startCheckout(priceType: "once" | "monthly" | "premium") {
     setPayjpPlan(priceType);
     setShowPayjp(true);
   }
@@ -22,13 +22,26 @@ export default function Home() {
           📊 AI経営計画書作成 — 5分で本格的な計画書を生成
         </div>
         <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight">
-          経営計画書、<br />
-          <span className="text-emerald-400">AIが5分で作成。</span>
+          融資審査を通過する経営計画書を、<br />
+          <span className="text-emerald-400">AIが15分で作ります。</span>
         </h1>
         <p className="text-gray-300 text-lg max-w-2xl mx-auto mb-8">
-          事業概要を入力するだけ。<strong className="text-white">収支計画・SWOT分析・アクションプラン・投資家向けピッチ</strong>まで
-          AIが一気に生成。融資申請・補助金申請・創業計画に。
+          日本政策金融公庫・銀行融資・補助金申請に対応。無料で2回お試しいただけます。
         </p>
+        <div className="flex flex-wrap justify-center gap-3 mb-8 text-sm">
+          <div className="flex items-center gap-1.5 bg-white border border-gray-200 rounded-full px-4 py-2 shadow-sm">
+            <span className="text-emerald-600 font-bold">融資申請対応</span>
+            <span className="text-gray-600">日本公庫・銀行・信用金庫</span>
+          </div>
+          <div className="flex items-center gap-1.5 bg-white border border-gray-200 rounded-full px-4 py-2 shadow-sm">
+            <span className="text-emerald-600 font-bold">補助金連携</span>
+            <span className="text-gray-600">ものづくり・IT導入・小規模事業者</span>
+          </div>
+          <div className="flex items-center gap-1.5 bg-white border border-gray-200 rounded-full px-4 py-2 shadow-sm">
+            <span className="text-emerald-600 font-bold">無料2回</span>
+            <span className="text-gray-600">登録不要ですぐ試せる</span>
+          </div>
+        </div>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href="/tool"
@@ -240,7 +253,7 @@ export default function Home() {
                 <li>✓ いつでも解約可能</li>
               </ul>
               <button
-                onClick={() => startCheckout("monthly")}
+                onClick={() => startCheckout("premium")}
                 className="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-xl transition text-sm"
               >
                 ¥3,980/月で始める
@@ -302,7 +315,7 @@ export default function Home() {
       {showPayjp && (
         <PayjpModal
           publicKey={PAYJP_PUBLIC_KEY}
-          planLabel={payjpPlan === "once" ? "スタンダード ¥1,980/月" : "月額プラン ¥1,980/月"}
+          planLabel={payjpPlan === "once" ? "スタンダード ¥1,980/月" : payjpPlan === "premium" ? "プレミアム ¥3,980/月" : "スタンダード ¥1,980/月"}
           plan={payjpPlan}
           onSuccess={() => setShowPayjp(false)}
           onClose={() => setShowPayjp(false)}

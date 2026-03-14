@@ -56,7 +56,7 @@ export default function ToolPage() {
   const [isPremium, setIsPremium] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
   const [showPayjp, setShowPayjp] = useState(false);
-  const [payjpPlan, setPayjpPlan] = useState("once");
+  const [payjpPlan, setPayjpPlan] = useState<"once" | "monthly" | "premium">("monthly");
   const [copied, setCopied] = useState<Tab | null>(null);
 
   useEffect(() => {
@@ -93,7 +93,7 @@ export default function ToolPage() {
     setLoading(false);
   }
 
-  function startCheckout(priceType: "once" | "monthly") {
+  function startCheckout(priceType: "once" | "monthly" | "premium") {
     setPayjpPlan(priceType);
     setShowPayjp(true);
   }
@@ -115,7 +115,7 @@ export default function ToolPage() {
       {showPayjp && (
         <PayjpModal
           publicKey={PAYJP_PUBLIC_KEY}
-          planLabel={payjpPlan === "once" ? "スタンダード ¥1,980/月" : "月額プラン ¥1,980/月"}
+          planLabel={payjpPlan === "once" ? "スタンダード ¥1,980/月" : payjpPlan === "premium" ? "プレミアム ¥3,980/月" : "スタンダード ¥1,980/月"}
           plan={payjpPlan}
           onSuccess={() => { setShowPayjp(false); setIsPremium(true); setRemaining(null); }}
           onClose={() => setShowPayjp(false)}
@@ -241,7 +241,7 @@ export default function ToolPage() {
               <button onClick={() => startCheckout("monthly")} disabled={false} className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-5 py-2 rounded-xl text-sm transition disabled:opacity-50">
                 ¥1,980/月 使い放題
               </button>
-              <button onClick={() => startCheckout("monthly")} disabled={false} className="bg-gray-700 hover:bg-gray-600 text-white font-bold px-5 py-2 rounded-xl text-sm transition disabled:opacity-50">
+              <button onClick={() => startCheckout("premium")} disabled={false} className="bg-gray-700 hover:bg-gray-600 text-white font-bold px-5 py-2 rounded-xl text-sm transition disabled:opacity-50">
                 ¥3,980/月 プレミアム
               </button>
             </div>
@@ -267,7 +267,7 @@ export default function ToolPage() {
               <button onClick={() => startCheckout("monthly")} disabled={false} className="bg-emerald-500 hover:bg-emerald-400 text-white font-black px-6 py-3 rounded-xl transition disabled:opacity-50">
                 ¥1,980/月で始める
               </button>
-              <button onClick={() => startCheckout("monthly")} disabled={false} className="bg-gray-700 hover:bg-gray-600 text-white font-bold px-6 py-3 rounded-xl transition disabled:opacity-50">
+              <button onClick={() => startCheckout("premium")} disabled={false} className="bg-gray-700 hover:bg-gray-600 text-white font-bold px-6 py-3 rounded-xl transition disabled:opacity-50">
                 ¥3,980/月（プレミアム）
               </button>
             </div>
