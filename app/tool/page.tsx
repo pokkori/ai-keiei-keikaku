@@ -115,7 +115,7 @@ export default function ToolPage() {
       {showPayjp && (
         <PayjpModal
           publicKey={PAYJP_PUBLIC_KEY}
-          planLabel={payjpPlan === "once" ? "1回払い ¥2,980" : "月額プラン ¥4,980/月"}
+          planLabel={payjpPlan === "once" ? "スタンダード ¥1,980/月" : "月額プラン ¥1,980/月"}
           plan={payjpPlan}
           onSuccess={() => { setShowPayjp(false); setIsPremium(true); setRemaining(null); }}
           onClose={() => setShowPayjp(false)}
@@ -238,11 +238,11 @@ export default function ToolPage() {
           <div className="bg-emerald-900/30 border border-emerald-700 rounded-xl p-4 text-center">
             <p className="text-sm text-emerald-200 mb-3">無料回数を使い切りました。</p>
             <div className="flex gap-3 justify-center">
-              <button onClick={() => startCheckout("once")} disabled={false} className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-5 py-2 rounded-xl text-sm transition disabled:opacity-50">
-                ¥2,980 1回払い
+              <button onClick={() => startCheckout("monthly")} disabled={false} className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-5 py-2 rounded-xl text-sm transition disabled:opacity-50">
+                ¥1,980/月 使い放題
               </button>
               <button onClick={() => startCheckout("monthly")} disabled={false} className="bg-gray-700 hover:bg-gray-600 text-white font-bold px-5 py-2 rounded-xl text-sm transition disabled:opacity-50">
-                ¥4,980/月 使い放題
+                ¥3,980/月 プレミアム
               </button>
             </div>
           </div>
@@ -262,13 +262,13 @@ export default function ToolPage() {
           <div className="bg-gray-900 border border-emerald-500 rounded-2xl p-8 text-center">
             <div className="text-4xl mb-4">📊</div>
             <h3 className="text-xl font-bold mb-2">無料回数が終わりました</h3>
-            <p className="text-gray-400 text-sm mb-6">¥2,980（1回払い）または¥4,980/月（使い放題）</p>
+            <p className="text-gray-400 text-sm mb-6">¥1,980/月（スタンダード）または¥3,980/月（プレミアム）</p>
             <div className="flex gap-4 justify-center">
-              <button onClick={() => startCheckout("once")} disabled={false} className="bg-emerald-500 hover:bg-emerald-400 text-white font-black px-6 py-3 rounded-xl transition disabled:opacity-50">
-                ¥2,980で1回作成
+              <button onClick={() => startCheckout("monthly")} disabled={false} className="bg-emerald-500 hover:bg-emerald-400 text-white font-black px-6 py-3 rounded-xl transition disabled:opacity-50">
+                ¥1,980/月で始める
               </button>
               <button onClick={() => startCheckout("monthly")} disabled={false} className="bg-gray-700 hover:bg-gray-600 text-white font-bold px-6 py-3 rounded-xl transition disabled:opacity-50">
-                ¥4,980/月
+                ¥3,980/月（プレミアム）
               </button>
             </div>
           </div>

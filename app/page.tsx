@@ -7,7 +7,7 @@ const PAYJP_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYJP_PUBLIC_KEY ?? "";
 
 export default function Home() {
   const [showPayjp, setShowPayjp] = useState(false);
-  const [payjpPlan, setPayjpPlan] = useState<"once" | "monthly">("once");
+  const [payjpPlan, setPayjpPlan] = useState<"once" | "monthly">("monthly");
 
   function startCheckout(priceType: "once" | "monthly") {
     setPayjpPlan(priceType);
@@ -34,16 +34,25 @@ export default function Home() {
             href="/tool"
             className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-8 py-4 rounded-xl text-lg transition"
           >
-            無料で試す（1回）
+            無料で試す（2回）
           </Link>
           <button
-            onClick={() => startCheckout("once")}
+            onClick={() => startCheckout("monthly")}
             className="border border-emerald-400 text-emerald-300 hover:bg-emerald-900 font-bold px-8 py-4 rounded-xl text-lg transition"
           >
-            ¥2,980で1回作成
+            月額プランを始める
           </button>
         </div>
       </section>
+
+      {/* クロスセルバナー: 補助金AI */}
+      <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 max-w-2xl mx-auto mb-8 flex items-center gap-3">
+        <span className="text-2xl">🤝</span>
+        <div>
+          <p className="font-bold text-amber-800 text-sm">補助金AI と併用でさらに効果的</p>
+          <p className="text-xs text-amber-600">経営計画書の作成 → 補助金申請書の作成をワンストップで。プレミアムプランで両方使えます。</p>
+        </div>
+      </div>
 
       {/* Use cases */}
       <section className="py-16 px-4 bg-gray-900">
@@ -112,7 +121,7 @@ export default function Home() {
               <h3 className="font-bold text-emerald-400 mb-4">AIを使ったら</h3>
               <ul className="text-sm text-emerald-200 space-y-3">
                 <li>• 入力5分 → 生成5分で完成</li>
-                <li>• ¥2,980から。コンサルの1/100以下</li>
+                <li>• ¥1,980/月から。コンサルの1/100以下</li>
                 <li>• あなたの事業に特化した内容を生成</li>
                 <li>• 収支計画・数値目標も自動算出</li>
                 <li>• 融資・補助金・ピッチに対応した構成</li>
@@ -154,10 +163,10 @@ export default function Home() {
             <p className="text-white font-bold text-sm mb-1">これ5つ、AIが一括で揃えてくれます</p>
             <p className="text-emerald-300 text-xs mb-4">融資担当者が「よく書けている」と感じる計画書の要素をすべてカバー</p>
             <button
-              onClick={() => startCheckout("once")}
+              onClick={() => startCheckout("monthly")}
               className="inline-block bg-emerald-400 hover:bg-emerald-300 text-gray-900 font-black py-3 px-8 rounded-xl transition text-sm"
             >
-              ¥2,980で計画書を作成する →
+              ¥1,980/月で計画書を作成する →
             </button>
           </div>
         </div>
@@ -187,15 +196,15 @@ export default function Home() {
       <section className="py-16 px-4 bg-gray-900">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-2xl font-bold mb-4">料金プラン</h2>
-          <p className="text-gray-400 text-sm mb-10">コンサルの1/100以下の価格で本格的な計画書を</p>
+          <p className="text-gray-400 text-sm mb-10">コンサルの1/100以下の価格で本格的な計画書を何通でも</p>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
               <h3 className="font-bold mb-2">無料体験</h3>
               <div className="text-4xl font-black mb-4">¥0</div>
               <ul className="text-gray-400 text-sm space-y-2 mb-6 text-left">
-                <li>✓ 1回無料で試せる</li>
+                <li>✓ 2回無料で試せる</li>
                 <li>✓ 全5タブ生成</li>
-                <li>✗ 2回目以降は有料</li>
+                <li>✗ 3回目以降は有料</li>
               </ul>
               <Link href="/tool" className="block w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-xl transition text-center text-sm">
                 無料で試す
@@ -203,40 +212,42 @@ export default function Home() {
             </div>
             <div className="bg-emerald-900 rounded-2xl p-6 border-2 border-emerald-400 relative">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-400 text-gray-900 text-xs font-black px-4 py-1 rounded-full whitespace-nowrap">おすすめ</div>
-              <h3 className="font-bold mb-2">1回払い</h3>
-              <div className="text-4xl font-black mb-4">¥2,980</div>
+              <h3 className="font-bold mb-2">スタンダード</h3>
+              <div className="text-4xl font-black mb-1">¥1,980</div>
+              <div className="text-emerald-300 text-xs mb-1">/月（無制限利用）</div>
+              <div className="text-emerald-400 text-xs font-bold mb-4">1日たった66円で何通でも作成</div>
               <ul className="text-emerald-200 text-sm space-y-2 mb-6 text-left">
-                <li>✓ 1回分の計画書作成</li>
+                <li>✓ 作成し放題</li>
                 <li>✓ 全5タブ完全解放</li>
                 <li>✓ 印刷・コピー自由</li>
-                <li>✓ 月額不要</li>
+                <li>✓ いつでも解約可能</li>
               </ul>
               <button
-                onClick={() => startCheckout("once")}
+                onClick={() => startCheckout("monthly")}
                 className="w-full bg-emerald-400 hover:bg-emerald-300 text-gray-900 font-black py-3 rounded-xl transition text-sm"
               >
-                ¥2,980で購入
+                ¥1,980/月で始める
               </button>
             </div>
             <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
-              <h3 className="font-bold mb-2">月額プラン</h3>
-              <div className="text-4xl font-black mb-1">¥4,980</div>
-              <div className="text-gray-400 text-xs mb-4">/月（使い放題）</div>
+              <h3 className="font-bold mb-2">プレミアム</h3>
+              <div className="text-4xl font-black mb-1">¥3,980</div>
+              <div className="text-gray-400 text-xs mb-4">/月（全サービス対応）</div>
               <ul className="text-gray-400 text-sm space-y-2 mb-6 text-left">
-                <li>✓ 作成し放題</li>
-                <li>✓ 全機能解放</li>
-                <li>✓ 複数事業の計画も</li>
+                <li>✓ 経営計画書 作成し放題</li>
+                <li>✓ 補助金AI 同時利用可</li>
+                <li>✓ 複数書類を並行作成</li>
                 <li>✓ いつでも解約可能</li>
               </ul>
               <button
                 onClick={() => startCheckout("monthly")}
                 className="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-xl transition text-sm"
               >
-                月額プランを始める
+                ¥3,980/月で始める
               </button>
             </div>
           </div>
-          <p className="text-gray-500 text-xs mt-6">※ 経営コンサルタント費用の相場: 30万〜100万円 / 当サービス: ¥2,980〜</p>
+          <p className="text-gray-500 text-xs mt-6">※ 経営コンサルタント費用の相場: 30万〜100万円 / 当サービス: ¥1,980/月〜</p>
         </div>
       </section>
 
@@ -248,7 +259,7 @@ export default function Home() {
             {[
               { q: "どんな業種に対応していますか？", a: "飲食・小売・IT・製造・建設・医療・美容・教育・不動産など全業種対応しています。AIが業種に合わせた内容を生成します。" },
               { q: "生成された計画書をそのまま金融機関に提出できますか？", a: "骨格・骨子として活用いただけます。数値や固有の情報はご自身で確認・修正の上ご利用ください。多くの方が下書きとして活用し、仕上げに1〜2時間で完成されています。" },
-              { q: "1回払いと月額の違いは？", a: "1回払いは1回分の計画書作成ができます。複数の事業・複数回作成したい方や、毎月計画を見直したい方には月額プランがお得です。" },
+              { q: "スタンダードとプレミアムの違いは？", a: "スタンダード（¥1,980/月）はAI経営計画書の無制限利用。プレミアム（¥3,980/月）は補助金AIとの同時利用や複数書類の並行作成が可能です。経営計画書と補助金申請書をワンストップで作成したい方はプレミアムがおすすめです。" },
             ].map((f) => (
               <div key={f.q} className="border border-gray-800 rounded-xl p-6">
                 <h3 className="font-bold text-sm mb-2 text-emerald-400">Q. {f.q}</h3>
@@ -291,7 +302,7 @@ export default function Home() {
       {showPayjp && (
         <PayjpModal
           publicKey={PAYJP_PUBLIC_KEY}
-          planLabel={payjpPlan === "once" ? "1回払い ¥2,980" : "月額プラン ¥4,980/月"}
+          planLabel={payjpPlan === "once" ? "スタンダード ¥1,980/月" : "月額プラン ¥1,980/月"}
           plan={payjpPlan}
           onSuccess={() => setShowPayjp(false)}
           onClose={() => setShowPayjp(false)}
