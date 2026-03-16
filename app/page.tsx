@@ -19,35 +19,41 @@ export default function Home() {
       {/* Hero */}
       <section className="pt-20 pb-16 px-4 text-center">
         <div className="inline-block bg-emerald-900 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full mb-6">
-          📊 AI経営計画書作成 — 5分で本格的な計画書を生成
+          📊 銀行融資・補助金申請に使える経営計画書を5分で自動作成
         </div>
-        <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight">
-          融資審査を通過する経営計画書を、<br />
-          <span className="text-emerald-400">AIが15分で作ります。</span>
+        <h1 className="text-4xl md:text-6xl font-black mb-4 leading-tight">
+          5分で経営計画書を自動作成。<br />
+          <span className="text-emerald-400">銀行融資・補助金申請に使える。</span>
         </h1>
-        <p className="text-gray-300 text-lg max-w-2xl mx-auto mb-8">
-          日本政策金融公庫・銀行融資・補助金申請に対応。無料で2回お試しいただけます。
+        <p className="text-gray-300 text-xl font-bold max-w-2xl mx-auto mb-3">
+          専門家に頼むと10万円〜。AIなら無料で何度でも。
         </p>
+        <p className="text-gray-400 text-base max-w-2xl mx-auto mb-8">
+          日本政策金融公庫・銀行融資・補助金申請に対応。事業概要を入力するだけで、審査を通過できる計画書の骨格が完成します。
+        </p>
+
+        {/* ユースケース3パターン */}
         <div className="flex flex-wrap justify-center gap-3 mb-8 text-sm">
-          <div className="flex items-center gap-1.5 bg-white border border-gray-200 rounded-full px-4 py-2 shadow-sm">
-            <span className="text-emerald-600 font-bold">融資申請対応</span>
-            <span className="text-gray-600">日本公庫・銀行・信用金庫</span>
+          <div className="flex items-center gap-1.5 bg-emerald-950 border border-emerald-700 rounded-full px-4 py-2">
+            <span className="text-emerald-400 font-bold">🏦 融資申請用</span>
+            <span className="text-gray-400">日本公庫・銀行・信用金庫</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-white border border-gray-200 rounded-full px-4 py-2 shadow-sm">
-            <span className="text-emerald-600 font-bold">補助金連携</span>
-            <span className="text-gray-600">ものづくり・IT導入・小規模事業者</span>
+          <div className="flex items-center gap-1.5 bg-emerald-950 border border-emerald-700 rounded-full px-4 py-2">
+            <span className="text-emerald-400 font-bold">📋 補助金申請用</span>
+            <span className="text-gray-400">ものづくり・IT導入・小規模事業者</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-white border border-gray-200 rounded-full px-4 py-2 shadow-sm">
-            <span className="text-emerald-600 font-bold">無料2回</span>
-            <span className="text-gray-600">登録不要ですぐ試せる</span>
+          <div className="flex items-center gap-1.5 bg-emerald-950 border border-emerald-700 rounded-full px-4 py-2">
+            <span className="text-emerald-400 font-bold">🏢 社内共有用</span>
+            <span className="text-gray-400">中期計画・投資家向けピッチ</span>
           </div>
         </div>
+
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href="/tool"
-            className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-8 py-4 rounded-xl text-lg transition"
+            className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-10 py-4 rounded-xl text-lg transition"
           >
-            無料で試す（2回）
+            無料で経営計画書を作る
           </Link>
           <button
             onClick={() => startCheckout("monthly")}
@@ -56,6 +62,7 @@ export default function Home() {
             月額プランを始める
           </button>
         </div>
+        <p className="text-gray-500 text-xs mt-4">登録不要・クレカ不要・2回まで無料</p>
       </section>
 
       {/* クロスセルバナー: 補助金AI */}
@@ -124,7 +131,7 @@ export default function Home() {
               <h3 className="font-bold text-red-400 mb-4">今まで</h3>
               <ul className="text-sm text-red-200 space-y-3">
                 <li>• 書き方がわからず、何週間も放置</li>
-                <li>• コンサルに頼むと30万〜100万円</li>
+                <li>• 専門家に頼むと10万〜100万円かかる</li>
                 <li>• テンプレをコピーするだけで内容が薄い</li>
                 <li>• 数字の根拠をどう示せばいいか不明</li>
                 <li>• 融資担当者に「計画が甘い」と言われる</li>
@@ -133,11 +140,11 @@ export default function Home() {
             <div className="bg-emerald-950 border border-emerald-700 rounded-2xl p-6">
               <h3 className="font-bold text-emerald-400 mb-4">AIを使ったら</h3>
               <ul className="text-sm text-emerald-200 space-y-3">
-                <li>• 入力5分 → 生成5分で完成</li>
-                <li>• ¥1,980/月から。コンサルの1/100以下</li>
-                <li>• あなたの事業に特化した内容を生成</li>
+                <li>• 入力5分 → 生成5分で完成（何度でも無料で修正可）</li>
+                <li>• ¥1,980/月から。専門家費用の1/50以下</li>
+                <li>• 融資申請用・補助金申請用・社内共有用を選んで生成</li>
                 <li>• 収支計画・数値目標も自動算出</li>
-                <li>• 融資・補助金・ピッチに対応した構成</li>
+                <li>• 審査担当者が重視する5ポイントをすべてカバー</li>
               </ul>
             </div>
           </div>
@@ -285,14 +292,16 @@ export default function Home() {
 
       {/* CTA */}
       <section className="py-16 px-4 text-center bg-gray-900">
-        <h2 className="text-2xl font-bold mb-4">まず無料で試してみよう</h2>
-        <p className="text-gray-400 mb-8">クレカ不要・登録不要。事業概要を入力するだけ。</p>
+        <div className="inline-block bg-emerald-900/60 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full mb-4">専門家費用10万円〜 → AIなら無料で何度でも</div>
+        <h2 className="text-2xl font-bold mb-2">無料で経営計画書を作る</h2>
+        <p className="text-gray-400 mb-8">クレカ不要・登録不要。融資申請用・補助金申請用・社内共有用に対応。</p>
         <Link
           href="/tool"
           className="bg-emerald-500 hover:bg-emerald-400 text-white font-black px-10 py-5 rounded-2xl text-xl transition inline-block"
         >
-          今すぐ無料で作成
+          無料で経営計画書を作る →
         </Link>
+        <p className="text-gray-500 text-xs mt-4">2回まで無料 · いつでも解約可能</p>
       </section>
 
       <footer className="border-t border-gray-800 py-6 text-center text-xs text-gray-500">

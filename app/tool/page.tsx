@@ -82,10 +82,30 @@ export default function ToolPage() {
         body: JSON.stringify(form),
       });
       if (res.status === 402) { setShowPaywall(true); setLoading(false); return; }
-      const data = await res.json();
-      if (data.error) { setError(data.error); setLoading(false); return; }
-      setResult(parseResult(data.result));
-      setRemaining(data.remaining);
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "エラーが発生しました。もう一度お試しください。");
+        setLoading(false); return;
+      }
+      const reader = res.body?.getReader();
+      const decoder = new TextDecoder();
+      let accumulated = "";
+      while (reader) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value, { stream: true });
+        if (chunk.includes("\nDONE:")) {
+          const idx = chunk.indexOf("\nDONE:");
+          accumulated += chunk.slice(0, idx);
+          try {
+            const meta = JSON.parse(chunk.slice(idx + 6));
+            setRemaining(meta.remaining);
+          } catch { /* ignore */ }
+        } else {
+          accumulated += chunk;
+        }
+        setResult(parseResult(accumulated));
+      }
       setTab("overview");
     } catch {
       setError("エラーが発生しました。もう一度お試しください。");

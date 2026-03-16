@@ -6,8 +6,8 @@ import "./globals.css";
 const geist = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 
 const SITE_URL = "https://ai-keiei-keikaku.vercel.app";
-const TITLE = "AI経営計画書作成 | 事業概要を入力するだけ。本格的な経営計画書をAIが5分で生成";
-const DESC = "事業概要・強み・課題を入力するだけ。AIが収支計画・SWOT分析・アクションプラン・投資家向けピッチまで自動生成。融資・補助金申請・創業計画に。¥2,980/回〜。";
+const TITLE = "AI経営計画書作成｜経営計画書を無料でAI自動生成・融資・補助金申請・創業計画に対応";
+const DESC = "経営計画書をAIが無料で自動生成。事業概要・強み・課題を入力するだけでAIが収支計画・SWOT分析・アクションプラン・投資家向けピッチまで自動生成。日本政策金融公庫の融資申請・補助金申請・創業計画書に活用。登録不要で無料お試し。¥2,980/回〜。";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -38,7 +38,8 @@ const jsonLd = {
       "url": SITE_URL,
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Web",
-      "offers": { "@type": "Offer", "price": "980", "priceCurrency": "JPY", "description": "プレミアムプラン ¥980/月" },
+      "keywords": "経営計画書,AI自動生成,無料,融資,補助金申請,創業計画,SWOT分析,日本政策金融公庫",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "JPY", "description": "無料お試し1回・プレミアム ¥2,980/回〜" },
       "description": DESC,
     },
     {
