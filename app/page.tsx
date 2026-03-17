@@ -74,6 +74,39 @@ export default function Home() {
         </div>
       </div>
 
+      {/* 感情フック：ストーリー型 */}
+      <section className="py-14 px-4">
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center mb-8">
+            <div className="inline-block bg-emerald-900/60 text-emerald-300 text-xs font-bold px-4 py-2 rounded-full mb-2 border border-emerald-700/40">
+              こんな経験、ありませんか？
+            </div>
+          </div>
+          <div className="space-y-4">
+            {[
+              { emoji: "😓", scene: "「計画書の書き方」で詰まり続けた", body: "融資申請の締め切りまであと2週間。テンプレートを開いても「事業の強みとは？」「市場規模は？」の問いに答えられず、白紙のまま閉じてしまう。" },
+              { emoji: "💸", scene: "専門家に頼む費用がない", body: "経営コンサルに依頼したら30万〜100万円。中小企業診断士でも数万円。開業前にそれだけ出す余裕はない。でも「計画書が甘い」と言われて融資が通らないのも困る。" },
+              { emoji: "⏰", scene: "補助金の締め切りが迫っている", body: "ものづくり補助金の申請締め切りまで3日。事業計画書の欄が白紙のまま。このまま諦めるしかないのか。" },
+            ].map((s) => (
+              <div key={s.scene} className="flex gap-4 bg-gray-900 border border-gray-800 rounded-2xl p-5">
+                <div className="text-3xl shrink-0">{s.emoji}</div>
+                <div>
+                  <p className="font-bold text-white text-sm mb-1">{s.scene}</p>
+                  <p className="text-xs text-gray-400 leading-relaxed">{s.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 bg-emerald-900 border border-emerald-600 rounded-2xl p-6 text-center">
+            <p className="text-white font-bold text-sm mb-1">その悩み、AIが5分で解決します</p>
+            <p className="text-emerald-300 text-xs mb-4">事業概要を入力するだけ。銀行融資・補助金申請に使えるレベルの計画書が完成</p>
+            <a href="/tool" className="inline-block bg-emerald-500 hover:bg-emerald-400 text-white font-black px-8 py-3 rounded-xl text-sm transition-colors">
+              今すぐ無料で経営計画書を作る →
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Use cases */}
       <section className="py-16 px-4 bg-gray-900">
         <div className="max-w-4xl mx-auto">
@@ -318,7 +351,14 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="border-t border-gray-800 py-6 text-center text-xs text-gray-500">
+      {/* スティッキーモバイルCTA */}
+      <div className="fixed bottom-0 left-0 right-0 bg-gray-950 border-t border-emerald-700/50 px-4 py-3 z-40 sm:hidden shadow-lg">
+        <a href="/tool" className="block w-full bg-emerald-500 hover:bg-emerald-400 text-white font-black text-center py-3.5 rounded-xl text-sm">
+          経営計画書を無料で作成する →
+        </a>
+      </div>
+
+      <footer className="border-t border-gray-800 py-6 pb-24 sm:pb-6 text-center text-xs text-gray-500">
         <div className="space-x-4 mb-3">
           <Link href="/legal" className="hover:underline">特定商取引法に基づく表記</Link>
           <Link href="/terms" className="hover:underline">利用規約</Link>
