@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import PayjpModal from "@/components/PayjpModal";
+import { track } from '@vercel/analytics';
 
 const PAYJP_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYJP_PUBLIC_KEY ?? "";
 
@@ -108,6 +109,7 @@ export default function ToolPage() {
 
   async function generate() {
     if (!form.overview.trim() || !form.industry) return;
+    track('ai_generated', { service: 'AI経営計画書' });
     setLoading(true);
     setError("");
     setResult(null);
@@ -117,7 +119,7 @@ export default function ToolPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-      if (res.status === 402) { setShowPaywall(true); setLoading(false); return; }
+      if (res.status === 402) { track('paywall_shown', { service: 'AI経営計画書' }); setShowPaywall(true); setLoading(false); return; }
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         setError(data.error || "エラーが発生しました。もう一度お試しください。");
@@ -321,10 +323,10 @@ export default function ToolPage() {
             <h3 className="text-xl font-bold mb-2">無料回数が終わりました</h3>
             <p className="text-gray-400 text-sm mb-6">¥1,980/月（スタンダード）または¥3,980/月（プレミアム）</p>
             <div className="flex gap-4 justify-center">
-              <button onClick={() => startCheckout("monthly")} disabled={false} className="bg-emerald-500 hover:bg-emerald-400 text-white font-black px-6 py-3 rounded-xl transition disabled:opacity-50">
+              <button onClick={() => { track('upgrade_click', { service: 'AI経営計画書', plan: 'monthly' }); startCheckout("monthly"); }} disabled={false} className="bg-emerald-500 hover:bg-emerald-400 text-white font-black px-6 py-3 rounded-xl transition disabled:opacity-50">
                 ¥1,980/月で始める
               </button>
-              <button onClick={() => startCheckout("premium")} disabled={false} className="bg-gray-700 hover:bg-gray-600 text-white font-bold px-6 py-3 rounded-xl transition disabled:opacity-50">
+              <button onClick={() => { track('upgrade_click', { service: 'AI経営計画書', plan: 'premium' }); startCheckout("premium"); }} disabled={false} className="bg-gray-700 hover:bg-gray-600 text-white font-bold px-6 py-3 rounded-xl transition disabled:opacity-50">
                 ¥3,980/月（プレミアム）
               </button>
             </div>
