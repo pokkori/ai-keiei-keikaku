@@ -58,6 +58,7 @@ export default function ToolPage() {
   const [showPayjp, setShowPayjp] = useState(false);
   const [payjpPlan, setPayjpPlan] = useState<"once" | "monthly" | "premium">("monthly");
   const [copied, setCopied] = useState<Tab | null>(null);
+  const [showComplete, setShowComplete] = useState(false);
 
   useEffect(() => {
     fetch("/api/auth/status").then((r) => r.json()).then((d) => {
@@ -107,6 +108,7 @@ export default function ToolPage() {
         setResult(parseResult(accumulated));
       }
       setTab("overview");
+      setShowComplete(true);
     } catch {
       setError("エラーが発生しました。もう一度お試しください。");
     }
@@ -294,6 +296,13 @@ export default function ToolPage() {
           </div>
         )}
 
+        {result && showComplete && (
+          <div className="bg-emerald-900 border-2 border-emerald-400 rounded-2xl p-5 text-center animate-bounce">
+            <p className="text-2xl font-black text-white mb-1">🎉 経営計画書が完成しました！</p>
+            <p className="text-emerald-300 text-sm">各タブをクリックして内容を確認・コピーしてください</p>
+          </div>
+        )}
+
         {result && (
           <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
             <div className="flex overflow-x-auto border-b border-gray-800">
@@ -334,11 +343,11 @@ export default function ToolPage() {
                 {result[tab] || "このセクションの内容がありません。"}
               </div>
               {/* 補助金AIへのクロスセル */}
-              <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-xl">
-                <p className="text-sm font-bold text-blue-800 mb-1">📋 この経営計画書、補助金申請にも使えます</p>
-                <p className="text-xs text-blue-600 mb-3">ものづくり補助金・IT補助金・小規模事業者持続化補助金の申請書を30秒でAI作成</p>
+              <div className="mt-8 p-5 bg-amber-50 border-2 border-amber-300 rounded-xl">
+                <p className="text-base font-bold text-amber-900 mb-1">💰 この経営計画書で補助金申請もしよう</p>
+                <p className="text-xs text-amber-700 mb-3">ものづくり補助金・IT補助金・小規模事業者持続化補助金の申請書をAIが自動作成。AI採択可能性スコア付き。</p>
                 <a href="https://hojyokin-ai-delta.vercel.app" target="_blank" rel="noopener noreferrer"
-                  className="inline-block bg-blue-600 text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-blue-700">
+                  className="inline-block bg-amber-500 hover:bg-amber-600 text-white text-sm font-bold px-5 py-2.5 rounded-lg transition-colors">
                   補助金AIで申請書を作成 →
                 </a>
               </div>

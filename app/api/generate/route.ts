@@ -6,7 +6,7 @@ import { isActiveSubscription } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
 
-const FREE_LIMIT = 2;
+const FREE_LIMIT = 3;
 const COOKIE_KEY = "keikaku_use_count";
 const APP_ID = "keikaku";
 
