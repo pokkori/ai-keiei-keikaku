@@ -366,7 +366,7 @@ export default function ToolPage() {
                   印刷
                 </button>
                 <a
-                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`「${form.businessName || "自分の事業"}の経営計画書が5分で完成した🙌 事業計画・収支計画・SWOT分析まで全部AIが出してくれた → https://ai-keiei-keikaku.vercel.app #経営計画 #AI活用 #起業`)}`}
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`AI経営計画書を試したら「${form.businessName || "事業計画"}」の事業計画書・収支シミュレーション・SWOT分析・投資家ピッチまでが5分で完成した。銀行融資にも使えるレベルで驚いた… → https://ai-keiei-keikaku.vercel.app #経営計画 #AI活用 #起業`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-gray-800 transition-colors"
