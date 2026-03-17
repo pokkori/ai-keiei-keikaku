@@ -302,6 +302,20 @@ export default function Home() {
           無料で経営計画書を作る →
         </Link>
         <p className="text-gray-500 text-xs mt-4">2回まで無料 · いつでも解約可能</p>
+        <div className="mt-8 pt-6 border-t border-gray-800">
+          <p className="text-gray-500 text-sm mb-4">経営計画書の作成に困っている知人にシェアしませんか？</p>
+          <a
+            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent("AIが5分で経営計画書を自動生成。銀行融資・補助金申請に使えるレベルの計画書が無料でできた。専門家に頼むと10万円〜のところ月¥1,980。 #経営計画書 #融資 #補助金 #AI")}&url=${encodeURIComponent("https://ai-keiei-keikaku.vercel.app")}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-black hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-xl transition-all text-sm"
+          >
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+            X(Twitter)でシェアする
+          </a>
+        </div>
       </section>
 
       <footer className="border-t border-gray-800 py-6 text-center text-xs text-gray-500">
