@@ -18,6 +18,39 @@ const TABS: { id: Tab; label: string }[] = [
 
 type Result = Record<Tab, string>;
 
+function renderMarkdown(text: string) {
+  const lines = text.split('\n');
+  const result: string[] = [];
+  let inList = false;
+
+  for (const line of lines) {
+    if (/^## (.+)$/.test(line)) {
+      if (inList) { result.push('</ul>'); inList = false; }
+      result.push(line.replace(/^## (.+)$/, '<h3 class="font-bold text-base mt-4 mb-2 text-emerald-400 border-b border-emerald-800 pb-1">$1</h3>'));
+    } else if (/^# (.+)$/.test(line)) {
+      if (inList) { result.push('</ul>'); inList = false; }
+      result.push(line.replace(/^# (.+)$/, '<h2 class="font-bold text-lg mt-4 mb-2 text-emerald-300">$1</h2>'));
+    } else if (/^- (.+)$/.test(line)) {
+      if (!inList) { result.push('<ul class="space-y-1 mb-2">'); inList = true; }
+      const inner = line.replace(/^- /, '').replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-white">$1</strong>');
+      result.push(`<li class="ml-4 list-disc text-gray-300 text-sm">${inner}</li>`);
+    } else if (/^[①②③④⑤⑥⑦⑧⑨⑩]/.test(line)) {
+      if (!inList) { result.push('<ul class="space-y-1 mb-2">'); inList = true; }
+      const inner = line.replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-white">$1</strong>');
+      result.push(`<li class="ml-4 list-disc text-gray-300 text-sm">${inner}</li>`);
+    } else if (line.trim() === '') {
+      if (inList) { result.push('</ul>'); inList = false; }
+      result.push('<div class="mt-2"></div>');
+    } else {
+      if (inList) { result.push('</ul>'); inList = false; }
+      const inner = line.replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-white">$1</strong>');
+      result.push(`<p class="text-gray-300 text-sm leading-relaxed">${inner}</p>`);
+    }
+  }
+  if (inList) result.push('</ul>');
+  return result.join('\n');
+}
+
 function parseResult(text: string): Result {
   const get = (tag: string) => {
     const m = text.match(new RegExp(`===\\s*${tag}\\s*===\\s*([\\s\\S]*?)(?====|$)`));
@@ -341,9 +374,10 @@ export default function ToolPage() {
                   𝕏 でシェアする
                 </a>
               </div>
-              <div className="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap">
-                {result[tab] || "このセクションの内容がありません。"}
-              </div>
+              {result[tab]
+                ? <div className="text-sm" dangerouslySetInnerHTML={{ __html: renderMarkdown(result[tab]) }} />
+                : <p className="text-sm text-gray-500">このセクションの内容がありません。</p>
+              }
               {/* 補助金AIへのクロスセル */}
               <div className="mt-8 p-5 bg-amber-50 border-2 border-amber-300 rounded-xl">
                 <p className="text-base font-bold text-amber-900 mb-1">💰 この経営計画書で補助金申請もしよう</p>
