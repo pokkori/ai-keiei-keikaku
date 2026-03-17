@@ -5,7 +5,7 @@ import PayjpModal from "@/components/PayjpModal";
 
 const PAYJP_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYJP_PUBLIC_KEY ?? "";
 
-type Tab = "overview" | "finance" | "swot" | "action" | "pitch";
+type Tab = "overview" | "finance" | "swot" | "action" | "pitch" | "benchmark";
 
 const TABS: { id: Tab; label: string }[] = [
   { id: "overview", label: "📋 事業概要" },
@@ -13,6 +13,7 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "swot", label: "🔍 SWOT分析" },
   { id: "action", label: "📅 アクションプラン" },
   { id: "pitch", label: "🚀 投資家ピッチ" },
+  { id: "benchmark", label: "📊 業界比較" },
 ];
 
 type Result = Record<Tab, string>;
@@ -28,6 +29,7 @@ function parseResult(text: string): Result {
     swot: get("SWOT"),
     action: get("ACTION"),
     pitch: get("PITCH"),
+    benchmark: get("BENCHMARK"),
   };
 }
 

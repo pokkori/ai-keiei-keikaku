@@ -167,14 +167,37 @@ export async function POST(req: NextRequest) {
 （他社と比べて圧倒的に優れている点3点）
 
 ### 1年後のマイルストーン
-（数値で示せる具体的な目標）`;
+（数値で示せる具体的な目標）
+
+===BENCHMARK===
+## 業界ベンチマーク比較
+
+### 業界標準KPIとの比較（${industry}業界）
+この事業の財務計画と業界平均値を比較してください。
+
+| 指標 | 業界平均 | 本計画目標 | 差異・コメント |
+|---|---|---|---|
+| 粗利益率（%） | | | |
+| 営業利益率（%） | | | |
+| 月次売上成長率（%） | | | |
+| 顧客獲得コスト（円） | | | |
+| 顧客継続率/リピート率（%） | | | |
+
+### この事業の優位点（業界平均を上回る指標とその理由）
+（2〜3点・具体的な数値と根拠）
+
+### 改善が必要な点（業界平均を下回る可能性がある指標）
+（1〜2点・改善策とセット）
+
+### 融資審査官・投資家へのアピールポイント（この業界特有の視点）
+（審査官が「この業種でこの数字なら現実的」と感じるポイントを3点）`;
 
   try {
     const newCount = cookieCount + 1;
     const remaining = isPremium ? null : FREE_LIMIT - newCount;
     const stream = getClient().messages.stream({
       model: "claude-sonnet-4-6",
-      max_tokens: 4000,
+      max_tokens: 5000,
       messages: [{ role: "user", content: prompt }],
     });
     const encoder = new TextEncoder();
