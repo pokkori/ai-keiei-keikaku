@@ -409,6 +409,23 @@ export default function ToolPage() {
                   補助金AIで申請書を作成 →
                 </a>
               </div>
+              {/* freee会計 A8.netアフィリエイト */}
+              <div className="mt-6 bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+                <p className="text-sm font-bold text-emerald-800 mb-3">📊 経営計画書の数字を管理するなら</p>
+                <a
+                  href="https://px.a8.net/svt/ejp?a8mat=4AZIOF+3LSINM+3SPO+9FDPYR"
+                  target="_blank"
+                  rel="noopener noreferrer sponsored"
+                  className="flex items-center justify-between bg-white border border-emerald-300 rounded-xl px-4 py-3 hover:bg-emerald-50 transition-colors"
+                >
+                  <div>
+                    <div className="text-sm font-bold text-slate-800">freee会計 — 経営数字をリアルタイム管理</div>
+                    <div className="text-xs text-slate-500 mt-0.5">30日間無料 • 損益計算書・貸借対照表を自動生成</div>
+                  </div>
+                  <span className="text-emerald-600 font-bold text-xs bg-emerald-100 px-2 py-1 rounded-full shrink-0 ml-2">無料で試す →</span>
+                </a>
+                <p className="text-xs text-slate-400 text-center mt-2">※ 広告・PR（freee公式サイトに遷移します）</p>
+              </div>
             </div>
           </div>
         )}
