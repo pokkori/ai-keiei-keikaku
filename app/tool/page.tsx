@@ -426,6 +426,37 @@ export default function ToolPage() {
                 </a>
                 <p className="text-xs text-slate-400 text-center mt-2">※ 広告・PR（freee公式サイトに遷移します）</p>
               </div>
+              {/* 電力・ガス コスト削減 A8.netアフィリエイト */}
+              <div className="mt-6 bg-green-50 border border-green-200 rounded-xl p-4">
+                <p className="text-sm font-bold text-green-800 mb-3">⚡ 法人の電気・ガス料金を見直してコスト削減</p>
+                <div className="space-y-2">
+                  <a
+                    href="https://px.a8.net/svt/ejp?a8mat=4AZIOF+8F1NOY+4P4C+HVNAP"
+                    target="_blank"
+                    rel="noopener noreferrer sponsored"
+                    className="flex items-center justify-between bg-white border border-green-300 rounded-xl px-4 py-3 hover:bg-green-50 transition-colors"
+                  >
+                    <div>
+                      <div className="text-sm font-bold text-slate-800">東急でんき&ガス — まとめて切り替えでお得</div>
+                      <div className="text-xs text-slate-500 mt-0.5">¥10,000 • 電気とガスをセットで切り替え節約</div>
+                    </div>
+                    <span className="text-green-700 font-bold text-xs bg-green-100 px-2 py-1 rounded-full shrink-0 ml-2">料金を見る →</span>
+                  </a>
+                  <a
+                    href="https://px.a8.net/svt/ejp?a8mat=4AZIOF+8VPSMQ+4R1I+HWI5T"
+                    target="_blank"
+                    rel="noopener noreferrer sponsored"
+                    className="flex items-center justify-between bg-white border border-green-300 rounded-xl px-4 py-3 hover:bg-green-50 transition-colors"
+                  >
+                    <div>
+                      <div className="text-sm font-bold text-slate-800">東京ガス — 法人向けガス料金プラン</div>
+                      <div className="text-xs text-slate-500 mt-0.5">¥1,750 • 安定供給と充実サポート</div>
+                    </div>
+                    <span className="text-green-700 font-bold text-xs bg-green-100 px-2 py-1 rounded-full shrink-0 ml-2">料金を見る →</span>
+                  </a>
+                </div>
+                <p className="text-xs text-slate-400 text-center mt-2">※ 広告・PR（各社公式サイトに遷移します）</p>
+              </div>
             </div>
           </div>
         )}
