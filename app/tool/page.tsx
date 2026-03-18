@@ -384,6 +384,22 @@ export default function ToolPage() {
                 ? <div className="text-sm" dangerouslySetInnerHTML={{ __html: renderMarkdown(result[tab]) }} />
                 : <p className="text-sm text-gray-500">このセクションの内容がありません。</p>
               }
+              {/* 次のアクション3選 */}
+              <div className="mt-6 bg-white border border-indigo-200 rounded-xl p-4">
+                <p className="text-sm font-bold text-indigo-800 mb-3">📋 次にやるべきこと3選</p>
+                <ol className="space-y-2">
+                  {[
+                    { icon: "🖨️", text: "この計画書を印刷して金融機関・投資家との面談に持参する" },
+                    { icon: "💰", text: "補助金AIで同じ内容を補助金申請書に転換する（上のボタン）" },
+                    { icon: "📅", text: "計画書の数値目標をカレンダーにマイルストーンとして登録する" },
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3 text-sm text-gray-700">
+                      <span className="text-lg leading-none">{item.icon}</span>
+                      <span>{i + 1}. {item.text}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
               {/* 補助金AIへのクロスセル */}
               <div className="mt-8 p-5 bg-amber-50 border-2 border-amber-300 rounded-xl">
                 <p className="text-base font-bold text-amber-900 mb-1">💰 この経営計画書で補助金申請もしよう</p>
