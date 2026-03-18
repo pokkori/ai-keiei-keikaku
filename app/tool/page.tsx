@@ -315,6 +315,10 @@ export default function ToolPage() {
           {loading ? "AIが経営計画書を作成中..." : "経営計画書を生成する"}
         </button>
 
+        {loading && (
+          <p className="text-xs text-gray-400 text-center">📊 市場分析 → 💡 戦略立案 → 📋 経営計画書生成</p>
+        )}
+
         {error && <p className="text-red-400 text-sm text-center">{error}</p>}
 
         {showPaywall && (
