@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import PayjpModal from "@/components/PayjpModal";
+import KomojuButton from "@/components/KomojuButton";
 import { track } from '@vercel/analytics';
 
 const PAYJP_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYJP_PUBLIC_KEY ?? "";
@@ -172,13 +172,15 @@ export default function ToolPage() {
   return (
     <main className="min-h-screen bg-gray-950 text-white">
       {showPayjp && (
-        <PayjpModal
-          publicKey={PAYJP_PUBLIC_KEY}
-          planLabel={payjpPlan === "once" ? "スタンダード ¥1,980/月" : payjpPlan === "premium" ? "プレミアム ¥3,980/月" : "スタンダード ¥1,980/月"}
-          plan={payjpPlan}
-          onSuccess={() => { setShowPayjp(false); setIsPremium(true); setRemaining(null); }}
-          onClose={() => setShowPayjp(false)}
-        />
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
+          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl relative">
+            <button onClick={() => setShowPayjp(false)} className="absolute top-3 right-3 text-gray-400 text-xl">✕</button>
+            <div className="text-3xl mb-3 text-center">📊</div>
+            <h2 className="text-lg font-bold mb-2 text-center">プレミアムプラン</h2>
+            <p className="text-sm text-gray-500 mb-4 text-center">{payjpPlan === "premium" ? "プレミアム — 経営計画書 無制限+高度分析" : "スタンダード — 経営計画書 無制限"}</p>
+            <KomojuButton planId="standard" planLabel={payjpPlan === "once" ? "スタンダード ¥1,980/月" : payjpPlan === "premium" ? "プレミアム ¥3,980/月" : "スタンダード ¥1,980/月"} className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 disabled:opacity-50" />
+          </div>
+        </div>
       )}
       <nav className="bg-gray-900 border-b border-gray-800 px-6 py-4 flex justify-between items-center">
         <Link href="/" className="font-bold text-emerald-400">📊 AI経営計画書作成</Link>
