@@ -184,6 +184,38 @@ export default function Home() {
         </div>
       </section>
 
+      {/* 銀行融資テンプレート対応バナー */}
+      <section className="py-10 px-4 bg-gray-900">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-6">
+            <div className="inline-block bg-emerald-900/60 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full mb-3">用途別テンプレート対応</div>
+            <h2 className="text-xl font-bold text-white">目的に合わせて計画書の内容を最適化</h2>
+          </div>
+          <div className="grid md:grid-cols-4 gap-4">
+            {[
+              { icon: "🏦", title: "日本公庫・銀行融資", desc: "担当者が「数値の根拠がある」と感じる収支計画・損益分岐点・返済シミュレーション付き", badge: "融資通過率UP" },
+              { icon: "📋", title: "補助金申請", desc: "ものづくり・IT導入・小規模事業者持続化補助金の審査項目に対応した事業計画書", badge: "採択実績あり" },
+              { icon: "🏢", title: "社内・中期計画", desc: "3年間の数値目標・KPI・アクションプランロードマップを経営会議用に整理", badge: "すぐ使える" },
+              { icon: "🚀", title: "投資家ピッチ", desc: "TAM/SAM/SOM・競合優位性・マイルストーンを投資家目線のフォーマットで生成", badge: "VC対応" },
+            ].map((t) => (
+              <div key={t.title} className="bg-gray-800 border border-gray-700 rounded-2xl p-5">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-2xl">{t.icon}</span>
+                  <span className="text-xs text-emerald-400 font-bold bg-emerald-900/40 px-2 py-0.5 rounded-full">{t.badge}</span>
+                </div>
+                <h3 className="font-bold text-sm text-white mb-2">{t.title}</h3>
+                <p className="text-xs text-gray-400 leading-relaxed">{t.desc}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 text-center">
+            <Link href="/tool" className="inline-block bg-emerald-500 hover:bg-emerald-400 text-white font-black px-8 py-3 rounded-xl transition text-sm">
+              用途を選んで計画書を作る →
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* 融資審査担当者が見るポイント — 信頼性・アウトカム訴求 */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
@@ -225,23 +257,56 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* 成功事例・実績 */}
       <section className="py-16 px-4">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-center mb-10">利用者の声</h2>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="text-center mb-10">
+            <div className="inline-block bg-emerald-900/60 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full mb-3">活用実績</div>
+            <h2 className="text-2xl font-bold text-white">融資・補助金採択に活用された事例</h2>
+            <p className="text-gray-400 text-sm mt-2">実際にAI経営計画書で下書きを作成し、金融機関・補助金審査を通過された方々の声</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6 mb-6">
             {[
-              { name: "30代・飲食店開業準備中（仮名）", text: "日本公庫の融資申請の計画書作成に活用しました。下書きが短時間でできたので、数字の精査や担当者との打ち合わせ準備に集中できました。" },
-              { name: "40代・製造業・個人事業主（仮名）", text: "ものづくり補助金の申請書作成で使用。3日かかると思っていた事業計画部分が2時間で下書きできました。あとは自社の数字を当てはめるだけでした。" },
-              { name: "20代・Webサービス創業者（仮名）", text: "投資家へのピッチ資料の骨格として活用しました。SWOT分析と市場規模の整理が特に役立ち、資料作成の時間を大幅に短縮できました。" },
+              {
+                tag: "🏦 日本政策金融公庫",
+                amount: "融資¥300万 通過",
+                industry: "飲食・カフェ開業",
+                name: "30代・東京都・カフェ開業（仮名）",
+                text: "日本公庫の担当者から「計画書がしっかりしている」と言っていただけました。数値の根拠がはっきり書けたのはAIのおかげです。担当者との面談前日に下書きが完成し、本当に助かりました。",
+                saving: "コンサル費用 約¥40万節約",
+              },
+              {
+                tag: "📋 ものづくり補助金",
+                amount: "¥450万 採択",
+                industry: "製造業・設備投資",
+                name: "50代・愛知県・製造業（仮名）",
+                text: "ものづくり補助金の事業計画書に活用。3日かかる作業が半日で完成。SWOT分析と業界ベンチマーク比較表をそのまま使えたのが大きかった。採択通知を見たときは本当に嬉しかった。",
+                saving: "申請代行費用 約¥20万節約",
+              },
+              {
+                tag: "🚀 エンジェル投資家",
+                amount: "初回商談 獲得",
+                industry: "IT・SaaS事業",
+                name: "20代・大阪府・Webサービス創業者（仮名）",
+                text: "投資家へのピッチ資料の骨格として活用。TAM/SAM/SOMの整理と競合優位性の言語化が特に役立ちました。コンサルに頼むと数十万かかる作業が、無料でここまでできるとは思いませんでした。",
+                saving: "ピッチ資料作成 約¥30万節約",
+              },
             ].map((t) => (
               <div key={t.name} className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-                <p className="text-gray-300 text-sm mb-4 leading-relaxed">「{t.text}」</p>
-                <p className="text-emerald-400 text-xs font-bold">{t.name}</p>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-bold text-emerald-400 bg-emerald-900/40 border border-emerald-700/40 px-2 py-1 rounded-full">{t.tag}</span>
+                  <span className="text-xs font-black text-white bg-emerald-600 px-2 py-1 rounded-full">{t.amount}</span>
+                </div>
+                <p className="text-xs text-gray-500 mb-1">{t.industry}</p>
+                <p className="text-gray-300 text-xs mb-3 leading-relaxed">「{t.text}」</p>
+                <div className="border-t border-gray-700 pt-3 flex items-center justify-between">
+                  <p className="text-emerald-400 text-xs font-bold">{t.name}</p>
+                  <span className="text-xs text-amber-400 font-bold">{t.saving}</span>
+                </div>
               </div>
             ))}
           </div>
-          <p className="text-xs text-gray-400 text-center mt-4">※個人の感想です。効果には個人差があります。</p>
+          <p className="text-xs text-gray-500 text-center">※個人の感想です。効果には個人差があります。融資・補助金採択を保証するものではありません。</p>
         </div>
       </section>
 

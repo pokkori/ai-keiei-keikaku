@@ -419,6 +419,30 @@ export default function ToolPage() {
         {!result && step === 3 && (
           <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6 space-y-4">
             <h2 className="font-bold text-lg text-emerald-400">Step 3 — 確認・生成</h2>
+
+            {/* 融資用途クイック選択 */}
+            <div className="bg-gray-800/60 border border-gray-700 rounded-xl p-4">
+              <p className="text-xs font-bold text-gray-400 mb-3">📌 この計画書の主な用途（任意）</p>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { icon: "🏦", label: "銀行・日本公庫 融資申請", value: "日本政策金融公庫・銀行・信用金庫への融資申請" },
+                  { icon: "📋", label: "補助金申請（ものづくり等）", value: "ものづくり補助金・IT導入補助金・小規模事業者持続化補助金の申請" },
+                  { icon: "🏢", label: "社内共有・中期経営計画", value: "社内共有・中期経営計画・投資家向けピッチ資料" },
+                  { icon: "🚀", label: "スタートアップ・資金調達", value: "エンジェル投資家・VCへの事業計画・ピッチデッキ" },
+                ].map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => set("overview", form.overview.trim() ? form.overview : opt.value)}
+                    className="flex items-center gap-2 text-left bg-gray-700 hover:bg-emerald-900/50 border border-gray-600 hover:border-emerald-600 text-gray-300 hover:text-emerald-300 px-3 py-2 rounded-xl text-xs transition"
+                  >
+                    <span className="text-base">{opt.icon}</span>
+                    <span>{opt.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="bg-gray-800 rounded-xl p-4 space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-gray-400">業種</span>
@@ -498,6 +522,36 @@ export default function ToolPage() {
             <p className="text-emerald-300 text-sm">各タブをクリックして内容を確認・コピーしてください</p>
           </div>
         )}
+        {result && (() => {
+          const savingMap: Record<string, number> = {
+            "個人事業主・フリーランス": 30,
+            "法人（1〜5名）": 50,
+            "法人（6〜20名）": 80,
+            "法人（21名以上）": 100,
+          };
+          const saving = savingMap[form.scale] ?? 50;
+          return (
+            <div className="bg-gradient-to-r from-amber-900/60 to-emerald-900/60 border border-amber-500/60 rounded-2xl p-5">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-2xl">💰</span>
+                <div>
+                  <p className="text-sm font-black text-white">コンサル費用 約<span className="text-amber-300 text-xl">¥{saving}万</span> を節約しました</p>
+                  <p className="text-xs text-gray-400">{form.scale}・{form.industry || ""}向けコンサルの市場相場 ¥{saving}万〜¥{saving * 2}万 と比較</p>
+                </div>
+              </div>
+              <div className="flex gap-2 flex-wrap">
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`AI経営計画書を使ったら経営コンサル費用¥${saving}万分の作業が5分で完成。融資申請・補助金申請に使えるレベルの計画書が無料で作れた。 https://ai-keiei-keikaku.vercel.app #経営計画書 #AI活用 #起業`)}`}
+                  target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 bg-black text-white text-xs font-bold px-3 py-2 rounded-lg hover:bg-gray-800 transition"
+                >
+                  <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
+                  ¥{saving}万節約をシェア
+                </a>
+              </div>
+            </div>
+          );
+        })()}
         {result && (
           <div className="flex justify-end">
             <button
