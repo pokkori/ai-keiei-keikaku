@@ -95,6 +95,7 @@ export default function ToolPage() {
   const [payjpPlan, setPayjpPlan] = useState<"once" | "monthly" | "premium">("monthly");
   const [copied, setCopied] = useState<Tab | null>(null);
   const [showComplete, setShowComplete] = useState(false);
+  const [step, setStep] = useState(1);
 
   useEffect(() => {
     fetch("/api/auth/status").then((r) => r.json()).then((d) => {
@@ -199,123 +200,210 @@ export default function ToolPage() {
       </nav>
 
       <div className="max-w-3xl mx-auto px-4 py-10 space-y-6">
-        {/* Form */}
-        <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6 space-y-5">
-          <h2 className="font-bold text-lg text-emerald-400">事業情報を入力</h2>
+        {/* ステップインジケーター */}
+        {!result && (
+          <div className="flex items-center justify-center gap-2 mb-2">
+            {[
+              { n: 1, label: "基本情報" },
+              { n: 2, label: "事業詳細" },
+              { n: 3, label: "確認・生成" },
+            ].map((s, i) => (
+              <div key={s.n} className="flex items-center gap-2">
+                <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold transition-all ${
+                  step === s.n ? "bg-emerald-500 text-white" : step > s.n ? "bg-emerald-800 text-emerald-300" : "bg-gray-800 text-gray-500"
+                }`}>
+                  {step > s.n ? "✓" : s.n}
+                </div>
+                <span className={`text-xs ${step === s.n ? "text-emerald-400 font-bold" : "text-gray-500"}`}>{s.label}</span>
+                {i < 2 && <div className={`w-8 h-px ${step > s.n ? "bg-emerald-700" : "bg-gray-700"}`} />}
+              </div>
+            ))}
+          </div>
+        )}
 
-          <div className="grid md:grid-cols-2 gap-4">
+        {/* Step 1: 基本情報 */}
+        {!result && step === 1 && (
+          <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6 space-y-5">
+            <h2 className="font-bold text-lg text-emerald-400">Step 1 — 基本情報</h2>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold mb-1 text-gray-400">事業名・屋号（任意）</label>
+                <input
+                  type="text"
+                  className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
+                  placeholder="例：田中食堂 / 株式会社〇〇"
+                  value={form.businessName}
+                  onChange={(e) => set("businessName", e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold mb-1 text-gray-400">業種 <span className="text-red-400">*</span></label>
+                <select
+                  className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500"
+                  value={form.industry}
+                  onChange={(e) => set("industry", e.target.value)}
+                >
+                  <option value="">選択してください</option>
+                  {INDUSTRIES.map((i) => <option key={i} value={i}>{i}</option>)}
+                </select>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold mb-1 text-gray-400">事業規模</label>
+                <select
+                  className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500"
+                  value={form.scale}
+                  onChange={(e) => set("scale", e.target.value)}
+                >
+                  {["個人事業主・フリーランス", "法人（1〜5名）", "法人（6〜20名）", "法人（21名以上）"].map((s) => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-bold mb-1 text-gray-400">初期投資・資金調達額（任意）</label>
+                <input
+                  type="text"
+                  className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
+                  placeholder="例：500万円（自己資金200万＋融資300万）"
+                  value={form.initialFund}
+                  onChange={(e) => set("initialFund", e.target.value)}
+                />
+              </div>
+            </div>
+
+            <button
+              onClick={() => setStep(2)}
+              disabled={!form.industry}
+              className="w-full bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition"
+            >
+              次へ: 事業詳細を入力 →
+            </button>
+          </div>
+        )}
+
+        {/* Step 2: 事業詳細 */}
+        {!result && step === 2 && (
+          <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6 space-y-5">
+            <h2 className="font-bold text-lg text-emerald-400">Step 2 — 事業詳細</h2>
+
             <div>
-              <label className="block text-xs font-bold mb-1 text-gray-400">事業名・屋号（任意）</label>
+              <label className="block text-xs font-bold mb-1 text-gray-400">事業概要・やりたいこと <span className="text-red-400">*</span></label>
+              <textarea
+                className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 resize-none focus:outline-none focus:border-emerald-500 h-28"
+                placeholder="例：地元の無農薬野菜を使った健康志向のカフェを開業したい。20〜40代の女性をメインターゲットに、ランチとスイーツを提供。テイクアウトとECサイトでの通販も展開予定。"
+                value={form.overview}
+                onChange={(e) => set("overview", e.target.value)}
+              />
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold mb-1 text-gray-400">強み・差別化ポイント</label>
+                <textarea
+                  className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 resize-none focus:outline-none focus:border-emerald-500 h-24"
+                  placeholder="例：農家直送で仕入れコスト30%削減。管理栄養士の資格保有。SNSフォロワー5,000人。"
+                  value={form.strengths}
+                  onChange={(e) => set("strengths", e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold mb-1 text-gray-400">現在の課題・懸念事項</label>
+                <textarea
+                  className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 resize-none focus:outline-none focus:border-emerald-500 h-24"
+                  placeholder="例：開業資金が不足。競合店が多い立地。スタッフ採用が難しい。"
+                  value={form.challenges}
+                  onChange={(e) => set("challenges", e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold mb-1 text-gray-400">3年後の目標</label>
               <input
                 type="text"
                 className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
-                placeholder="例：田中食堂 / 株式会社〇〇"
-                value={form.businessName}
-                onChange={(e) => set("businessName", e.target.value)}
+                placeholder="例：年商3,000万・2店舗展開・EC売上月100万"
+                value={form.goal3y}
+                onChange={(e) => set("goal3y", e.target.value)}
               />
             </div>
-            <div>
-              <label className="block text-xs font-bold mb-1 text-gray-400">業種 <span className="text-red-400">*</span></label>
-              <select
-                className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500"
-                value={form.industry}
-                onChange={(e) => set("industry", e.target.value)}
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setStep(1)}
+                className="flex-1 bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold py-3 rounded-xl transition"
               >
-                <option value="">選択してください</option>
-                {INDUSTRIES.map((i) => <option key={i} value={i}>{i}</option>)}
-              </select>
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-bold mb-1 text-gray-400">事業規模</label>
-              <select
-                className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500"
-                value={form.scale}
-                onChange={(e) => set("scale", e.target.value)}
-              >
-                {["個人事業主・フリーランス", "法人（1〜5名）", "法人（6〜20名）", "法人（21名以上）"].map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-xs font-bold mb-1 text-gray-400">初期投資・資金調達額（任意）</label>
-              <input
-                type="text"
-                className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
-                placeholder="例：500万円（自己資金200万＋融資300万）"
-                value={form.initialFund}
-                onChange={(e) => set("initialFund", e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold mb-1 text-gray-400">事業概要・やりたいこと <span className="text-red-400">*</span></label>
-            <textarea
-              className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 resize-none focus:outline-none focus:border-emerald-500 h-28"
-              placeholder="例：地元の無農薬野菜を使った健康志向のカフェを開業したい。20〜40代の女性をメインターゲットに、ランチとスイーツを提供。テイクアウトとECサイトでの通販も展開予定。"
-              value={form.overview}
-              onChange={(e) => set("overview", e.target.value)}
-            />
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-bold mb-1 text-gray-400">強み・差別化ポイント</label>
-              <textarea
-                className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 resize-none focus:outline-none focus:border-emerald-500 h-24"
-                placeholder="例：農家直送で仕入れコスト30%削減。管理栄養士の資格保有。SNSフォロワー5,000人。"
-                value={form.strengths}
-                onChange={(e) => set("strengths", e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold mb-1 text-gray-400">現在の課題・懸念事項</label>
-              <textarea
-                className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 resize-none focus:outline-none focus:border-emerald-500 h-24"
-                placeholder="例：開業資金が不足。競合店が多い立地。スタッフ採用が難しい。"
-                value={form.challenges}
-                onChange={(e) => set("challenges", e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold mb-1 text-gray-400">3年後の目標</label>
-            <input
-              type="text"
-              className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
-              placeholder="例：年商3,000万・2店舗展開・EC売上月100万"
-              value={form.goal3y}
-              onChange={(e) => set("goal3y", e.target.value)}
-            />
-          </div>
-        </div>
-
-        {!isPremium && remaining === 0 && !result && (
-          <div className="bg-emerald-900/30 border border-emerald-700 rounded-xl p-4 text-center">
-            <p className="text-sm text-emerald-200 mb-3">無料回数を使い切りました。</p>
-            <div className="flex gap-3 justify-center">
-              <button onClick={() => startCheckout("monthly")} disabled={false} className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-5 py-2 rounded-xl text-sm transition disabled:opacity-50">
-                ¥1,980/月 使い放題
+                ← 戻る
               </button>
-              <button onClick={() => startCheckout("premium")} disabled={false} className="bg-gray-700 hover:bg-gray-600 text-white font-bold px-5 py-2 rounded-xl text-sm transition disabled:opacity-50">
-                ¥3,980/月 プレミアム
+              <button
+                onClick={() => setStep(3)}
+                disabled={!form.overview.trim()}
+                className="flex-2 flex-1 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition"
+              >
+                次へ: 内容を確認する →
               </button>
             </div>
           </div>
         )}
 
-        <button
-          onClick={generate}
-          disabled={loading || !canGenerate}
-          className="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-black py-4 rounded-xl text-lg transition disabled:opacity-40 disabled:cursor-not-allowed"
-        >
-          {loading ? "AIが経営計画書を作成中..." : "経営計画書を生成する"}
-        </button>
+        {/* Step 3: 確認・生成 */}
+        {!result && step === 3 && (
+          <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6 space-y-4">
+            <h2 className="font-bold text-lg text-emerald-400">Step 3 — 確認・生成</h2>
+            <div className="bg-gray-800 rounded-xl p-4 space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-gray-400">業種</span>
+                <span className="text-white font-medium">{form.industry}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">事業規模</span>
+                <span className="text-white font-medium">{form.scale}</span>
+              </div>
+              {form.businessName && (
+                <div className="flex justify-between">
+                  <span className="text-gray-400">事業名</span>
+                  <span className="text-white font-medium">{form.businessName}</span>
+                </div>
+              )}
+              {form.goal3y && (
+                <div className="flex justify-between">
+                  <span className="text-gray-400">3年後の目標</span>
+                  <span className="text-white font-medium text-right max-w-[60%]">{form.goal3y}</span>
+                </div>
+              )}
+              <div className="border-t border-gray-700 pt-2">
+                <span className="text-gray-400 block mb-1">事業概要</span>
+                <p className="text-white text-xs leading-relaxed">{form.overview}</p>
+              </div>
+            </div>
+            <p className="text-xs text-gray-500 text-center">上記の内容で経営計画書を生成します。修正が必要な場合は「戻る」を押してください。</p>
+
+            {!isPremium && remaining === 0 && (
+              <div className="bg-emerald-900/30 border border-emerald-700 rounded-xl p-4 text-center">
+                <p className="text-sm text-emerald-200 mb-3">無料回数を使い切りました。</p>
+                <div className="flex gap-3 justify-center">
+                  <button onClick={() => startCheckout("monthly")} className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-5 py-2 rounded-xl text-sm transition">¥1,980/月 使い放題</button>
+                  <button onClick={() => startCheckout("premium")} className="bg-gray-700 hover:bg-gray-600 text-white font-bold px-5 py-2 rounded-xl text-sm transition">¥3,980/月 プレミアム</button>
+                </div>
+              </div>
+            )}
+
+            <div className="flex gap-3">
+              <button onClick={() => setStep(2)} className="flex-1 bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold py-3 rounded-xl transition">← 戻る</button>
+              <button
+                onClick={generate}
+                disabled={loading || !canGenerate}
+                className="flex-2 flex-1 bg-emerald-500 hover:bg-emerald-400 text-white font-black py-3 rounded-xl text-base transition disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {loading ? "AIが経営計画書を作成中..." : "経営計画書を生成する"}
+              </button>
+            </div>
+          </div>
+        )}
 
         {loading && (
           <p className="text-xs text-gray-400 text-center">📊 市場分析 → 💡 戦略立案 → 📋 経営計画書生成</p>
@@ -343,6 +431,16 @@ export default function ToolPage() {
           <div className="bg-emerald-900 border-2 border-emerald-400 rounded-2xl p-5 text-center animate-bounce">
             <p className="text-2xl font-black text-white mb-1">🎉 経営計画書が完成しました！</p>
             <p className="text-emerald-300 text-sm">各タブをクリックして内容を確認・コピーしてください</p>
+          </div>
+        )}
+        {result && (
+          <div className="flex justify-end">
+            <button
+              onClick={() => { setResult(null); setStep(1); setShowComplete(false); }}
+              className="text-xs text-gray-500 hover:text-gray-300 border border-gray-700 px-3 py-1.5 rounded-lg transition"
+            >
+              ↩ もう一度作る
+            </button>
           </div>
         )}
 
