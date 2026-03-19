@@ -73,6 +73,40 @@ const INDUSTRIES = [
   "農業・食品", "輸送・物流", "その他",
 ];
 
+type TemplateFields = { overview: string; strengths: string; challenges: string; goal3y: string };
+const INDUSTRY_TEMPLATES: Record<string, TemplateFields> = {
+  "飲食・カフェ": {
+    overview: "地元の無農薬野菜を使った健康志向のカフェを開業。20〜40代女性をターゲットに、ランチ・スイーツを提供。テイクアウト・EC通販も展開予定。",
+    strengths: "農家直送で仕入れコスト30%削減。管理栄養士の資格保有。SNSフォロワー5,000人。",
+    challenges: "開業資金が不足。競合店が多い立地。スタッフ採用が難しい。",
+    goal3y: "年商3,000万・2店舗展開・EC月商100万",
+  },
+  "IT・Web・アプリ": {
+    overview: "中小企業向けの業務効率化SaaSを開発・提供。受注管理・在庫管理・請求書発行を一元化するクラウドシステム。",
+    strengths: "エンジニア歴10年。既存顧客5社からの収益基盤あり。月次サブスク型の安定収益モデル。",
+    challenges: "営業リソースが不足。競合大手との差別化。開発・保守コストの最適化。",
+    goal3y: "契約社数200社・ARR5,000万・シリーズA調達",
+  },
+  "小売・EC": {
+    overview: "ハンドメイドアクセサリーのECサイト運営。InstagramやMinneで集客し、自社ECサイトへ誘導。OEM製造も展開予定。",
+    strengths: "デザイン力とブランド力。SNSフォロワー12,000人。低在庫・高利益率のビジネスモデル。",
+    challenges: "物流コストの高さ。クレーム対応の属人化。季節需要の波への対応。",
+    goal3y: "月商500万・自社ブランド確立・百貨店バイヤーとの取引開始",
+  },
+  "医療・介護・福祉": {
+    overview: "訪問介護事業所の開設。要介護1〜3の高齢者を対象に、身体介護・生活援助・通院同行サービスを提供。",
+    strengths: "介護福祉士・社会福祉士の有資格者揃い。地域医療機関との連携体制。",
+    challenges: "介護士の採用・定着。運転資金の確保（介護報酬の2ヶ月後払い）。",
+    goal3y: "利用者数80名・スタッフ20名・地域での認知度No.1",
+  },
+  "コンサルティング": {
+    overview: "製造業向けDXコンサルティング。工場の業務プロセス可視化・改善提案・ITシステム導入支援を提供。",
+    strengths: "大手製造業10年の実務経験。デジタル・現場両方を知る希少なスキルセット。",
+    challenges: "案件単価の低下リスク。属人的なサービス提供。リピート率の向上。",
+    goal3y: "顧問契約10社・年商3,000万・法人化と採用",
+  },
+};
+
 export default function ToolPage() {
   const [form, setForm] = useState({
     businessName: "",
@@ -288,7 +322,20 @@ export default function ToolPage() {
         {/* Step 2: 事業詳細 */}
         {!result && step === 2 && (
           <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6 space-y-5">
-            <h2 className="font-bold text-lg text-emerald-400">Step 2 — 事業詳細</h2>
+            <div className="flex items-center justify-between">
+              <h2 className="font-bold text-lg text-emerald-400">Step 2 — 事業詳細</h2>
+              {INDUSTRY_TEMPLATES[form.industry] && (
+                <button
+                  onClick={() => {
+                    const t = INDUSTRY_TEMPLATES[form.industry];
+                    setForm(f => ({ ...f, overview: t.overview, strengths: t.strengths, challenges: t.challenges, goal3y: t.goal3y }));
+                  }}
+                  className="text-xs bg-emerald-900/50 hover:bg-emerald-800/60 border border-emerald-700 text-emerald-400 px-3 py-1.5 rounded-lg transition flex items-center gap-1"
+                >
+                  📝 {form.industry}テンプレートを使う
+                </button>
+              )}
+            </div>
 
             <div>
               <label className="block text-xs font-bold mb-1 text-gray-400">事業概要・やりたいこと <span className="text-red-400">*</span></label>
