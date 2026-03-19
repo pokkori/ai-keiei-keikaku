@@ -1,12 +1,12 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import KomojuButton from "@/components/KomojuButton";
 import { track } from '@vercel/analytics';
 
 const PAYJP_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYJP_PUBLIC_KEY ?? "";
 
-type Tab = "overview" | "finance" | "swot" | "action" | "pitch" | "benchmark";
+type Tab = "overview" | "finance" | "swot" | "action" | "pitch" | "benchmark" | "checklist";
 
 const TABS: { id: Tab; label: string }[] = [
   { id: "overview", label: "📋 事業概要" },
@@ -15,9 +15,24 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "action", label: "📅 アクションプラン" },
   { id: "pitch", label: "🚀 投資家ピッチ" },
   { id: "benchmark", label: "📊 業界比較" },
+  { id: "checklist", label: "✅ 融資チェック" },
 ];
 
-type Result = Record<Tab, string>;
+// 融資チェックリスト（融資担当者視点）
+const LOAN_CHECKLIST = [
+  { id: "purpose", label: "事業の目的・背景が明確か", category: "基本" },
+  { id: "market", label: "ターゲット市場と規模が具体的か", category: "市場" },
+  { id: "differentiation", label: "競合との差別化が説明できるか", category: "差別化" },
+  { id: "numbers", label: "売上・費用の数値に根拠があるか", category: "財務" },
+  { id: "breakeven", label: "損益分岐点が計算されているか", category: "財務" },
+  { id: "risk", label: "リスクと対策が記載されているか", category: "リスク" },
+  { id: "repayment", label: "返済計画が具体的か（融資申請時）", category: "財務" },
+  { id: "action", label: "具体的なアクションプランがあるか", category: "実行力" },
+  { id: "track", label: "申請者の経験・実績が書かれているか", category: "実行力" },
+  { id: "cashflow", label: "キャッシュフローの見通しがあるか", category: "財務" },
+];
+
+type Result = Record<Exclude<Tab, "checklist">, string>;
 
 function renderMarkdown(text: string) {
   const lines = text.split('\n');
@@ -65,6 +80,12 @@ function parseResult(text: string): Result {
     pitch: get("PITCH"),
     benchmark: get("BENCHMARK"),
   };
+}
+
+// チェックリスト完成度スコア
+function calcChecklistScore(checklist: Record<string, boolean>): number {
+  const checked = Object.values(checklist).filter(Boolean).length;
+  return Math.round((checked / LOAN_CHECKLIST.length) * 100);
 }
 
 const INDUSTRIES = [
@@ -130,6 +151,9 @@ export default function ToolPage() {
   const [copied, setCopied] = useState<Tab | null>(null);
   const [showComplete, setShowComplete] = useState(false);
   const [step, setStep] = useState(1);
+  const [checklist, setChecklist] = useState<Record<string, boolean>>({});
+  const [showUpsellTimer, setShowUpsellTimer] = useState(false);
+  const upsellTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     fetch("/api/auth/status").then((r) => r.json()).then((d) => {
@@ -181,6 +205,12 @@ export default function ToolPage() {
       }
       setTab("overview");
       setShowComplete(true);
+      // 生成後45秒でアップセルポップアップ（非プレミアムかつ残り回数1以下）
+      if (!isPremium) {
+        upsellTimerRef.current = setTimeout(() => {
+          setShowUpsellTimer(true);
+        }, 45000);
+      }
     } catch {
       setError("エラーが発生しました。もう一度お試しください。");
     }
@@ -577,9 +607,83 @@ export default function ToolPage() {
               ))}
             </div>
             <div className="p-6">
+              {/* チェックリストタブ */}
+              {tab === "checklist" ? (
+                <div>
+                  <p className="text-sm font-bold text-white mb-2">融資審査通過チェックリスト</p>
+                  <p className="text-xs text-gray-400 mb-4">融資担当者・補助金審査官の目線で計画書の完成度を確認しましょう</p>
+                  {/* 完成度スコアバー */}
+                  {(() => {
+                    const score = calcChecklistScore(checklist);
+                    const scoreColor = score >= 80 ? "#34d399" : score >= 50 ? "#f59e0b" : "#f87171";
+                    return (
+                      <div className="bg-gray-800 rounded-xl p-4 mb-5">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-xs text-gray-400">完成度スコア</span>
+                          <span className="text-2xl font-black" style={{ color: scoreColor }}>{score}%</span>
+                        </div>
+                        <div className="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
+                          <div className="h-3 rounded-full transition-all duration-500"
+                            style={{ width: `${score}%`, background: `linear-gradient(90deg, ${scoreColor}, ${scoreColor}cc)` }} />
+                        </div>
+                        <p className="text-xs mt-2" style={{ color: scoreColor }}>
+                          {score >= 80 ? "融資審査に十分な内容が揃っています！" : score >= 50 ? "あと少し！チェックを増やして完成度を上げましょう" : "基本項目を埋めて計画書を充実させましょう"}
+                        </p>
+                      </div>
+                    );
+                  })()}
+                  {/* チェックリスト */}
+                  <div className="space-y-2 mb-5">
+                    {LOAN_CHECKLIST.map((item) => (
+                      <label key={item.id} className="flex items-center gap-3 cursor-pointer p-3 rounded-xl border transition-colors"
+                        style={{
+                          background: checklist[item.id] ? "rgba(52,211,153,0.08)" : "rgba(255,255,255,0.03)",
+                          borderColor: checklist[item.id] ? "rgba(52,211,153,0.4)" : "rgba(255,255,255,0.08)",
+                        }}>
+                        <input
+                          type="checkbox"
+                          checked={!!checklist[item.id]}
+                          onChange={(e) => setChecklist(prev => ({ ...prev, [item.id]: e.target.checked }))}
+                          className="w-4 h-4 accent-emerald-400"
+                        />
+                        <div className="flex-1">
+                          <span className="text-sm text-white">{item.label}</span>
+                          <span className="ml-2 text-xs text-gray-500 bg-gray-800 px-1.5 py-0.5 rounded">{item.category}</span>
+                        </div>
+                        {checklist[item.id] && <span className="text-emerald-400 text-sm">✓</span>}
+                      </label>
+                    ))}
+                  </div>
+                  {/* スコアに基づくCTA */}
+                  {calcChecklistScore(checklist) >= 80 && (
+                    <div className="bg-emerald-900 border border-emerald-600 rounded-xl p-4 text-center">
+                      <p className="text-white font-bold text-sm mb-1">🎉 計画書の完成度が高い状態です！</p>
+                      <p className="text-emerald-300 text-xs mb-3">今すぐ印刷して金融機関への提出準備をしましょう</p>
+                      <button onClick={print} className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-6 py-2 rounded-xl text-sm transition">
+                        印刷して申請準備 →
+                      </button>
+                    </div>
+                  )}
+                  {/* シェアカード */}
+                  {calcChecklistScore(checklist) >= 60 && (
+                    <div className="mt-4">
+                      <a
+                        href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`AI経営計画書で「${form.businessName || "事業計画書"}」が完成！融資チェックリスト${calcChecklistScore(checklist)}%達成。5分で融資・補助金申請用の計画書ができるの凄すぎる → https://ai-keiei-keikaku.vercel.app #経営計画書 #AI活用 #起業`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-white text-sm bg-black hover:bg-gray-800 transition"
+                      >
+                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
+                        完成度{calcChecklistScore(checklist)}%達成をXでシェア
+                      </a>
+                    </div>
+                  )}
+                </div>
+              ) : (
+              <>
               <div className="flex justify-end mb-4 gap-2 flex-wrap">
                 <button
-                  onClick={() => copy(result[tab], tab)}
+                  onClick={() => copy(result[tab as Exclude<Tab, "checklist">], tab as Exclude<Tab, "checklist">)}
                   className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition"
                 >
                   {copied === tab ? "コピー済" : "このタブをコピー"}
@@ -599,10 +703,14 @@ export default function ToolPage() {
                   𝕏 でシェアする
                 </a>
               </div>
-              {result[tab]
-                ? <div className="text-sm" dangerouslySetInnerHTML={{ __html: renderMarkdown(result[tab]) }} />
+              {result[tab as Exclude<Tab, "checklist">]
+                ? <div className="text-sm" dangerouslySetInnerHTML={{ __html: renderMarkdown(result[tab as Exclude<Tab, "checklist">]) }} />
                 : <p className="text-sm text-gray-500">このセクションの内容がありません。</p>
               }
+              </>
+              )}
+              {tab !== "checklist" && (
+              <>
               {/* 次のアクション3選 */}
               <div className="mt-6 bg-white border border-indigo-200 rounded-xl p-4">
                 <p className="text-sm font-bold text-indigo-800 mb-3">📋 次にやるべきこと3選</p>
@@ -676,10 +784,30 @@ export default function ToolPage() {
                 </div>
                 <p className="text-xs text-slate-400 text-center mt-2">※ 広告・PR（各社公式サイトに遷移します）</p>
               </div>
+              </>
+              )}
             </div>
           </div>
         )}
       </div>
+
+      {/* アップセルタイマーポップアップ（生成後45秒） */}
+      {showUpsellTimer && !isPremium && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4">
+          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl relative">
+            <button onClick={() => { setShowUpsellTimer(false); if (upsellTimerRef.current) clearTimeout(upsellTimerRef.current); }} className="absolute top-3 right-3 text-gray-400 text-xl">✕</button>
+            <div className="text-3xl mb-3 text-center">📊</div>
+            <h2 className="text-lg font-bold mb-1 text-center text-gray-900">計画書をもっと活用しましょう</h2>
+            <p className="text-sm text-gray-500 mb-2 text-center">月額¥1,980で無制限作成 + 補助金AIも利用可能</p>
+            <ul className="text-sm text-gray-600 space-y-1 mb-4 text-left">
+              <li>✓ 経営計画書 作成し放題（業種変更・修正も無制限）</li>
+              <li>✓ 融資チェックリストで採択率UP</li>
+              <li>✓ 補助金AIとワンストップ連携</li>
+            </ul>
+            <KomojuButton planId="standard" planLabel="¥1,980/月で始める" className="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-700 disabled:opacity-50" />
+          </div>
+        </div>
+      )}
 
       <footer className="border-t border-gray-800 py-6 text-center text-xs text-gray-600 space-x-4 mt-10">
         <Link href="/legal" className="hover:underline">特定商取引法</Link>
