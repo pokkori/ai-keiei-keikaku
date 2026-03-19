@@ -24,3 +24,58 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* 印刷・PDF出力スタイル */
+@media print {
+  /* ナビ・フッター・CTAボタン・アフィリ広告・シェアボタンを非表示 */
+  nav,
+  footer,
+  .fixed,
+  button,
+  a[target="_blank"],
+  [data-print-hide] {
+    display: none !important;
+  }
+
+  /* 背景を白・文字を黒に変換 */
+  body,
+  main {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  /* タブコンテンツのみ表示 */
+  .bg-gray-900,
+  .bg-gray-950,
+  .bg-gray-800 {
+    background: #ffffff !important;
+    border-color: #cccccc !important;
+  }
+
+  /* テキストカラーを黒系に */
+  .text-white,
+  .text-gray-300,
+  .text-gray-400 {
+    color: #222222 !important;
+  }
+
+  .text-emerald-400,
+  .text-emerald-300 {
+    color: #047857 !important;
+  }
+
+  /* 改ページ設定 */
+  h2, h3 {
+    page-break-after: avoid;
+  }
+
+  /* タブバーを非表示 */
+  .overflow-x-auto.border-b {
+    display: none !important;
+  }
+
+  /* 印刷時に全タブ内容を表示 */
+  [data-print-content] {
+    display: block !important;
+  }
+}

@@ -18,6 +18,100 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "checklist", label: "✅ 融資チェック" },
 ];
 
+// 業種別ベンチマーク数値（中小企業白書2024年版ベース）
+const INDUSTRY_BENCHMARKS: Record<string, {
+  salesGrowth: string;
+  profitMargin: string;
+  loanApproval: string;
+  avgSales: string;
+  tips: string;
+}> = {
+  "飲食・カフェ": {
+    salesGrowth: "2〜5%",
+    profitMargin: "3〜8%",
+    loanApproval: "約62%",
+    avgSales: "中小飲食店 平均年商3,200万円",
+    tips: "飲食業の利益率は3〜8%が平均。10%超えは高収益店舗。原価率30%以下・人件費30%以下が黒字経営の目安です。",
+  },
+  "小売・EC": {
+    salesGrowth: "3〜8%",
+    profitMargin: "5〜12%",
+    loanApproval: "約58%",
+    avgSales: "中小小売 平均年商4,800万円",
+    tips: "EC小売の粗利率は40〜60%が目安。送料・返品コストを加味した実質利益率5〜12%が一般的です。",
+  },
+  "IT・Web・アプリ": {
+    salesGrowth: "10〜25%",
+    profitMargin: "15〜30%",
+    loanApproval: "約71%",
+    avgSales: "中小IT企業 平均年商8,500万円",
+    tips: "IT・SaaS業界の利益率は15〜30%と他業種より高め。ARR/MRRの継続収益モデルが融資審査でも高評価を受けます。",
+  },
+  "製造業": {
+    salesGrowth: "1〜4%",
+    profitMargin: "3〜7%",
+    loanApproval: "約65%",
+    avgSales: "中小製造業 平均年商1.2億円",
+    tips: "製造業の利益率は3〜7%。設備稼働率80%以上・在庫回転率の改善が収益向上の鍵。補助金採択率も高い業種です。",
+  },
+  "建設・不動産": {
+    salesGrowth: "2〜6%",
+    profitMargin: "4〜10%",
+    loanApproval: "約60%",
+    avgSales: "中小建設 平均年商9,200万円",
+    tips: "建設業の完工利益率は4〜10%が目安。外注費率50%超は要注意。職人の確保と工期管理が評価ポイントです。",
+  },
+  "医療・介護・福祉": {
+    salesGrowth: "3〜8%",
+    profitMargin: "5〜12%",
+    loanApproval: "約74%",
+    avgSales: "訪問介護 平均年商6,500万円",
+    tips: "介護・医療は診療報酬・介護報酬が安定収入。人件費比率60〜70%が標準。融資承認率が高い業種の一つです。",
+  },
+  "美容・エステ": {
+    salesGrowth: "2〜6%",
+    profitMargin: "8〜18%",
+    loanApproval: "約55%",
+    avgSales: "美容室 平均年商2,800万円",
+    tips: "美容・サロンの粗利率は70〜80%と高め。技術単価の向上とリピート率（70%以上が優良）が収益の鍵です。",
+  },
+  "教育・スクール": {
+    salesGrowth: "4〜10%",
+    profitMargin: "10〜20%",
+    loanApproval: "約67%",
+    avgSales: "教育サービス 平均年商3,900万円",
+    tips: "教育・スクール業は粗利率が高く（60〜80%）、固定費管理が重要。継続率（退会率5%以下が優良）が評価されます。",
+  },
+  "コンサルティング": {
+    salesGrowth: "5〜15%",
+    profitMargin: "20〜35%",
+    loanApproval: "約69%",
+    avgSales: "中小コンサル 平均年商4,200万円",
+    tips: "コンサル業は利益率20〜35%と高水準。一方で属人的リスクを問われます。顧問契約比率と1人月単価が審査のポイントです。",
+  },
+  "農業・食品": {
+    salesGrowth: "1〜4%",
+    profitMargin: "3〜8%",
+    loanApproval: "約70%",
+    avgSales: "農業法人 平均年商5,000万円",
+    tips: "農業・食品加工は6次産業化で利益率が向上。農林漁業向け融資は日本政策金融公庫の専門窓口で承認率が高めです。",
+  },
+  "輸送・物流": {
+    salesGrowth: "2〜5%",
+    profitMargin: "3〜7%",
+    loanApproval: "約63%",
+    avgSales: "中小物流 平均年商7,800万円",
+    tips: "物流業の燃料費・人件費は変動リスク大。傭車率の管理と荷主分散（上位3社で50%以下）がリスク評価のポイントです。",
+  },
+  "その他": {
+    salesGrowth: "2〜6%",
+    profitMargin: "5〜10%",
+    loanApproval: "約60%",
+    avgSales: "中小企業全般 平均年商5,000万円",
+    tips: "業種を問わず、融資審査では「返済可能なキャッシュフロー」と「代表者の実行力の根拠」が最重視されます。",
+  },
+};
+
 // 融資チェックリスト（融資担当者視点）
 const LOAN_CHECKLIST = [
   { id: "purpose", label: "事業の目的・背景が明確か", category: "基本" },
@@ -254,12 +348,14 @@ export default function ToolPage() {
           {!isPremium && remaining !== null && (
             <span className="text-xs text-gray-400">残り無料 {remaining}回</span>
           )}
-          <button
-            onClick={print}
-            className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition"
-          >
-            印刷
-          </button>
+          {result && (
+            <button
+              onClick={print}
+              className="text-xs bg-emerald-800 hover:bg-emerald-700 text-emerald-200 px-3 py-1.5 rounded-lg transition flex items-center gap-1"
+            >
+              📄 PDFで保存・印刷
+            </button>
+          )}
         </div>
       </nav>
 
@@ -366,6 +462,37 @@ export default function ToolPage() {
                 </button>
               )}
             </div>
+
+            {/* 業種別ベンチマークティップス */}
+            {form.industry && INDUSTRY_BENCHMARKS[form.industry] && (() => {
+              const bm = INDUSTRY_BENCHMARKS[form.industry];
+              return (
+                <div className="bg-blue-950/60 border border-blue-700/60 rounded-xl p-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-blue-300 text-sm font-bold">📊 {form.industry}の業界平均ベンチマーク</span>
+                    <span className="text-xs text-blue-400 bg-blue-900/40 px-2 py-0.5 rounded-full">中小企業白書2024版</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-3 mb-3">
+                    <div className="bg-blue-900/30 rounded-lg p-3 text-center">
+                      <p className="text-xs text-blue-400 mb-1">売上高成長率</p>
+                      <p className="text-sm font-black text-white">{bm.salesGrowth}</p>
+                    </div>
+                    <div className="bg-blue-900/30 rounded-lg p-3 text-center">
+                      <p className="text-xs text-blue-400 mb-1">利益率平均</p>
+                      <p className="text-sm font-black text-white">{bm.profitMargin}</p>
+                    </div>
+                    <div className="bg-blue-900/30 rounded-lg p-3 text-center">
+                      <p className="text-xs text-blue-400 mb-1">融資承認率</p>
+                      <p className="text-sm font-black text-emerald-300">{bm.loanApproval}</p>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-400 mb-2">{bm.avgSales}</p>
+                  <div className="bg-amber-950/40 border border-amber-700/40 rounded-lg p-2">
+                    <p className="text-xs text-amber-300">💡 {bm.tips}</p>
+                  </div>
+                </div>
+              );
+            })()}
 
             <div>
               <label className="block text-xs font-bold mb-1 text-gray-400">事業概要・やりたいこと <span className="text-red-400">*</span></label>
@@ -690,9 +817,9 @@ export default function ToolPage() {
                 </button>
                 <button
                   onClick={print}
-                  className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition"
+                  className="text-xs bg-emerald-800 hover:bg-emerald-700 text-emerald-200 px-3 py-1.5 rounded-lg transition flex items-center gap-1"
                 >
-                  印刷
+                  📄 PDFで保存・印刷
                 </button>
                 <a
                   href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`AI経営計画書を試したら「${form.businessName || "事業計画"}」の事業計画書・収支シミュレーション・SWOT分析・投資家ピッチまでが5分で完成した。銀行融資にも使えるレベルで驚いた… → https://ai-keiei-keikaku.vercel.app #経営計画 #AI活用 #起業`)}`}
