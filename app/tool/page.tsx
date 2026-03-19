@@ -359,6 +359,24 @@ export default function ToolPage() {
               </div>
               <div>
                 <label className="block text-xs font-bold mb-1 text-gray-400">現在の課題・懸念事項</label>
+                <div className="flex flex-wrap gap-1.5 mb-2">
+                  {[
+                    { label: "📉 売上低迷", value: "売上が前年比20%減少しており、新規顧客獲得が課題です" },
+                    { label: "👥 人材不足", value: "採用が追いつかず、既存スタッフの業務過多が深刻な問題です" },
+                    { label: "💰 資金繰り", value: "売掛金回収が遅く、月末の資金繰りに常に不安があります" },
+                    { label: "🏢 競合対応", value: "低価格競合の台頭で、価格競争に巻き込まれています" },
+                    { label: "📱 DX推進", value: "業務のデジタル化が遅れており、生産性向上が急務です" },
+                  ].map((preset) => (
+                    <button
+                      key={preset.label}
+                      type="button"
+                      onClick={() => set("challenges", preset.value)}
+                      className="text-xs bg-gray-700 hover:bg-emerald-900/60 border border-gray-600 hover:border-emerald-600 text-gray-300 hover:text-emerald-300 px-2.5 py-1 rounded-lg transition"
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
+                </div>
                 <textarea
                   className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 resize-none focus:outline-none focus:border-emerald-500 h-24"
                   placeholder="例：開業資金が不足。競合店が多い立地。スタッフ採用が難しい。"
