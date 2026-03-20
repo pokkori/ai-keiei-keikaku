@@ -48,6 +48,22 @@ const FAQ_SCHEMA = {
         "text": "入力5分・AI生成5分の計約10分で完成します。事業概要・業種・規模・強み・課題・3年後の目標を入力するだけで、事業概要・収支計画・SWOT分析・アクションプラン・投資家向けピッチの5つのアウトプットが自動生成されます。",
       },
     },
+    {
+      "@type": "Question",
+      "name": "日本政策金融公庫の創業融資に使えますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "はい。当AIが生成する計画書は日本公庫の「創業計画書」の構成に対応した内容を含みます。事業の動機・経験・内容・市場・強み・収支計画をすべてカバーしています。数値の確認・調整を加えることで申請書として活用できます。",
+      },
+    },
+    {
+      "@type": "Question",
+      "name": "業種別ベンチマーク比較とは何ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "生成した計画書の収益計画を、中小企業庁・国税庁の業種別財務データと比較できる機能です。自社の利益率・成長率が業界標準と比べて現実的かを確認できるため、融資審査担当者への説得力が高まります。",
+      },
+    },
   ],
 };
 
@@ -502,6 +518,73 @@ export default function Home() {
             </svg>
             X(Twitter)でシェアする
           </a>
+        </div>
+      </section>
+
+      {/* SEOテキスト: 銀行融資に通る経営計画書 */}
+      <section className="py-16 px-4 bg-gray-900">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl font-bold text-white mb-4">銀行融資に通る経営計画書の書き方（2026年最新版）</h2>
+          <div className="prose prose-sm max-w-none text-gray-400 leading-relaxed space-y-4 mb-10">
+            <p>日本政策金融公庫への融資申請では、事業計画書の質が審査結果を大きく左右します。融資担当者が「この計画は現実的だ」と判断するには、<span className="text-gray-300 font-bold">数値の根拠・リスクの認識・実行力の証明</span>の3つが必要です。</p>
+            <p>2026年の審査トレンドでは「AI・DX活用計画」を含む事業計画書の評価が高まっています。また「人材確保・賃上げ計画」の明記が融資承認率を高める要因として注目されています。本AIは2026年の最新審査基準に対応した計画書を自動生成します。</p>
+            <p>本AIで生成した計画書は「業種別ベンチマーク比較」タブで同業他社との数値比較が可能です。自社の収益計画が業界標準と比べて現実的かどうかを確認してから融資申請することで、審査担当者への説得力が格段に増します。</p>
+          </div>
+
+          <h2 className="text-2xl font-bold text-white mb-4">経営計画書のPDF出力・印刷方法</h2>
+          <div className="bg-gray-800 border border-gray-700 rounded-2xl p-6 mb-10">
+            <div className="space-y-4">
+              {[
+                { step: "1", title: "事業概要を入力して計画書を生成", desc: "業種・事業概要・強み・課題・目標を入力してAI生成ボタンを押します（約30〜60秒）。" },
+                { step: "2", title: "各タブの内容を確認・必要に応じて編集", desc: "事業概要・収支計画・SWOT分析・アクションプランの5タブが自動生成されます。数値は自社実態に合わせて修正してください。" },
+                { step: "3", title: "「PDFで保存・印刷」ボタンをクリック", desc: "ツール右上の「📄 PDFで保存・印刷」ボタンを押すと印刷ダイアログが開きます。「PDFとして保存」を選択するとPDFファイルとして保存できます。" },
+                { step: "4", title: "日本公庫・銀行の融資申請に提出", desc: "生成した計画書を下書きとして活用。固有の数値・実績・担当者情報を追記して完成させてください。" },
+              ].map((item) => (
+                <div key={item.step} className="flex gap-4">
+                  <div className="bg-emerald-500 text-white font-black text-sm w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5">{item.step}</div>
+                  <div>
+                    <p className="font-bold text-white text-sm mb-0.5">{item.title}</p>
+                    <p className="text-xs text-gray-400 leading-relaxed">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <h2 className="text-2xl font-bold text-white mb-4">業種別 融資審査のポイント</h2>
+          <div className="grid md:grid-cols-2 gap-4 mb-10">
+            {[
+              { icon: "🍽️", industry: "飲食業", point: "原価率30%以下・人件費比率30%以下のダブル30%ルールを達成できる計画が高評価。立地・回転率・客単価の数値根拠が必須。" },
+              { icon: "💻", industry: "IT・SaaS", point: "ARR・MRR・解約率（チャーンレート）の具体値が重要。サブスク型は審査担当者に安定収益として評価されやすい。" },
+              { icon: "🏭", industry: "製造業", point: "設備投資の回収年数・稼働率・受注残の提示が鍵。補助金と組み合わせた投資計画が融資審査で有利。" },
+              { icon: "🏥", industry: "医療・介護", point: "介護報酬・診療報酬は公定価格のため収益予測が立てやすく融資承認率が高め。人員配置基準の達成計画を明記。" },
+              { icon: "🏗️", industry: "建設・不動産", point: "受注残・完工利益率・外注費率が審査のポイント。資金繰りの波（前払い・後払い）を明示した月次キャッシュフローが必須。" },
+              { icon: "📚", industry: "教育・スクール", point: "退会率（チャーン）5%以下が融資審査で優良指標。継続率と口コミ評価を数値で示すと説得力が増す。" },
+            ].map((item) => (
+              <div key={item.industry} className="bg-gray-800 border border-gray-700 rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-xl">{item.icon}</span>
+                  <span className="font-bold text-emerald-400 text-sm">{item.industry}</span>
+                </div>
+                <p className="text-xs text-gray-400 leading-relaxed">{item.point}</p>
+              </div>
+            ))}
+          </div>
+
+          <h2 className="text-2xl font-bold text-white mb-4">よくある質問</h2>
+          <div className="space-y-3">
+            {[
+              { q: "日本政策金融公庫の創業融資に使えますか？", a: "はい。当AIが生成する計画書は日本公庫の「創業計画書」の構成（動機・経験・事業内容・市場・強み・収支計画）に対応した内容を含みます。数値の確認・調整を加えることで、創業融資の申請書作成の大幅な時間削減が可能です。" },
+              { q: "生成した計画書は修正できますか？", a: "はい。生成結果は全文コピー可能で、WordやGoogleドキュメントに貼り付けて自由に編集できます。AIが生成した骨格を叩き台として、自社の具体的な数値・実績・将来像を追記することで完成度が大幅に高まります。" },
+              { q: "複数の業種・計画を作成できますか？", a: "スタンダードプラン（¥1,980/月）では作成回数が無制限になります。事業計画が複数ある場合や、銀行・補助金・投資家向けに書き分けが必要な場合に最適です。" },
+              { q: "業種別ベンチマークはどんなデータを使っていますか？", a: "中小企業庁の「中小企業白書2024年版」および国税庁の業種別財務データを参考に設定しています。融資担当者が「業界標準と比べてどうか」を確認する際の参考値として活用いただけます。" },
+            ].map((faq, i) => (
+              <div key={i} className="border border-gray-700 rounded-xl p-5">
+                <h3 className="font-bold text-sm mb-2 text-emerald-400">Q. {faq.q}</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">A. {faq.a}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
