@@ -9,13 +9,13 @@ const PAYJP_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYJP_PUBLIC_KEY ?? "";
 type Tab = "overview" | "finance" | "swot" | "action" | "pitch" | "benchmark" | "checklist";
 
 const TABS: { id: Tab; label: string }[] = [
-  { id: "overview", label: "📋 事業概要" },
-  { id: "finance", label: "💰 収支計画" },
-  { id: "swot", label: "🔍 SWOT分析" },
-  { id: "action", label: "📅 アクションプラン" },
-  { id: "pitch", label: "🚀 投資家ピッチ" },
-  { id: "benchmark", label: "📊 業界比較" },
-  { id: "checklist", label: "✅ 融資チェック" },
+  { id: "overview", label: "事業概要" },
+  { id: "finance", label: "収支計画" },
+  { id: "swot", label: "SWOT分析" },
+  { id: "action", label: "アクションプラン" },
+  { id: "pitch", label: "投資家ピッチ" },
+  { id: "benchmark", label: "業界比較" },
+  { id: "checklist", label: "融資チェック" },
 ];
 
 // 業種別ベンチマーク数値（中小企業白書2024年版ベース）
@@ -334,7 +334,7 @@ export default function ToolPage() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
           <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl relative">
             <button onClick={() => setShowPayjp(false)} className="absolute top-3 right-3 text-gray-400 text-xl">✕</button>
-            <div className="text-3xl mb-3 text-center">📊</div>
+            <div className="flex justify-center mb-3"><svg viewBox="0 0 48 48" width="48" height="48" className="text-emerald-500" aria-hidden="true"><rect x="4" y="24" width="10" height="20" fill="currentColor"/><rect x="19" y="14" width="10" height="30" fill="currentColor"/><rect x="34" y="4" width="10" height="40" fill="currentColor"/></svg></div>
             <h2 className="text-lg font-bold mb-2 text-center">プレミアムプラン</h2>
             <p className="text-sm text-gray-500 mb-4 text-center">{payjpPlan === "premium" ? "プレミアム — 経営計画書 無制限+高度分析" : "スタンダード — 経営計画書 無制限"}</p>
             <KomojuButton planId="standard" planLabel={payjpPlan === "once" ? "スタンダード ¥1,980/月" : payjpPlan === "premium" ? "プレミアム ¥3,980/月" : "スタンダード ¥1,980/月"} className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 disabled:opacity-50" />
@@ -342,7 +342,10 @@ export default function ToolPage() {
         </div>
       )}
       <nav className="bg-gray-900 border-b border-gray-800 px-6 py-4 flex justify-between items-center">
-        <Link href="/" className="font-bold text-emerald-400">📊 AI経営計画書作成</Link>
+        <Link href="/" className="font-bold text-emerald-400 flex items-center gap-1.5">
+          <svg viewBox="0 0 24 24" width="18" height="18" className="text-emerald-400" aria-hidden="true"><rect x="2" y="12" width="5" height="10" fill="currentColor"/><rect x="9.5" y="7" width="5" height="15" fill="currentColor"/><rect x="17" y="2" width="5" height="20" fill="currentColor"/></svg>
+          AI経営計画書作成
+        </Link>
         <div className="flex items-center gap-4">
           {isPremium && <span className="text-xs text-emerald-400 font-bold">✓ プレミアム</span>}
           {!isPremium && remaining !== null && (
@@ -653,14 +656,14 @@ export default function ToolPage() {
         )}
 
         {loading && (
-          <p className="text-xs text-gray-400 text-center">📊 市場分析 → 💡 戦略立案 → 📋 経営計画書生成</p>
+          <p className="text-xs text-gray-400 text-center">市場分析 → 戦略立案 → 経営計画書生成</p>
         )}
 
         {error && <p className="text-red-400 text-sm text-center">{error}</p>}
 
         {showPaywall && (
           <div className="bg-gray-900 border border-emerald-500 rounded-2xl p-8 text-center">
-            <div className="text-4xl mb-4">📊</div>
+            <div className="flex justify-center mb-4"><svg viewBox="0 0 48 48" width="48" height="48" className="text-emerald-400" aria-hidden="true"><rect x="4" y="24" width="10" height="20" fill="currentColor"/><rect x="19" y="14" width="10" height="30" fill="currentColor"/><rect x="34" y="4" width="10" height="40" fill="currentColor"/></svg></div>
             <h3 className="text-xl font-bold mb-2">無料回数が終わりました</h3>
             <p className="text-gray-400 text-sm mb-6">¥1,980/月（スタンダード）または¥3,980/月（プレミアム）</p>
             <div className="flex gap-4 justify-center">
@@ -676,7 +679,7 @@ export default function ToolPage() {
 
         {result && showComplete && (
           <div className="bg-emerald-900 border-2 border-emerald-400 rounded-2xl p-5 text-center animate-bounce">
-            <p className="text-2xl font-black text-white mb-1">🎉 経営計画書が完成しました！</p>
+            <p className="text-2xl font-black text-white mb-1">経営計画書が完成しました！</p>
             <p className="text-emerald-300 text-sm">各タブをクリックして内容を確認・コピーしてください</p>
           </div>
         )}
@@ -691,7 +694,7 @@ export default function ToolPage() {
           return (
             <div className="bg-gradient-to-r from-amber-900/60 to-emerald-900/60 border border-amber-500/60 rounded-2xl p-5">
               <div className="flex items-center gap-3 mb-2">
-                <span className="text-2xl">💰</span>
+                <svg viewBox="0 0 24 24" width="28" height="28" className="text-amber-400 shrink-0" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2.5" fill="currentColor"/><rect x="6" y="10" width="12" height="2" rx="1" fill="white"/><rect x="6" y="14" width="7" height="2" rx="1" fill="white"/></svg>
                 <div>
                   <p className="text-sm font-black text-white">コンサル費用 約<span className="text-amber-300 text-xl">¥{saving}万</span> を節約しました</p>
                   <p className="text-xs text-gray-400">{form.scale}・{form.industry || ""}向けコンサルの市場相場 ¥{saving}万〜¥{saving * 2}万 と比較</p>
@@ -969,7 +972,7 @@ export default function ToolPage() {
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4">
           <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl relative">
             <button onClick={() => { setShowUpsellTimer(false); if (upsellTimerRef.current) clearTimeout(upsellTimerRef.current); }} className="absolute top-3 right-3 text-gray-400 text-xl">✕</button>
-            <div className="text-3xl mb-3 text-center">📊</div>
+            <div className="flex justify-center mb-3"><svg viewBox="0 0 48 48" width="40" height="40" className="text-emerald-500" aria-hidden="true"><rect x="4" y="24" width="10" height="20" fill="currentColor"/><rect x="19" y="14" width="10" height="30" fill="currentColor"/><rect x="34" y="4" width="10" height="40" fill="currentColor"/></svg></div>
             <h2 className="text-lg font-bold mb-1 text-center text-gray-900">計画書をもっと活用しましょう</h2>
             <p className="text-sm text-gray-500 mb-2 text-center">月額¥1,980で無制限作成 + 補助金AIも利用可能</p>
             <ul className="text-sm text-gray-600 space-y-1 mb-4 text-left">

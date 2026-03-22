@@ -12,7 +12,7 @@ const DESC = "経営計画書をAIが無料で自動生成。事業概要・強�
 export const metadata: Metadata = {
   title: TITLE,
   description: DESC,
-  icons: { icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>" },
+  icons: { icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%2310b981'><rect x='10' y='50' width='18' height='40'/><rect x='35' y='30' width='18' height='60'/><rect x='60' y='15' width='18' height='75'/></svg>" },
   openGraph: {
     title: TITLE,
     description: DESC,
