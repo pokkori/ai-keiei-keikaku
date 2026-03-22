@@ -643,6 +643,7 @@ export default function ToolPage() {
               <button
                 onClick={generate}
                 disabled={loading || !canGenerate}
+                aria-label="経営計画書をAIで自動生成する"
                 className="flex-2 flex-1 bg-emerald-500 hover:bg-emerald-400 text-white font-black py-3 rounded-xl text-base transition disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {loading ? "AIが経営計画書を作成中..." : "経営計画書を生成する"}
@@ -727,6 +728,8 @@ export default function ToolPage() {
                 <button
                   key={t.id}
                   onClick={() => setTab(t.id)}
+                  aria-label={t.label.replace(/^[^\s]+\s/, "")}
+                  aria-current={tab === t.id ? "true" : undefined}
                   className={`px-4 py-3 text-xs font-bold whitespace-nowrap transition ${tab === t.id ? "text-emerald-400 border-b-2 border-emerald-400" : "text-gray-500 hover:text-gray-300"}`}
                 >
                   {t.label}
@@ -830,6 +833,49 @@ export default function ToolPage() {
                   𝕏 でシェアする
                 </a>
               </div>
+              {/* 業界比較タブ専用ビジュアル */}
+              {tab === "benchmark" && form.industry && INDUSTRY_BENCHMARKS[form.industry] && (() => {
+                const bm = INDUSTRY_BENCHMARKS[form.industry];
+                // Extract min/max from ranges like "3〜8%"
+                const parseRange = (s: string): [number, number] => {
+                  const m = s.match(/([\d.]+)[〜~]([\d.]+)/);
+                  if (m) return [parseFloat(m[1]), parseFloat(m[2])];
+                  const n = s.match(/([\d.]+)/);
+                  if (n) return [parseFloat(n[1]), parseFloat(n[1])];
+                  return [0, 0];
+                };
+                const [pmMin, pmMax] = parseRange(bm.profitMargin);
+                const [sgMin, sgMax] = parseRange(bm.salesGrowth);
+                const laMatch = bm.loanApproval.match(/([\d.]+)/);
+                const laPct = laMatch ? parseFloat(laMatch[1]) : 60;
+                return (
+                  <div className="mb-6">
+                    <h3 className="text-sm font-bold text-emerald-400 mb-3">📊 {form.industry} 業種別ベンチマーク比較</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                      {[
+                        { label: "利益率（業界平均）", min: pmMin, max: pmMax, unit: "%", color: "#34d399", tip: "この業種の平均的な利益率です。あなたの計画が上回れば審査で有利。" },
+                        { label: "売上成長率（業界平均）", min: sgMin, max: sgMax, unit: "%", color: "#60a5fa", tip: "業界全体の成長率。計画書に近い数値を使うと現実的と判断されます。" },
+                        { label: "融資承認率（業界）", min: laPct, max: laPct, unit: "%", color: "#f59e0b", tip: "この業種の中小企業融資が通る確率です。業種選択が融資可否に影響します。" },
+                      ].map((item) => (
+                        <div key={item.label} className="bg-gray-800 rounded-xl p-4">
+                          <p className="text-xs text-gray-400 mb-1">{item.label}</p>
+                          <p className="text-xl font-black mb-2" style={{ color: item.color }}>
+                            {item.min === item.max ? `${item.min}${item.unit}` : `${item.min}〜${item.max}${item.unit}`}
+                          </p>
+                          <div className="w-full bg-gray-700 rounded-full h-2 mb-2">
+                            <div className="h-2 rounded-full transition-all" style={{ width: `${Math.min(100, (item.min + item.max) / 2)}%`, background: item.color }} />
+                          </div>
+                          <p className="text-xs text-gray-500 leading-relaxed">{item.tip}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="bg-amber-950/40 border border-amber-700/40 rounded-xl p-3 mb-4">
+                      <p className="text-xs text-amber-300">💡 融資審査のポイント: {bm.tips}</p>
+                    </div>
+                    <p className="text-xs text-gray-500 mb-4">参考: {bm.avgSales}（中小企業白書2024年版ベース）</p>
+                  </div>
+                );
+              })()}
               {result[tab as Exclude<Tab, "checklist">]
                 ? <div className="text-sm" dangerouslySetInnerHTML={{ __html: renderMarkdown(result[tab as Exclude<Tab, "checklist">]) }} />
                 : <p className="text-sm text-gray-500">このセクションの内容がありません。</p>
