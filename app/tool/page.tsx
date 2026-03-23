@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import KomojuButton from "@/components/KomojuButton";
 import { track } from '@vercel/analytics';
+import { updateStreak, loadStreak, getStreakMilestoneMessage, type StreakData } from "@/lib/streak";
 
 const PAYJP_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYJP_PUBLIC_KEY ?? "";
 
@@ -247,6 +248,8 @@ export default function ToolPage() {
   const [step, setStep] = useState(1);
   const [checklist, setChecklist] = useState<Record<string, boolean>>({});
   const [showUpsellTimer, setShowUpsellTimer] = useState(false);
+  const [streak, setStreak] = useState<StreakData | null>(null);
+  const [streakMsg, setStreakMsg] = useState<string | null>(null);
   const upsellTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -254,6 +257,7 @@ export default function ToolPage() {
       setIsPremium(d.premium);
       setRemaining(d.remaining);
     });
+    setStreak(loadStreak("keieikaikaku"));
   }, []);
 
   function set(key: string, val: string) {
@@ -298,6 +302,11 @@ export default function ToolPage() {
         setResult(parseResult(accumulated));
       }
       setTab("overview");
+      // ストリーク更新
+      const s = updateStreak("keieikaikaku");
+      setStreak(s);
+      const msg = getStreakMilestoneMessage(s.count);
+      if (msg) setStreakMsg(msg);
       setShowComplete(true);
       // 生成後45秒でアップセルポップアップ（非プレミアムかつ残り回数1以下）
       if (!isPremium) {
@@ -351,6 +360,12 @@ export default function ToolPage() {
           {!isPremium && remaining !== null && (
             <span className="text-xs text-gray-400">残り無料 {remaining}回</span>
           )}
+          {streak && streak.count > 0 && (
+            <div className="inline-flex items-center gap-2 bg-orange-50 border border-orange-200 rounded-full px-3 py-1 text-sm text-gray-800">
+              <span>{streak.count}日連続利用中</span>
+            </div>
+          )}
+          {streakMsg && <div className="text-orange-400 font-bold text-sm animate-bounce">{streakMsg}</div>}
           {result && (
             <button
               onClick={print}
