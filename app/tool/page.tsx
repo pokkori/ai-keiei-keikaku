@@ -333,7 +333,7 @@ export default function ToolPage() {
       {showPayjp && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
           <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl relative">
-            <button onClick={() => setShowPayjp(false)} className="absolute top-3 right-3 text-gray-400 text-xl">✕</button>
+            <button type="button" onClick={() => setShowPayjp(false)} aria-label="決済モーダルを閉じる" className="absolute top-3 right-3 text-gray-400 text-xl">✕</button>
             <div className="flex justify-center mb-3"><svg viewBox="0 0 48 48" width="48" height="48" className="text-emerald-500" aria-hidden="true"><rect x="4" y="24" width="10" height="20" fill="currentColor"/><rect x="19" y="14" width="10" height="30" fill="currentColor"/><rect x="34" y="4" width="10" height="40" fill="currentColor"/></svg></div>
             <h2 className="text-lg font-bold mb-2 text-center">プレミアムプラン</h2>
             <p className="text-sm text-gray-500 mb-4 text-center">{payjpPlan === "premium" ? "プレミアム — 経営計画書 無制限+高度分析" : "スタンダード — 経営計画書 無制限"}</p>
@@ -396,6 +396,7 @@ export default function ToolPage() {
                   type="text"
                   className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
                   placeholder="例：田中食堂 / 株式会社〇〇"
+                  aria-label="事業名・屋号を入力（任意）"
                   value={form.businessName}
                   onChange={(e) => set("businessName", e.target.value)}
                 />
@@ -405,6 +406,7 @@ export default function ToolPage() {
                 <select
                   className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500"
                   value={form.industry}
+                  aria-label="業種を選択してください"
                   onChange={(e) => set("industry", e.target.value)}
                 >
                   <option value="">選択してください</option>
@@ -419,6 +421,7 @@ export default function ToolPage() {
                 <select
                   className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500"
                   value={form.scale}
+                  aria-label="事業規模を選択"
                   onChange={(e) => set("scale", e.target.value)}
                 >
                   {["個人事業主・フリーランス", "法人（1〜5名）", "法人（6〜20名）", "法人（21名以上）"].map((s) => (
@@ -432,6 +435,7 @@ export default function ToolPage() {
                   type="text"
                   className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
                   placeholder="例：500万円（自己資金200万＋融資300万）"
+                  aria-label="初期投資・資金調達額を入力（任意）"
                   value={form.initialFund}
                   onChange={(e) => set("initialFund", e.target.value)}
                 />
@@ -439,8 +443,10 @@ export default function ToolPage() {
             </div>
 
             <button
+              type="button"
               onClick={() => setStep(2)}
               disabled={!form.industry}
+              aria-label="次のステップ（事業詳細）へ進む"
               className="w-full bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition"
             >
               次へ: 事業詳細を入力 →
@@ -502,6 +508,7 @@ export default function ToolPage() {
               <textarea
                 className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 resize-none focus:outline-none focus:border-emerald-500 h-28"
                 placeholder="例：地元の無農薬野菜を使った健康志向のカフェを開業したい。20〜40代の女性をメインターゲットに、ランチとスイーツを提供。テイクアウトとECサイトでの通販も展開予定。"
+                aria-label="事業概要・やりたいことを入力（必須）"
                 value={form.overview}
                 onChange={(e) => set("overview", e.target.value)}
               />
@@ -513,6 +520,7 @@ export default function ToolPage() {
                 <textarea
                   className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 resize-none focus:outline-none focus:border-emerald-500 h-24"
                   placeholder="例：農家直送で仕入れコスト30%削減。管理栄養士の資格保有。SNSフォロワー5,000人。"
+                  aria-label="強み・差別化ポイントを入力"
                   value={form.strengths}
                   onChange={(e) => set("strengths", e.target.value)}
                 />
@@ -540,6 +548,7 @@ export default function ToolPage() {
                 <textarea
                   className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 resize-none focus:outline-none focus:border-emerald-500 h-24"
                   placeholder="例：開業資金が不足。競合店が多い立地。スタッフ採用が難しい。"
+                  aria-label="現在の課題・懸念事項を入力"
                   value={form.challenges}
                   onChange={(e) => set("challenges", e.target.value)}
                 />
@@ -552,6 +561,7 @@ export default function ToolPage() {
                 type="text"
                 className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
                 placeholder="例：年商3,000万・2店舗展開・EC売上月100万"
+                aria-label="3年後の目標を入力"
                 value={form.goal3y}
                 onChange={(e) => set("goal3y", e.target.value)}
               />
@@ -559,14 +569,18 @@ export default function ToolPage() {
 
             <div className="flex gap-3">
               <button
+                type="button"
                 onClick={() => setStep(1)}
+                aria-label="前のステップ（基本情報）に戻る"
                 className="flex-1 bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold py-3 rounded-xl transition"
               >
                 ← 戻る
               </button>
               <button
+                type="button"
                 onClick={() => setStep(3)}
                 disabled={!form.overview.trim()}
+                aria-label="次のステップ（確認・生成）へ進む"
                 className="flex-2 flex-1 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition"
               >
                 次へ: 内容を確認する →

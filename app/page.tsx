@@ -4,6 +4,529 @@ import Link from "next/link";
 import Script from "next/script";
 import KomojuButton from "@/components/KomojuButton";
 
+// ===== 業種別インタラクティブサンプル =====
+const INDUSTRY_SAMPLES = [
+  {
+    industry: "🍽 飲食業",
+    label: "飲食・レストラン",
+    tabs: [
+      {
+        label: "📋 事業概要",
+        content: `【事業概要】
+
+当社は東京都渋谷区に本店を置く、イタリアンレストランを3店舗運営する株式会社〇〇フーズです。コロナ禍での売上回復を経て、2026年度は4店舗目の出店と新業態（テイクアウト専門）への展開を計画しています。
+
+【3年後のビジョン】
+
+2028年度までに都内5店舗体制を確立し、年商5億円・従業員30名体制を実現します。単なる飲食店展開に留まらず、食材の産直仕入れネットワークを構築することで、他チェーンとの差別化と原価率25%以下を同時に達成します。
+
+【差別化ポイント】
+・地元農家との直接契約による新鮮食材の安定調達
+・シェフ経験20年の料理長による本格イタリアン
+・テイクアウト・EC展開による多角化収益`,
+      },
+      {
+        label: "📊 3年間収支",
+        content: `【3年間収支計画（概算）】
+
+年度      | 売上高    | 経費      | 営業利益
+2026年度 | 2.4億円  | 2.1億円  | 3,000万円
+2027年度 | 3.2億円  | 2.7億円  | 5,000万円
+2028年度 | 5.0億円  | 4.1億円  | 9,000万円
+
+利益率推移: 12.5% → 15.6% → 18.0%
+
+【損益分岐点】
+月次固定費: 約1,200万円
+必要月商: 約1,800万円（現状達成済み）
+
+【主要コスト構成（2026年度見込み）】
+・原価率: 28%（産直仕入れで競合33%比5%優位）
+・人件費率: 32%
+・家賃: 8%（3店舗合計）
+・その他経費: 19%`,
+      },
+      {
+        label: "🔍 SWOT分析",
+        content: `【SWOT分析】
+
+■ 強み（Strengths）
+・料理長20年のキャリア×イタリア研修経験
+・産直仕入れによる原価率25%（業界平均33%比）
+・渋谷・恵比寿・代官山の好立地3店舗
+
+■ 弱み（Weaknesses）
+・人材確保・育成コストが課題
+・テイクアウト・デリバリー比率が低い（売上5%）
+・知名度が地域限定
+
+■ 機会（Opportunities）
+・インバウンド回復による外食需要増加
+・フードテック・DX化による業務効率改善余地
+・産直EC市場の急成長（年率18%増）
+
+■ 脅威（Threats）
+・原材料費・人件費の継続的上昇
+・大手チェーンのコストリーダーシップ
+・飲食業の人材不足（業界離職率30%超）`,
+      },
+    ],
+  },
+  {
+    industry: "💻 IT・Web",
+    label: "IT・SaaS",
+    tabs: [
+      {
+        label: "📋 事業概要",
+        content: `【事業概要】
+
+当社は中小企業向けのクラウド型在庫管理SaaSを提供する株式会社〇〇テクノロジーズです。従業員5名・創業3年目で、現在MRR（月次経常収益）120万円を達成しています。2026年度はエンタープライズ向け機能を拡充し、ARR（年間経常収益）3,000万円を目指します。
+
+【3年後のビジョン】
+
+2028年度に累計導入社数1,000社・ARR1億円を達成し、Series A調達（目標3億円）によって東南アジア市場への展開を開始します。在庫管理という単一機能から「中小企業の業務OS」への進化を目指します。
+
+【差別化ポイント】
+・導入コスト0円・月額¥9,800から（競合の1/3）
+・APIファーストで既存ERPとの連携が容易
+・AI自動発注機能（業界唯一）`,
+      },
+      {
+        label: "📊 3年間収支",
+        content: `【3年間収支計画（概算）】
+
+年度      | ARR        | 経費       | 営業利益
+2026年度 | 3,000万円 | 2,500万円 | 500万円
+2027年度 | 6,000万円 | 4,000万円 | 2,000万円
+2028年度 | 1.0億円   | 5,500万円 | 4,500万円
+
+【SaaSメトリクス（現状）】
+・MRR: 120万円 / ARR: 1,440万円
+・チャーンレート（解約率）: 月次2.1%
+・LTV（顧客生涯価値）: ¥228,571/社
+・CAC（顧客獲得コスト）: ¥45,000/社
+
+【黒字化計画】
+現在: 月次損益 ▲80万円（先行投資期）
+2026Q3目標: 月次損益トントン（MRR200万円）
+2027Q1目標: 累積黒字転換`,
+      },
+      {
+        label: "🔍 SWOT分析",
+        content: `【SWOT分析】
+
+■ 強み（Strengths）
+・AIによる自動発注機能（特許申請中）
+・チャーンレート2.1%（SaaS平均5〜7%比で優秀）
+・小規模でも使えるUI設計（導入教育コスト0）
+
+■ 弱み（Weaknesses）
+・営業人員が1名のみ（スケールに限界）
+・エンタープライズ向け機能が未成熟
+・資金調達実績なし（ARR成長限界）
+
+■ 機会（Opportunities）
+・デジタル化・AI導入補助金でのSaaS採用増加
+・中小企業のDX化加速（2026年IT需要30%増見込み）
+・東南アジア中小企業の在庫管理課題
+
+■ 脅威（Threats）
+・大手SaaS（Salesforce・freee）の隣接領域進出
+・エンジニア採用競争の激化
+・景気後退時のSMB予算削減リスク`,
+      },
+    ],
+  },
+  {
+    industry: "🏭 製造業",
+    label: "製造業",
+    tabs: [
+      {
+        label: "📋 事業概要",
+        content: `【事業概要】
+
+当社は愛知県刈谷市に工場を構える精密部品製造業・株式会社〇〇精工です。従業員12名・年商2.2億円で、自動車メーカー向けの金属プレス部品を主力製品としています。2026年度はAI画像検査システムを導入し、不良品率の削減と新規受注獲得を目指します。
+
+【3年後のビジョン】
+
+2028年度に年商3億円・不良品率0.3%以下を実現し、自動車向けから半導体・医療機器向けへの取引先多角化を完成させます。ものづくり補助金を活用した設備更新で、人員を付加価値業務へ再配置します。
+
+【差別化ポイント】
+・AI画像検査による不良品率91%削減（3.2%→0.3%）
+・1万分の1mm精度の金属プレス加工技術
+・ISO9001認証取得による品質保証体制`,
+      },
+      {
+        label: "📊 3年間収支",
+        content: `【3年間収支計画（概算）】
+
+年度      | 売上高    | 経費       | 営業利益
+2026年度 | 2.2億円  | 1.95億円  | 2,500万円
+2027年度 | 2.6億円  | 2.2億円   | 4,000万円
+2028年度 | 3.0億円  | 2.5億円   | 5,000万円
+
+【設備投資・補助金計画】
+AI画像検査システム導入費: 1,200万円
+ものづくり補助金（補助率1/2）: 600万円
+自己負担額: 600万円
+
+【投資回収シミュレーション】
+年間不良品廃棄コスト削減: 730万円/年
+投資回収期間: 約10ヶ月（補助金活用後）
+3年間累計コスト削減: 約2,190万円`,
+      },
+      {
+        label: "🔍 SWOT分析",
+        content: `【SWOT分析】
+
+■ 強み（Strengths）
+・創業35年の金属プレス加工技術と職人技術
+・主要取引先3社との10年以上の継続取引実績
+・工場内一貫生産による短納期対応（最短3日）
+
+■ 弱み（Weaknesses）
+・熟練工の高齢化（平均年齢52歳）・後継者不足
+・売上の80%が自動車メーカー2社に集中
+・IT・DX化の遅れ（手作業検査・紙台帳管理）
+
+■ 機会（Opportunities）
+・電気自動車（EV）化による精密部品需要増加
+・半導体・医療機器分野での国内調達回帰
+・ものづくり補助金・AI導入補助金の活用余地
+
+■ 脅威（Threats）
+・中国・東南アジア製造業のコスト競争力
+・原材料（鉄・アルミ）価格の高騰継続
+・取引先の海外調達シフトリスク`,
+      },
+    ],
+  },
+  {
+    industry: "🏗 建設業",
+    label: "建設業",
+    tabs: [
+      {
+        label: "📋 事業概要",
+        content: `【事業概要】
+
+当社は大阪府堺市を拠点とする内装・リフォーム専門工事会社・株式会社〇〇建設です。従業員18名・年商3.1億円で、一般住宅から中規模商業施設までの内装工事を手掛けています。2026年度はBIM（建築情報モデリング）ソフトと工事管理アプリを導入し、DXによる生産性向上と新規法人顧客獲得を目指します。
+
+【3年後のビジョン】
+
+2028年度に年商4.5億円・営業利益率8%を達成し、リフォーム×不動産投資コンサルの複合サービスを大阪・神戸に展開します。
+
+【差別化ポイント】
+・BIM設計による完成イメージの事前提示（受注率20%UP）
+・施主への毎日の工事進捗報告（アプリで写真共有）
+・全工事10年保証による信頼獲得`,
+      },
+      {
+        label: "📊 3年間収支",
+        content: `【3年間収支計画（概算）】
+
+年度      | 売上高    | 経費       | 営業利益
+2026年度 | 3.1億円  | 2.9億円   | 2,000万円
+2027年度 | 3.7億円  | 3.35億円  | 3,500万円
+2028年度 | 4.5億円  | 4.1億円   | 4,000万円
+
+【IT投資計画（IT導入補助金活用）】
+BIM・工事管理システム導入費: 350万円
+IT導入補助金（補助率3/4）: 262万円
+自己負担額: 88万円
+
+【収益改善シミュレーション】
+工程管理DXによる工期短縮（10%）: +300万円/年
+受注率向上（BIM導入で5%改善）: +500万円/年
+合計収益改善効果: 約800万円/年`,
+      },
+      {
+        label: "🔍 SWOT分析",
+        content: `【SWOT分析】
+
+■ 強み（Strengths）
+・地域密着30年・口コミ紹介率60%以上
+・一級建築士2名在籍による設計提案力
+・急な修繕・緊急工事への即日対応体制
+
+■ 弱み（Weaknesses）
+・人材依存度が高く、職人1人あたり生産性に個人差
+・ITツール活用が遅れ、見積もりがExcel中心
+・下請け比率が60%で元請け受注の開拓が不十分
+
+■ 機会（Opportunities）
+・築30年以上の建物増加によるリフォーム需要拡大
+・DX補助金・省エネ補助金との組み合わせ受注
+・空き家・民泊リノベーション案件の増加
+
+■ 脅威（Threats）
+・建設資材（木材・鉄鋼）価格の高騰
+・職人・技能者の慢性的な人手不足
+・大手ハウスメーカーのリフォーム部門強化`,
+      },
+    ],
+  },
+  {
+    industry: "🛒 小売業",
+    label: "小売・EC",
+    tabs: [
+      {
+        label: "📋 事業概要",
+        content: `【事業概要】
+
+当社は福岡県福岡市に実店舗2店舗を構えるナチュラルコスメ専門店・株式会社〇〇ビューティーです。従業員8名・年商8,500万円で、オーガニック化粧品の小売とプライベートブランド開発を行っています。2026年度はEC（オンラインショップ）の本格展開と定期購入（サブスク）モデルへの移行を目指します。
+
+【3年後のビジョン】
+
+2028年度にEC売上比率50%・年商1.8億円を達成します。自社PBブランドのEC展開によって利益率を現状の18%から30%へ改善し、九州発のナチュラルコスメブランドとして全国認知を獲得します。
+
+【差別化ポイント】
+・九州産オーガニック原料100%使用のPBコスメ
+・美容師・エステ資格保有スタッフによる無料肌診断
+・サブスク（月次お届け）で継続使用率90%以上`,
+      },
+      {
+        label: "📊 3年間収支",
+        content: `【3年間収支計画（概算）】
+
+年度      | 売上高     | 経費       | 営業利益
+2026年度 | 8,500万円 | 6,970万円 | 1,530万円
+2027年度 | 1.2億円   | 9,000万円 | 3,000万円
+2028年度 | 1.8億円   | 1.26億円  | 5,400万円
+
+利益率推移: 18% → 25% → 30%
+
+【ECサブスク収益モデル（2027年目標）】
+定期購入会員: 500名
+平均単価: ¥4,800/月
+月次定期収益（MRR）: 240万円
+年間定期収益（ARR）: 2,880万円（年商の24%）
+
+【EC投資計画（小規模事業者持続化補助金活用）】
+EC構築・SNS広告費: 200万円
+補助金（補助率2/3）: 133万円
+自己負担: 67万円`,
+      },
+      {
+        label: "🔍 SWOT分析",
+        content: `【SWOT分析】
+
+■ 強み（Strengths）
+・九州産有機原料の独自調達ルート（競合参入障壁）
+・実店舗での体験・接客による高いリピート率（72%）
+・SNSフォロワー12,000名のオーガニックコミュニティ
+
+■ 弱み（Weaknesses）
+・EC売上比率が15%と低く、エリア依存が高い
+・在庫管理・物流のオペレーションが未整備
+・PBブランドの認知度が九州外では限定的
+
+■ 機会（Opportunities）
+・オーガニック・サステナブルコスメ市場の急成長（年率12%）
+・インスタグラム・TikTokでのビューティーEC拡大
+・越境EC（中国・台湾）への展開余地
+
+■ 脅威（Threats）
+・大手コスメブランドのナチュラル路線への転換
+・原料コスト（有機植物油・エッセンシャルオイル）の高騰
+・EC参入障壁の低下による競合増加`,
+      },
+    ],
+  },
+];
+
+function IndustrySampleSection() {
+  const [activeIndustry, setActiveIndustry] = useState(0);
+  const [activeTab, setActiveTab] = useState(0);
+  const sample = INDUSTRY_SAMPLES[activeIndustry];
+
+  return (
+    <section className="py-16 px-4 bg-gray-900">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-10">
+          <div className="inline-block bg-emerald-900/60 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full mb-3">
+            業種別 実際の出力サンプル
+          </div>
+          <h2 className="text-2xl font-bold text-white">こんな経営計画書が5分で生成されます</h2>
+          <p className="text-gray-400 text-sm mt-2">ChatGPTに直接聞くだけでは得られない「融資・補助金審査用フォーマット」で出力されます</p>
+        </div>
+
+        {/* ChatGPTとの違いバナー */}
+        <div className="bg-gray-800 border border-emerald-700/50 rounded-xl px-5 py-3 mb-6 flex flex-wrap gap-4 items-center justify-between">
+          <div>
+            <p className="text-xs font-bold text-emerald-300">ChatGPTとの違い</p>
+            <p className="text-xs text-gray-400 mt-0.5">ChatGPTは汎用テキスト生成。このAIは銀行融資書類形式・5項目同時生成・業種特化テンプレートで出力します</p>
+          </div>
+          <div className="flex flex-wrap gap-2 shrink-0">
+            {["銀行融資書類形式", "5項目同時生成", "業種特化テンプレート"].map((tag) => (
+              <span key={tag} className="text-xs bg-emerald-900 text-emerald-300 border border-emerald-700 px-2 py-0.5 rounded-full font-medium">{tag}</span>
+            ))}
+          </div>
+        </div>
+
+        {/* 業種タブ */}
+        <div className="flex gap-2 mb-4 flex-wrap">
+          {INDUSTRY_SAMPLES.map((s, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => { setActiveIndustry(i); setActiveTab(0); }}
+              aria-label={`${s.label}の経営計画書サンプルを表示`}
+              aria-pressed={activeIndustry === i}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeIndustry === i ? "bg-emerald-500 text-white" : "bg-gray-800 text-gray-400 hover:bg-gray-700 border border-gray-700"}`}
+            >
+              {s.industry}
+            </button>
+          ))}
+        </div>
+
+        <div className="bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden">
+          {/* 業種ラベル */}
+          <div className="px-5 py-3 border-b border-gray-700 bg-emerald-900/30">
+            <p className="text-xs text-gray-400 font-medium">業種サンプル</p>
+            <p className="text-sm text-emerald-300 font-bold">{sample.label} — AI生成出力（抜粋）</p>
+          </div>
+
+          {/* 出力タブ */}
+          <div className="p-5">
+            <div className="flex gap-1 mb-4 flex-wrap">
+              {sample.tabs.map((tab, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setActiveTab(i)}
+                  aria-label={`${tab.label}タブを表示`}
+                  aria-pressed={activeTab === i}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${activeTab === i ? "bg-emerald-500 text-white" : "bg-gray-700 border border-gray-600 text-gray-400 hover:bg-gray-600"}`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+            <div className="bg-gray-900 border border-gray-700 rounded-xl p-4">
+              <pre className="text-xs text-gray-300 whitespace-pre-wrap font-sans leading-relaxed">{sample.tabs[activeTab].content}</pre>
+            </div>
+            <p className="text-xs text-gray-500 mt-3 text-center">※ これはサンプルです。実際の生成結果はあなたの事業情報に基づいてカスタマイズされます</p>
+          </div>
+        </div>
+
+        <div className="text-center mt-8">
+          <Link href="/tool" className="inline-block bg-emerald-500 text-white font-bold px-8 py-4 rounded-xl hover:bg-emerald-400 shadow-lg transition-colors">
+            自分の業種で経営計画書を作る →
+          </Link>
+          <p className="text-xs text-gray-500 mt-2">登録不要・2回まで無料</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ===== 融資審査通過率セルフチェック（4問） =====
+function LoanApprovalSelfCheck() {
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState<number[]>([]);
+
+  const questions = [
+    {
+      q: "事業の「現状の課題」を数値で説明できますか？",
+      opts: [
+        { label: "売上・コスト・顧客数など数値で説明できる", score: 3 },
+        { label: "課題はあるが数値化できていない", score: 1 },
+        { label: "まだ整理できていない", score: 0 },
+      ],
+    },
+    {
+      q: "投資額の回収期間（収支計画）を試算できますか？",
+      opts: [
+        { label: "月次の収支シミュレーションがある", score: 3 },
+        { label: "おおまかな見通しはある", score: 1 },
+        { label: "試算していない", score: 0 },
+      ],
+    },
+    {
+      q: "競合他社との「差別化ポイント」を3つ以上挙げられますか？",
+      opts: [
+        { label: "3つ以上、具体的に挙げられる", score: 3 },
+        { label: "1〜2つは言えるが弱い", score: 1 },
+        { label: "まだ整理できていない", score: 0 },
+      ],
+    },
+    {
+      q: "融資が必要な理由（使途）が明確ですか？",
+      opts: [
+        { label: "設備・運転資金・広告費など用途が明確", score: 3 },
+        { label: "だいたい分かるが書けない", score: 1 },
+        { label: "まだ決まっていない", score: 0 },
+      ],
+    },
+  ];
+
+  function handleSelect(score: number) {
+    const newAnswers = [...answers, score];
+    setAnswers(newAnswers);
+    if (step < questions.length - 1) {
+      setStep(step + 1);
+    } else {
+      setStep(questions.length);
+    }
+  }
+
+  const total = answers.reduce((a, b) => a + b, 0);
+  const maxScore = questions.length * 3;
+  const pct = Math.round((total / maxScore) * 100);
+
+  if (step === questions.length) {
+    const result =
+      pct >= 75
+        ? { label: "融資通過可能性: 高", color: "text-emerald-400", bg: "bg-emerald-950 border-emerald-600", msg: "計画書の骨格が揃っています。AIで仕上げて融資申請書として完成させましょう。" }
+        : pct >= 40
+        ? { label: "融資通過可能性: 中（要補強）", color: "text-amber-400", bg: "bg-amber-950 border-amber-600", msg: "数値根拠・差別化・収支計画のどれかが不足しています。AIが補強案を生成します。" }
+        : { label: "融資通過可能性: 低（準備が必要）", color: "text-red-400", bg: "bg-red-950 border-red-600", msg: "今すぐAIで計画書の骨格を作り、足りない部分を埋めていきましょう。" };
+
+    return (
+      <div className={`border-2 rounded-2xl p-6 text-center ${result.bg}`}>
+        <p className="text-sm font-bold text-gray-300 mb-1">あなたの融資準備スコア</p>
+        <p className={`text-2xl font-black mb-2 ${result.color}`}>{result.label}</p>
+        <div className="w-full bg-gray-700 rounded-full h-3 mb-3 mx-auto max-w-xs">
+          <div className="h-3 rounded-full bg-emerald-400 transition-all duration-1000" style={{ width: `${pct}%` }} />
+        </div>
+        <p className="text-sm text-gray-400 mb-4">{result.msg}</p>
+        <Link href="/tool" className="inline-block bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-6 py-3 rounded-xl transition-colors text-sm">
+          AIで経営計画書を今すぐ作成する →
+        </Link>
+        <div className="mt-3">
+          <button onClick={() => { setAnswers([]); setStep(0); }} className="text-xs underline opacity-40 text-gray-400">もう一度診断する</button>
+        </div>
+      </div>
+    );
+  }
+
+  const q = questions[step];
+  return (
+    <div className="bg-gray-900 border-2 border-emerald-700 rounded-2xl p-6">
+      <div className="flex items-center gap-2 mb-4">
+        <div className="flex gap-1">
+          {questions.map((_, i) => (
+            <div key={i} className={`h-1.5 w-8 rounded-full ${i < step ? "bg-emerald-500" : i === step ? "bg-emerald-300" : "bg-gray-700"}`} />
+          ))}
+        </div>
+        <span className="text-xs text-gray-500">{step + 1}/{questions.length}</span>
+      </div>
+      <p className="font-bold text-white text-sm mb-4 leading-relaxed">{q.q}</p>
+      <div className="space-y-2">
+        {q.opts.map((opt, i) => (
+          <button
+            key={i}
+            onClick={() => handleSelect(opt.score)}
+            className="w-full text-left bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 font-medium text-sm px-4 py-3 rounded-xl transition-colors"
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 const FAQ_SCHEMA = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -68,6 +591,62 @@ const FAQ_SCHEMA = {
 };
 
 const PAYJP_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYJP_PUBLIC_KEY ?? "";
+
+// ===== FAQ アコーディオン =====
+const FAQ_ITEMS = [
+  {
+    q: "AIで作った経営計画書は銀行融資に使えますか？",
+    a: "はい、下書き・骨格として活用いただけます。日本政策金融公庫や銀行融資の審査項目（事業の目的・市場分析・収支計画・返済計画）をすべてカバーした構成で生成されます。数値や固有情報をご自身で確認・補足することで、融資申請に使えるレベルに仕上がります。",
+  },
+  {
+    q: "補助金申請に必要な経営計画書の書き方は？",
+    a: "ものづくり補助金・IT導入補助金・小規模事業者持続化補助金の申請には「現状と課題」「解決策と実施内容」「期待する効果と数値目標」の3点が必須です。当AIは業種・規模に合わせてこれら3要素を自動で生成します。補助金AIと組み合わせることで申請書の完成度がさらに高まります。",
+  },
+  {
+    q: "事業計画書とビジネスプランの違いは何ですか？",
+    a: "「事業計画書」は主に日本の金融機関・補助金審査向けに使われる書類で、収支計画・返済計画・実行スケジュールを重視します。「ビジネスプラン（Business Plan）」は投資家向けに市場規模・競合分析・収益モデルを詳述した英文書類を指すことが多いです。当AIはいずれの用途にも対応した計画書を生成できます。",
+  },
+  {
+    q: "無料で何回まで使えますか？",
+    a: "登録不要・クレジットカード不要で2回まで無料で試せます。3回目以降はスタンダードプラン（¥1,980/月）またはプレミアムプラン（¥3,980/月）へのご登録が必要です。",
+  },
+  {
+    q: "経営計画書の作成にどのくらい時間がかかりますか？",
+    a: "入力5分・AI生成5分の計約10分で完成します。事業概要・業種・規模・強み・課題・3年後の目標を入力するだけで、事業概要・収支計画・SWOT分析・アクションプラン・投資家向けピッチの5つのアウトプットが自動生成されます。",
+  },
+  {
+    q: "ChatGPTで作った計画書と何が違いますか？",
+    a: "このAIは「融資審査担当者が見る5つのポイント」「業種別ベンチマーク数値」「収支計画の自動算出」を組み込んだ専門プロンプトで動いています。ChatGPTは汎用AIですが、本サービスは経営計画書の採点軸に特化して設計されており、融資・補助金申請用に最適化されています。",
+  },
+  {
+    q: "日本政策金融公庫の創業融資に使えますか？",
+    a: "はい。当AIが生成する計画書は日本公庫の「創業計画書」の構成に対応した内容を含みます。事業の動機・経験・内容・市場・強み・収支計画をすべてカバーしています。数値の確認・調整を加えることで申請書として活用できます。",
+  },
+];
+
+function FaqAccordion() {
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
+  return (
+    <div className="space-y-2">
+      {FAQ_ITEMS.map((f, i) => (
+        <div key={i} className="border border-gray-800 rounded-xl overflow-hidden">
+          <button
+            onClick={() => setOpenIdx(openIdx === i ? null : i)}
+            className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-gray-900 transition-colors"
+          >
+            <span className="font-bold text-sm text-emerald-400 flex-1 pr-4">Q. {f.q}</span>
+            <span className="text-emerald-400 text-lg leading-none shrink-0">{openIdx === i ? "▲" : "▼"}</span>
+          </button>
+          {openIdx === i && (
+            <div className="px-5 pb-4 border-t border-gray-800">
+              <p className="text-gray-400 text-sm leading-relaxed pt-3">A. {f.a}</p>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function Home() {
   const [showPayjp, setShowPayjp] = useState(false);
@@ -239,6 +818,8 @@ export default function Home() {
         </div>
       </section>
 
+      <IndustrySampleSection />
+
       {/* Before/After */}
       <section className="py-16 px-4 bg-gray-900">
         <div className="max-w-3xl mx-auto">
@@ -394,6 +975,18 @@ export default function Home() {
         </div>
       </section>
 
+      {/* 融資審査通過率セルフチェック */}
+      <section className="py-14 px-4">
+        <div className="max-w-xl mx-auto">
+          <div className="text-center mb-6">
+            <div className="inline-block bg-emerald-900/60 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full mb-3">30秒でわかる</div>
+            <h2 className="text-2xl font-bold text-white">あなたの融資計画書、審査を通りますか？</h2>
+            <p className="text-gray-400 text-sm mt-2">銀行・日本政策金融公庫の審査担当者が最初に確認する4項目でセルフチェック</p>
+          </div>
+          <LoanApprovalSelfCheck />
+        </div>
+      </section>
+
       {/* Pricing */}
       <section className="py-16 px-4 bg-gray-900">
         <div className="max-w-2xl mx-auto text-center">
@@ -461,35 +1054,7 @@ export default function Home() {
             <h2 className="text-2xl font-bold text-white">経営計画書・事業計画書に関するQ&A</h2>
             <p className="text-gray-400 text-sm mt-2">融資・補助金申請・書き方に関するよくある疑問にお答えします</p>
           </div>
-          <div className="space-y-4">
-            {[
-              {
-                q: "AIで作った経営計画書は銀行融資に使えますか？",
-                a: "はい、下書き・骨格として活用いただけます。日本政策金融公庫や銀行融資の審査項目（事業の目的・市場分析・収支計画・返済計画）をすべてカバーした構成で生成されます。数値や固有情報をご自身で確認・補足することで、融資申請に使えるレベルに仕上がります。",
-              },
-              {
-                q: "補助金申請に必要な経営計画書の書き方は？",
-                a: "ものづくり補助金・IT導入補助金・小規模事業者持続化補助金の申請には「現状と課題」「解決策と実施内容」「期待する効果と数値目標」の3点が必須です。当AIは業種・規模に合わせてこれら3要素を自動で生成します。補助金AIと組み合わせることで申請書の完成度がさらに高まります。",
-              },
-              {
-                q: "事業計画書とビジネスプランの違いは何ですか？",
-                a: "「事業計画書」は主に日本の金融機関・補助金審査向けに使われる書類で、収支計画・返済計画・実行スケジュールを重視します。「ビジネスプラン（Business Plan）」は投資家向けに市場規模・競合分析・収益モデルを詳述した英文書類を指すことが多いです。当AIはいずれの用途にも対応した計画書を生成できます。",
-              },
-              {
-                q: "無料で何回まで使えますか？",
-                a: "登録不要・クレジットカード不要で2回まで無料で試せます。3回目以降はスタンダードプラン（¥1,980/月）またはプレミアムプラン（¥3,980/月）へのご登録が必要です。",
-              },
-              {
-                q: "経営計画書の作成にどのくらい時間がかかりますか？",
-                a: "入力5分・AI生成5分の計約10分で完成します。事業概要・業種・規模・強み・課題・3年後の目標を入力するだけで、事業概要・収支計画・SWOT分析・アクションプラン・投資家向けピッチの5つのアウトプットが自動生成されます。",
-              },
-            ].map((f) => (
-              <div key={f.q} className="border border-gray-800 rounded-xl p-6">
-                <h3 className="font-bold text-sm mb-2 text-emerald-400">Q. {f.q}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">A. {f.a}</p>
-              </div>
-            ))}
-          </div>
+          <FaqAccordion />
         </div>
       </section>
 
