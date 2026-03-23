@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
-const geist = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 
 const SITE_URL = "https://ai-keiei-keikaku.vercel.app";
 const TITLE = "AI経営計画書作成｜経営計画書を無料でAI自動生成・融資・補助金申請・創業計画に対応";
@@ -85,7 +83,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className={`${geist.variable} antialiased`}>
+      <body className="antialiased">
         {children}
         <Analytics />
       </body>
