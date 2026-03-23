@@ -494,7 +494,7 @@ function LoanApprovalSelfCheck() {
           AIで経営計画書を今すぐ作成する →
         </Link>
         <div className="mt-3">
-          <button onClick={() => { setAnswers([]); setStep(0); }} className="text-xs underline opacity-40 text-gray-400">もう一度診断する</button>
+          <button onClick={() => { setAnswers([]); setStep(0); }} aria-label="経営計画書必要度診断をもう一度やり直す" className="text-xs underline opacity-40 text-gray-400">もう一度診断する</button>
         </div>
       </div>
     );
@@ -517,6 +517,7 @@ function LoanApprovalSelfCheck() {
           <button
             key={i}
             onClick={() => handleSelect(opt.score)}
+            aria-label={`回答「${opt.label}」を選択`}
             className="w-full text-left bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 font-medium text-sm px-4 py-3 rounded-xl transition-colors"
           >
             {opt.label}
@@ -632,10 +633,12 @@ function FaqAccordion() {
         <div key={i} className="border border-gray-800 rounded-xl overflow-hidden">
           <button
             onClick={() => setOpenIdx(openIdx === i ? null : i)}
+            aria-label={`よくある質問「${f.q}」の回答を${openIdx === i ? "閉じる" : "開く"}`}
+            aria-expanded={openIdx === i}
             className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-gray-900 transition-colors"
           >
             <span className="font-bold text-sm text-emerald-400 flex-1 pr-4">Q. {f.q}</span>
-            <span className="text-emerald-400 text-lg leading-none shrink-0">{openIdx === i ? "▲" : "▼"}</span>
+            <span className="text-emerald-400 text-lg leading-none shrink-0" aria-hidden="true">{openIdx === i ? "▲" : "▼"}</span>
           </button>
           {openIdx === i && (
             <div className="px-5 pb-4 border-t border-gray-800">
@@ -720,6 +723,7 @@ export default function Home() {
           </Link>
           <button
             onClick={() => startCheckout("monthly")}
+            aria-label="月額¥1,980のスタンダードプランで経営計画書AIを始める"
             className="border border-emerald-400 text-emerald-300 hover:bg-emerald-900 font-bold px-8 py-4 rounded-xl text-lg transition"
           >
             月額プランを始める
@@ -914,6 +918,7 @@ export default function Home() {
             <p className="text-emerald-300 text-xs mb-4">融資担当者が「よく書けている」と感じる計画書の要素をすべてカバー</p>
             <button
               onClick={() => startCheckout("monthly")}
+              aria-label="月額¥1,980のスタンダードプランで経営計画書を作成する"
               className="inline-block bg-emerald-400 hover:bg-emerald-300 text-gray-900 font-black py-3 px-8 rounded-xl transition text-sm"
             >
               ¥1,980/月で計画書を作成する →
@@ -1019,6 +1024,7 @@ export default function Home() {
               </ul>
               <button
                 onClick={() => startCheckout("monthly")}
+                aria-label="スタンダードプラン（¥1,980/月・無制限）に申し込む"
                 className="w-full bg-emerald-400 hover:bg-emerald-300 text-gray-900 font-black py-3 rounded-xl transition text-sm"
               >
                 ¥1,980/月で始める
@@ -1036,6 +1042,7 @@ export default function Home() {
               </ul>
               <button
                 onClick={() => startCheckout("premium")}
+                aria-label="プレミアムプラン（¥3,980/月・全サービス対応）に申し込む"
                 className="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-xl transition text-sm"
               >
                 ¥3,980/月で始める
@@ -1159,6 +1166,21 @@ export default function Home() {
           経営計画書を無料で作成する →
         </a>
       </div>
+
+      {/* X(Twitter) Share */}
+      <section className="max-w-4xl mx-auto px-4 py-10 text-center">
+        <p className="text-gray-400 text-sm mb-4">AIが銀行融資用の経営計画書を5分で生成！経営者・起業家の方にシェアしませんか？</p>
+        <a
+          href={`https://twitter.com/intent/tweet?text=${encodeURIComponent("AIが銀行融資用の経営計画書を5分で生成！無料お試し #AI経営計画書")}&url=${encodeURIComponent("https://ai-keiei-keikaku.vercel.app")}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="XでシェアするXでシェアする"
+          className="inline-flex items-center gap-2 bg-black text-white px-5 py-3 rounded-xl font-bold hover:bg-gray-800 transition-colors min-h-[44px]"
+        >
+          <span>𝕏</span>
+          <span>Xでシェアする</span>
+        </a>
+      </section>
 
       <footer className="border-t border-gray-800 py-6 pb-24 sm:pb-6 text-center text-xs text-gray-500">
         <div className="space-x-4 mb-3">
