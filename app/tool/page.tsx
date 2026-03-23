@@ -332,7 +332,7 @@ export default function ToolPage() {
     <main className="min-h-screen bg-gray-950 text-white">
       {showPayjp && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl relative">
+          <div className="backdrop-blur-md bg-white/90 border border-white/40 rounded-2xl p-6 max-w-sm w-full shadow-2xl relative">
             <button type="button" onClick={() => setShowPayjp(false)} aria-label="決済モーダルを閉じる" className="absolute top-3 right-3 text-gray-400 text-xl">✕</button>
             <div className="flex justify-center mb-3"><svg viewBox="0 0 48 48" width="48" height="48" className="text-emerald-500" aria-hidden="true"><rect x="4" y="24" width="10" height="20" fill="currentColor"/><rect x="19" y="14" width="10" height="30" fill="currentColor"/><rect x="34" y="4" width="10" height="40" fill="currentColor"/></svg></div>
             <h2 className="text-lg font-bold mb-2 text-center">プレミアムプラン</h2>
@@ -386,7 +386,7 @@ export default function ToolPage() {
 
         {/* Step 1: 基本情報 */}
         {!result && step === 1 && (
-          <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6 space-y-5">
+          <div className="backdrop-blur-sm bg-white/5 border border-white/10 shadow-xl rounded-2xl p-6 space-y-5">
             <h2 className="font-bold text-lg text-emerald-400">Step 1 — 基本情報</h2>
 
             <div className="grid md:grid-cols-2 gap-4">
@@ -447,7 +447,7 @@ export default function ToolPage() {
               onClick={() => setStep(2)}
               disabled={!form.industry}
               aria-label="次のステップ（事業詳細）へ進む"
-              className="w-full bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition"
+              className="w-full bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition-all hover:shadow-lg hover:scale-105 active:scale-95 duration-200 disabled:hover:scale-100"
             >
               次へ: 事業詳細を入力 →
             </button>
@@ -456,7 +456,7 @@ export default function ToolPage() {
 
         {/* Step 2: 事業詳細 */}
         {!result && step === 2 && (
-          <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6 space-y-5">
+          <div className="backdrop-blur-sm bg-white/5 border border-white/10 shadow-xl rounded-2xl p-6 space-y-5">
             <div className="flex items-center justify-between">
               <h2 className="font-bold text-lg text-emerald-400">Step 2 — 事業詳細</h2>
               {INDUSTRY_TEMPLATES[form.industry] && (
@@ -581,7 +581,7 @@ export default function ToolPage() {
                 onClick={() => setStep(3)}
                 disabled={!form.overview.trim()}
                 aria-label="次のステップ（確認・生成）へ進む"
-                className="flex-2 flex-1 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition"
+                className="flex-2 flex-1 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition-all hover:shadow-lg hover:scale-105 active:scale-95 duration-200 disabled:hover:scale-100"
               >
                 次へ: 内容を確認する →
               </button>
@@ -591,7 +591,7 @@ export default function ToolPage() {
 
         {/* Step 3: 確認・生成 */}
         {!result && step === 3 && (
-          <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6 space-y-4">
+          <div className="backdrop-blur-sm bg-white/5 border border-white/10 shadow-xl rounded-2xl p-6 space-y-4">
             <h2 className="font-bold text-lg text-emerald-400">Step 3 — 確認・生成</h2>
 
             {/* 融資用途クイック選択 */}
@@ -617,7 +617,7 @@ export default function ToolPage() {
               </div>
             </div>
 
-            <div className="bg-gray-800 rounded-xl p-4 space-y-2 text-sm">
+            <div className="backdrop-blur-sm bg-white/5 border border-white/10 rounded-xl p-4 space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-gray-400">業種</span>
                 <span className="text-white font-medium">{form.industry}</span>
@@ -661,7 +661,7 @@ export default function ToolPage() {
                 onClick={generate}
                 disabled={loading || !canGenerate}
                 aria-label="経営計画書をAIで自動生成する"
-                className="flex-2 flex-1 bg-emerald-500 hover:bg-emerald-400 text-white font-black py-3 rounded-xl text-base transition disabled:opacity-40 disabled:cursor-not-allowed"
+                className="flex-2 flex-1 bg-emerald-500 hover:bg-emerald-400 text-white font-black py-3 rounded-xl text-base transition-all hover:shadow-lg hover:scale-105 active:scale-95 duration-200 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 {loading ? "AIが経営計画書を作成中..." : "経営計画書を生成する"}
               </button>
@@ -676,7 +676,7 @@ export default function ToolPage() {
         {error && <p className="text-red-400 text-sm text-center">{error}</p>}
 
         {showPaywall && (
-          <div className="bg-gray-900 border border-emerald-500 rounded-2xl p-8 text-center">
+          <div className="backdrop-blur-md bg-white/5 border border-emerald-500/80 shadow-2xl rounded-2xl p-8 text-center">
             <div className="flex justify-center mb-4"><svg viewBox="0 0 48 48" width="48" height="48" className="text-emerald-400" aria-hidden="true"><rect x="4" y="24" width="10" height="20" fill="currentColor"/><rect x="19" y="14" width="10" height="30" fill="currentColor"/><rect x="34" y="4" width="10" height="40" fill="currentColor"/></svg></div>
             <h3 className="text-xl font-bold mb-2">無料回数が終わりました</h3>
             <p className="text-gray-400 text-sm mb-6">¥1,980/月（スタンダード）または¥3,980/月（プレミアム）</p>
@@ -739,7 +739,7 @@ export default function ToolPage() {
         )}
 
         {result && (
-          <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
+          <div className="backdrop-blur-sm bg-white/5 border border-white/10 shadow-xl rounded-2xl overflow-hidden">
             <div className="flex overflow-x-auto border-b border-gray-800">
               {TABS.map((t) => (
                 <button
@@ -764,7 +764,7 @@ export default function ToolPage() {
                     const score = calcChecklistScore(checklist);
                     const scoreColor = score >= 80 ? "#34d399" : score >= 50 ? "#f59e0b" : "#f87171";
                     return (
-                      <div className="bg-gray-800 rounded-xl p-4 mb-5">
+                      <div className="backdrop-blur-sm bg-white/5 border border-white/10 rounded-xl p-4 mb-5">
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-xs text-gray-400">完成度スコア</span>
                           <span className="text-2xl font-black" style={{ color: scoreColor }}>{score}%</span>
@@ -874,7 +874,7 @@ export default function ToolPage() {
                         { label: "売上成長率（業界平均）", min: sgMin, max: sgMax, unit: "%", color: "#60a5fa", tip: "業界全体の成長率。計画書に近い数値を使うと現実的と判断されます。" },
                         { label: "融資承認率（業界）", min: laPct, max: laPct, unit: "%", color: "#f59e0b", tip: "この業種の中小企業融資が通る確率です。業種選択が融資可否に影響します。" },
                       ].map((item) => (
-                        <div key={item.label} className="bg-gray-800 rounded-xl p-4">
+                        <div key={item.label} className="backdrop-blur-sm bg-white/5 border border-white/10 rounded-xl p-4">
                           <p className="text-xs text-gray-400 mb-1">{item.label}</p>
                           <p className="text-xl font-black mb-2" style={{ color: item.color }}>
                             {item.min === item.max ? `${item.min}${item.unit}` : `${item.min}〜${item.max}${item.unit}`}
@@ -984,7 +984,7 @@ export default function ToolPage() {
       {/* アップセルタイマーポップアップ（生成後45秒） */}
       {showUpsellTimer && !isPremium && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl relative">
+          <div className="backdrop-blur-md bg-white/90 border border-white/40 rounded-2xl p-6 max-w-sm w-full shadow-2xl relative">
             <button onClick={() => { setShowUpsellTimer(false); if (upsellTimerRef.current) clearTimeout(upsellTimerRef.current); }} className="absolute top-3 right-3 text-gray-400 text-xl">✕</button>
             <div className="flex justify-center mb-3"><svg viewBox="0 0 48 48" width="40" height="40" className="text-emerald-500" aria-hidden="true"><rect x="4" y="24" width="10" height="20" fill="currentColor"/><rect x="19" y="14" width="10" height="30" fill="currentColor"/><rect x="34" y="4" width="10" height="40" fill="currentColor"/></svg></div>
             <h2 className="text-lg font-bold mb-1 text-center text-gray-900">計画書をもっと活用しましょう</h2>

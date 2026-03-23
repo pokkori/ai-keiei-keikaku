@@ -630,7 +630,7 @@ function FaqAccordion() {
   return (
     <div className="space-y-2">
       {FAQ_ITEMS.map((f, i) => (
-        <div key={i} className="border border-gray-800 rounded-xl overflow-hidden">
+        <div key={i} className="backdrop-blur-sm bg-white/5 border border-white/10 shadow-xl rounded-xl overflow-hidden">
           <button
             onClick={() => setOpenIdx(openIdx === i ? null : i)}
             aria-label={`よくある質問「${f.q}」の回答を${openIdx === i ? "閉じる" : "開く"}`}
@@ -717,14 +717,14 @@ export default function Home() {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href="/tool"
-            className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-10 py-4 rounded-xl text-lg transition"
+            className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-10 py-4 rounded-xl text-lg transition hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-200"
           >
             無料で経営計画書を作る
           </Link>
           <button
             onClick={() => startCheckout("monthly")}
             aria-label="月額¥1,980のスタンダードプランで経営計画書AIを始める"
-            className="border border-emerald-400 text-emerald-300 hover:bg-emerald-900 font-bold px-8 py-4 rounded-xl text-lg transition"
+            className="border border-emerald-400 text-emerald-300 hover:bg-emerald-900 font-bold px-8 py-4 rounded-xl text-lg transition hover:scale-105 active:scale-95 transition-transform duration-150"
           >
             月額プランを始める
           </button>
@@ -755,7 +755,7 @@ export default function Home() {
               { emoji: "💸", scene: "専門家に頼む費用がない", body: "経営コンサルに依頼したら30万〜100万円。中小企業診断士でも数万円。開業前にそれだけ出す余裕はない。でも「計画書が甘い」と言われて融資が通らないのも困る。" },
               { emoji: "⏰", scene: "補助金の締め切りが迫っている", body: "ものづくり補助金の申請締め切りまで3日。事業計画書の欄が白紙のまま。このまま諦めるしかないのか。" },
             ].map((s) => (
-              <div key={s.scene} className="flex gap-4 bg-gray-900 border border-gray-800 rounded-2xl p-5">
+              <div key={s.scene} className="flex gap-4 backdrop-blur-sm bg-white/5 border border-white/10 shadow-xl rounded-2xl p-5">
                 <div className="text-3xl shrink-0">{s.emoji}</div>
                 <div>
                   <p className="font-bold text-white text-sm mb-1">{s.scene}</p>
@@ -767,7 +767,7 @@ export default function Home() {
           <div className="mt-8 bg-emerald-900 border border-emerald-600 rounded-2xl p-6 text-center">
             <p className="text-white font-bold text-sm mb-1">その悩み、AIが5分で解決します</p>
             <p className="text-emerald-300 text-xs mb-4">事業概要を入力するだけ。銀行融資・補助金申請に使えるレベルの計画書が完成</p>
-            <a href="/tool" className="inline-block bg-emerald-500 hover:bg-emerald-400 text-white font-black px-8 py-3 rounded-xl text-sm transition-colors">
+            <a href="/tool" className="inline-block bg-emerald-500 hover:bg-emerald-400 text-white font-black px-8 py-3 rounded-xl text-sm transition-all hover:shadow-lg hover:scale-105 active:scale-95 duration-200">
               今すぐ無料で経営計画書を作る →
             </a>
           </div>
@@ -787,7 +787,7 @@ export default function Home() {
               { emoji: "🏪", title: "店舗開業", body: "飲食・美容・小売などの開業計画を収支予測付きで作成" },
               { emoji: "📈", title: "事業拡大", body: "既存事業の次のフェーズに向けた中期経営計画の策定に" },
             ].map((u) => (
-              <div key={u.title} className="bg-gray-800 rounded-2xl p-6">
+              <div key={u.title} className="backdrop-blur-sm bg-white/5 border border-white/10 shadow-xl rounded-2xl p-6">
                 <div className="text-3xl mb-3">{u.emoji}</div>
                 <h3 className="font-bold text-lg mb-2">{u.title}</h3>
                 <p className="text-gray-400 text-sm leading-relaxed">{u.body}</p>
@@ -810,7 +810,7 @@ export default function Home() {
               { num: "04", title: "アクションプラン", desc: "開業/拡大に向けた月次タスク一覧。優先度・担当・期限付きのロードマップ" },
               { num: "05", title: "投資家向けピッチ", desc: "エレベーターピッチ・問題と解決策・市場規模・マネタイズ・チームの強み" },
             ].map((o) => (
-              <div key={o.num} className="flex gap-6 bg-gray-900 border border-gray-800 rounded-2xl p-6">
+              <div key={o.num} className="flex gap-6 backdrop-blur-sm bg-white/5 border border-white/10 shadow-xl rounded-2xl p-6">
                 <div className="text-emerald-400 font-black text-2xl w-12 shrink-0">{o.num}</div>
                 <div>
                   <h3 className="font-bold text-lg mb-1">{o.title}</h3>
@@ -829,7 +829,7 @@ export default function Home() {
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold text-center mb-10">Before / After</h2>
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-red-950 border border-red-800 rounded-2xl p-6">
+            <div className="backdrop-blur-sm bg-red-950/80 border border-red-700/60 shadow-xl rounded-2xl p-6">
               <h3 className="font-bold text-red-400 mb-4">今まで</h3>
               <ul className="text-sm text-red-200 space-y-3">
                 <li>• 書き方がわからず、何週間も放置</li>
@@ -839,7 +839,7 @@ export default function Home() {
                 <li>• 融資担当者に「計画が甘い」と言われる</li>
               </ul>
             </div>
-            <div className="bg-emerald-950 border border-emerald-700 rounded-2xl p-6">
+            <div className="backdrop-blur-sm bg-emerald-950/80 border border-emerald-600/60 shadow-xl rounded-2xl p-6">
               <h3 className="font-bold text-emerald-400 mb-4">AIを使ったら</h3>
               <ul className="text-sm text-emerald-200 space-y-3">
                 <li>• 入力5分 → 生成5分で完成（何度でも無料で修正可）</li>
@@ -867,7 +867,7 @@ export default function Home() {
               { icon: "🏢", title: "社内・中期計画", desc: "3年間の数値目標・KPI・アクションプランロードマップを経営会議用に整理", badge: "すぐ使える" },
               { icon: "🚀", title: "投資家ピッチ", desc: "TAM/SAM/SOM・競合優位性・マイルストーンを投資家目線のフォーマットで生成", badge: "VC対応" },
             ].map((t) => (
-              <div key={t.title} className="bg-gray-800 border border-gray-700 rounded-2xl p-5">
+              <div key={t.title} className="backdrop-blur-sm bg-white/5 border border-white/10 shadow-xl rounded-2xl p-5 hover:scale-105 active:scale-95 transition-transform duration-150">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-2xl">{t.icon}</span>
                   <span className="text-xs text-emerald-400 font-bold bg-emerald-900/40 px-2 py-0.5 rounded-full">{t.badge}</span>
@@ -901,7 +901,7 @@ export default function Home() {
               { num: "04", point: "返済できる根拠が見えるか", detail: "融資額を何ヶ月で回収できるのか。キャッシュフロー計算書のイメージが必須。", aiHelp: "売上・コスト・返済シミュレーションを3年分で生成" },
               { num: "05", point: "申請者に実行力があるか", detail: "具体的なアクションプランがあると「本気で実行する人」と判断される。", aiHelp: "月次タスク・マイルストーン・担当者付きロードマップを生成" },
             ].map((item) => (
-              <div key={item.num} className="flex gap-4 bg-gray-900 border border-gray-800 rounded-2xl p-5 items-start">
+              <div key={item.num} className="flex gap-4 backdrop-blur-sm bg-white/5 border border-white/10 shadow-xl rounded-2xl p-5 items-start">
                 <div className="text-emerald-400 font-black text-xl w-10 shrink-0">{item.num}</div>
                 <div className="flex-1">
                   <h3 className="font-bold text-white text-sm mb-1">{item.point}</h3>
@@ -919,7 +919,7 @@ export default function Home() {
             <button
               onClick={() => startCheckout("monthly")}
               aria-label="月額¥1,980のスタンダードプランで経営計画書を作成する"
-              className="inline-block bg-emerald-400 hover:bg-emerald-300 text-gray-900 font-black py-3 px-8 rounded-xl transition text-sm"
+              className="inline-block bg-emerald-400 hover:bg-emerald-300 text-gray-900 font-black py-3 px-8 rounded-xl transition-all hover:shadow-lg hover:scale-105 active:scale-95 duration-200 text-sm"
             >
               ¥1,980/月で計画書を作成する →
             </button>
@@ -962,7 +962,7 @@ export default function Home() {
                 saving: "ピッチ資料作成 約¥30万節約",
               },
             ].map((t) => (
-              <div key={t.name} className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+              <div key={t.name} className="backdrop-blur-sm bg-white/5 border border-white/10 shadow-xl rounded-2xl p-6">
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-xs font-bold text-emerald-400 bg-emerald-900/40 border border-emerald-700/40 px-2 py-1 rounded-full">{t.tag}</span>
                   <span className="text-xs font-black text-white bg-emerald-600 px-2 py-1 rounded-full">{t.amount}</span>
@@ -998,7 +998,7 @@ export default function Home() {
           <h2 className="text-2xl font-bold mb-4">料金プラン</h2>
           <p className="text-gray-400 text-sm mb-10">コンサルの1/100以下の価格で本格的な計画書を何通でも</p>
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+            <div className="backdrop-blur-sm bg-white/5 border border-white/10 shadow-xl rounded-2xl p-6">
               <h3 className="font-bold mb-2">無料体験</h3>
               <div className="text-4xl font-black mb-4">¥0</div>
               <ul className="text-gray-400 text-sm space-y-2 mb-6 text-left">
@@ -1010,7 +1010,7 @@ export default function Home() {
                 無料で試す
               </Link>
             </div>
-            <div className="bg-emerald-900 rounded-2xl p-6 border-2 border-emerald-400 relative">
+            <div className="backdrop-blur-md bg-emerald-900/80 border-2 border-emerald-400/80 shadow-2xl rounded-2xl p-6 relative">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-400 text-gray-900 text-xs font-black px-4 py-1 rounded-full whitespace-nowrap">おすすめ</div>
               <h3 className="font-bold mb-2">スタンダード</h3>
               <div className="text-4xl font-black mb-1">¥1,980</div>
@@ -1025,12 +1025,12 @@ export default function Home() {
               <button
                 onClick={() => startCheckout("monthly")}
                 aria-label="スタンダードプラン（¥1,980/月・無制限）に申し込む"
-                className="w-full bg-emerald-400 hover:bg-emerald-300 text-gray-900 font-black py-3 rounded-xl transition text-sm"
+                className="w-full bg-emerald-400 hover:bg-emerald-300 text-gray-900 font-black py-3 rounded-xl transition-all hover:shadow-lg hover:scale-105 active:scale-95 duration-200 text-sm"
               >
                 ¥1,980/月で始める
               </button>
             </div>
-            <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+            <div className="backdrop-blur-sm bg-white/5 border border-white/10 shadow-xl rounded-2xl p-6">
               <h3 className="font-bold mb-2">プレミアム</h3>
               <div className="text-4xl font-black mb-1">¥3,980</div>
               <div className="text-gray-400 text-xs mb-4">/月（全サービス対応）</div>
@@ -1072,7 +1072,7 @@ export default function Home() {
         <p className="text-gray-400 mb-8">クレカ不要・登録不要。融資申請用・補助金申請用・社内共有用に対応。</p>
         <Link
           href="/tool"
-          className="bg-emerald-500 hover:bg-emerald-400 text-white font-black px-10 py-5 rounded-2xl text-xl transition inline-block"
+          className="bg-emerald-500 hover:bg-emerald-400 text-white font-black px-10 py-5 rounded-2xl text-xl transition-all hover:shadow-lg hover:scale-105 active:scale-95 duration-200 inline-block"
         >
           無料で経営計画書を作る →
         </Link>
@@ -1104,7 +1104,7 @@ export default function Home() {
           </div>
 
           <h2 className="text-2xl font-bold text-white mb-4">経営計画書のPDF出力・印刷方法</h2>
-          <div className="bg-gray-800 border border-gray-700 rounded-2xl p-6 mb-10">
+          <div className="backdrop-blur-sm bg-white/5 border border-white/10 shadow-xl rounded-2xl p-6 mb-10">
             <div className="space-y-4">
               {[
                 { step: "1", title: "事業概要を入力して計画書を生成", desc: "業種・事業概要・強み・課題・目標を入力してAI生成ボタンを押します（約30〜60秒）。" },
