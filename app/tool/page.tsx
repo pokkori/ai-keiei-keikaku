@@ -671,7 +671,7 @@ export default function ToolPage() {
             )}
 
             <div className="flex gap-3">
-              <button onClick={() => setStep(2)} className="flex-1 bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold py-3 rounded-xl transition">← 戻る</button>
+              <button onClick={() => setStep(2)} aria-label="前のステップ（事業詳細）に戻る" className="flex-1 bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold py-3 rounded-xl transition">← 戻る</button>
               <button
                 onClick={generate}
                 disabled={loading || !canGenerate}
@@ -696,10 +696,10 @@ export default function ToolPage() {
             <h3 className="text-xl font-bold mb-2">無料回数が終わりました</h3>
             <p className="text-gray-400 text-sm mb-6">¥1,980/月（スタンダード）または¥3,980/月（プレミアム）</p>
             <div className="flex gap-4 justify-center">
-              <button onClick={() => { track('upgrade_click', { service: 'AI経営計画書', plan: 'monthly' }); startCheckout("monthly"); }} disabled={false} className="bg-emerald-500 hover:bg-emerald-400 text-white font-black px-6 py-3 rounded-xl transition disabled:opacity-50">
+              <button onClick={() => { track('upgrade_click', { service: 'AI経営計画書', plan: 'monthly' }); startCheckout("monthly"); }} disabled={false} aria-label="AI経営計画書スタンダードプランに登録する（月額1,980円）" className="bg-emerald-500 hover:bg-emerald-400 text-white font-black px-6 py-3 rounded-xl transition disabled:opacity-50">
                 ¥1,980/月で始める
               </button>
-              <button onClick={() => { track('upgrade_click', { service: 'AI経営計画書', plan: 'premium' }); startCheckout("premium"); }} disabled={false} className="bg-gray-700 hover:bg-gray-600 text-white font-bold px-6 py-3 rounded-xl transition disabled:opacity-50">
+              <button onClick={() => { track('upgrade_click', { service: 'AI経営計画書', plan: 'premium' }); startCheckout("premium"); }} disabled={false} aria-label="AI経営計画書プレミアムプランに登録する（月額3,980円）" className="bg-gray-700 hover:bg-gray-600 text-white font-bold px-6 py-3 rounded-xl transition disabled:opacity-50">
                 ¥3,980/月（プレミアム）
               </button>
             </div>
@@ -746,6 +746,7 @@ export default function ToolPage() {
           <div className="flex justify-end">
             <button
               onClick={() => { setResult(null); setStep(1); setShowComplete(false); }}
+              aria-label="経営計画書の入力フォームに戻り、もう一度作成する"
               className="text-xs text-gray-500 hover:text-gray-300 border border-gray-700 px-3 py-1.5 rounded-lg transition"
             >
               ↩ もう一度作る
@@ -806,6 +807,7 @@ export default function ToolPage() {
                           type="checkbox"
                           checked={!!checklist[item.id]}
                           onChange={(e) => setChecklist(prev => ({ ...prev, [item.id]: e.target.checked }))}
+                          aria-label={`融資チェックリスト「${item.label}」を確認済みにする`}
                           className="w-4 h-4 accent-emerald-400"
                         />
                         <div className="flex-1">
@@ -821,7 +823,7 @@ export default function ToolPage() {
                     <div className="bg-emerald-900 border border-emerald-600 rounded-xl p-4 text-center">
                       <p className="text-white font-bold text-sm mb-1">🎉 計画書の完成度が高い状態です！</p>
                       <p className="text-emerald-300 text-xs mb-3">今すぐ印刷して金融機関への提出準備をしましょう</p>
-                      <button onClick={print} className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-6 py-2 rounded-xl text-sm transition">
+                      <button onClick={print} aria-label="経営計画書を印刷・PDF保存して融資申請の準備をする" className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-6 py-2 rounded-xl text-sm transition">
                         印刷して申請準備 →
                       </button>
                     </div>
@@ -846,15 +848,17 @@ export default function ToolPage() {
               <div className="flex justify-end mb-4 gap-2 flex-wrap">
                 <button
                   onClick={() => copy(result[tab as Exclude<Tab, "checklist">], tab as Exclude<Tab, "checklist">)}
+                  aria-label={`現在のタブ（${TABS.find(t => t.id === tab)?.label ?? tab}）の内容をクリップボードにコピーする`}
                   className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition"
                 >
                   {copied === tab ? "コピー済" : "このタブをコピー"}
                 </button>
                 <button
                   onClick={print}
+                  aria-label="経営計画書全体を印刷またはPDFで保存する"
                   className="text-xs bg-emerald-800 hover:bg-emerald-700 text-emerald-200 px-3 py-1.5 rounded-lg transition flex items-center gap-1"
                 >
-                  📄 PDFで保存・印刷
+                  PDFで保存・印刷
                 </button>
                 <a
                   href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`AI経営計画書を試したら「${form.businessName || "事業計画"}」の事業計画書・収支シミュレーション・SWOT分析・投資家ピッチまでが5分で完成した。銀行融資にも使えるレベルで驚いた… → https://ai-keiei-keikaku.vercel.app #経営計画 #AI活用 #起業`)}`}

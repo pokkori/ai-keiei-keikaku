@@ -356,7 +356,7 @@ function IndustrySampleSection() {
             <p className="text-xs font-bold text-emerald-300">ChatGPTとの違い</p>
             <p className="text-xs text-gray-400 mt-0.5">ChatGPTは汎用テキスト生成。このAIは銀行融資書類形式・5項目同時生成・業種特化テンプレートで出力します</p>
           </div>
-          <div className="flex flex-wrap gap-2 shrink-0">
+          <div className="flex flex-wrap gap-2">
             {["銀行融資書類形式", "5項目同時生成", "業種特化テンプレート"].map((tag) => (
               <span key={tag} className="text-xs bg-emerald-900 text-emerald-300 border border-emerald-700 px-2 py-0.5 rounded-full font-medium">{tag}</span>
             ))}
@@ -667,6 +667,18 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_SCHEMA) }}
       />
+      {/* ナビゲーション */}
+      <nav className="border-b border-white/10 px-6 py-4 sticky top-0 bg-gray-950/95 backdrop-blur z-10">
+        <div className="max-w-5xl mx-auto flex items-center justify-between">
+          <span className="font-bold text-white">AI経営計画書</span>
+          <div className="flex items-center gap-3">
+            <Link href="/business" aria-label="税理士・コンサル向け法人プランを見る" className="text-emerald-400 hover:text-emerald-300 text-sm font-bold hidden sm:inline transition-colors">士業・法人向けプラン</Link>
+            <Link href="/tool" aria-label="経営計画書を無料で作成するツールページへ移動する" className="bg-emerald-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-emerald-700">
+              無料で作成する
+            </Link>
+          </div>
+        </div>
+      </nav>
       {/* Hero */}
       <section className="pt-20 pb-16 px-4 text-center">
         <div className="inline-block bg-emerald-900 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full mb-6">
@@ -728,6 +740,13 @@ export default function Home() {
           >
             月額プランを始める
           </button>
+          <Link
+            href="/business"
+            aria-label="税理士・コンサル向け法人プランを見る"
+            className="border border-gray-600 text-gray-400 hover:bg-gray-800 font-medium px-8 py-4 rounded-xl text-base transition"
+          >
+            士業・法人向けプラン →
+          </Link>
         </div>
         <p className="text-gray-500 text-xs mt-4">登録不要・クレカ不要・2回まで無料</p>
       </section>
@@ -751,12 +770,12 @@ export default function Home() {
           </div>
           <div className="space-y-4">
             {[
-              { emoji: "😓", scene: "「計画書の書き方」で詰まり続けた", body: "融資申請の締め切りまであと2週間。テンプレートを開いても「事業の強みとは？」「市場規模は？」の問いに答えられず、白紙のまま閉じてしまう。" },
-              { emoji: "💸", scene: "専門家に頼む費用がない", body: "経営コンサルに依頼したら30万〜100万円。中小企業診断士でも数万円。開業前にそれだけ出す余裕はない。でも「計画書が甘い」と言われて融資が通らないのも困る。" },
-              { emoji: "⏰", scene: "補助金の締め切りが迫っている", body: "ものづくり補助金の申請締め切りまで3日。事業計画書の欄が白紙のまま。このまま諦めるしかないのか。" },
+              { icon: <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#86efac" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>, scene: "「計画書の書き方」で詰まり続けた", body: "融資申請の締め切りまであと2週間。テンプレートを開いても「事業の強みとは？」「市場規模は？」の問いに答えられず、白紙のまま閉じてしまう。" },
+              { icon: <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#86efac" strokeWidth="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>, scene: "専門家に頼む費用がない", body: "経営コンサルに依頼したら30万〜100万円。中小企業診断士でも数万円。開業前にそれだけ出す余裕はない。でも「計画書が甘い」と言われて融資が通らないのも困る。" },
+              { icon: <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#86efac" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>, scene: "補助金の締め切りが迫っている", body: "ものづくり補助金の申請締め切りまで3日。事業計画書の欄が白紙のまま。このまま諦めるしかないのか。" },
             ].map((s) => (
               <div key={s.scene} className="flex gap-4 backdrop-blur-sm bg-white/5 border border-white/10 shadow-xl rounded-2xl p-5">
-                <div className="text-3xl shrink-0">{s.emoji}</div>
+                <div className="shrink-0">{s.icon}</div>
                 <div>
                   <p className="font-bold text-white text-sm mb-1">{s.scene}</p>
                   <p className="text-xs text-gray-400 leading-relaxed">{s.body}</p>
