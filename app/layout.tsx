@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Sans_JP } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import FeedbackButton from "@/components/FeedbackButton";
 import "./globals.css";
 import { InstallPrompt } from "@/components/InstallPrompt";
@@ -171,6 +172,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <FeedbackButton serviceName="AI経営計画書" />
         </footer>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

@@ -6,6 +6,7 @@ import KomojuButton from "@/components/KomojuButton";
 import { StreakBanner } from "@/components/StreakBanner";
 import { UsageCounter } from "@/components/UsageCounter";
 import { THEMES } from "@/lib/design-system-themes";
+import { CrossSell } from "@/components/CrossSell";
 const T = THEMES.legal;
 
 /* ---- SVG Icon helper (replaces all emoji) ---- */
@@ -478,9 +479,10 @@ function IndustrySampleSection() {
  <div className="text-center mt-8">
  <div className="max-w-xs mx-auto mb-4"><UsageCounter /></div>
  <Link href="/tool" className="inline-block bg-emerald-500/100 text-white font-bold px-8 py-4 rounded-xl hover:bg-emerald-400 shadow-xl transition-colors">
- 自分の業種で経営計画書を作る →
+ 無料でAIが計画書を作成 →
  </Link>
- <p className="text-xs text-white/50 mt-2">登録不要・2回まで無料</p>
+ <p className="text-xs opacity-60 mt-2">※登録不要・3項目で完成</p>
+ <p className="text-xs text-white/50 mt-2">登録不要・3回まで無料</p>
  </div>
  </div>
  </section>
@@ -628,7 +630,7 @@ const FAQ_SCHEMA = {
  "name": "無料で何回まで使えますか？",
  "acceptedAnswer": {
  "@type": "Answer",
- "text": "登録不要・クレジットカード不要で2回まで無料で試せます。3回目以降はスタンダードプラン（¥1,980/月）またはプレミアムプラン（¥3,980/月）へのご登録が必要です。",
+ "text": "登録不要・クレジットカード不要で3回まで無料で試せます。4回目以降はスタンダードプラン（¥1,980/月）またはプレミアムプラン（¥3,980/月）へのご登録が必要です。",
  },
  },
  {
@@ -676,7 +678,7 @@ const FAQ_ITEMS = [
  },
  {
  q: "無料で何回まで使えますか？",
- a: "登録不要・クレジットカード不要で2回まで無料で試せます。3回目以降はスタンダードプラン（¥1,980/月）またはプレミアムプラン（¥3,980/月）へのご登録が必要です。",
+ a: "登録不要・クレジットカード不要で3回まで無料で試せます。4回目以降はスタンダードプラン（¥1,980/月）またはプレミアムプラン（¥3,980/月）へのご登録が必要です。",
  },
  {
  q: "経営計画書の作成にどのくらい時間がかかりますか？",
@@ -819,7 +821,7 @@ export default function Home() {
  士業・法人向けプラン →
  </Link>
  </div>
- <p className="text-white/50 text-xs mt-4">登録不要・クレカ不要・2回まで無料</p>
+ <p className="text-white/50 text-xs mt-4">登録不要・クレカ不要・3回まで無料</p>
  </section>
 
  {/* クロスセルバナー: 補助金AI */}
@@ -1092,9 +1094,9 @@ export default function Home() {
  <h3 className="font-bold mb-2">無料体験</h3>
  <div className="text-4xl font-black mb-4">¥0</div>
  <ul className="text-white/40 text-sm space-y-2 mb-6 text-left">
- <li>2回無料で試せる</li>
+ <li>3回無料で試せる</li>
  <li>全5タブ生成</li>
- <li>3回目以降は有料</li>
+ <li>4回目以降は有料</li>
  </ul>
  <Link href="/tool" className="block w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-xl transition text-center text-sm">
  無料で試す
@@ -1166,7 +1168,7 @@ export default function Home() {
  >
  無料で経営計画書を作る →
  </Link>
- <p className="text-white/50 text-xs mt-4">2回まで無料 · いつでも解約可能</p>
+ <p className="text-white/50 text-xs mt-4">3回まで無料 · いつでも解約可能</p>
  <div className="mt-8 pt-6 border-t border-gray-800">
  <p className="text-white/50 text-sm mb-4">経営計画書の作成に困っている知人にシェアしませんか？</p>
  <a
@@ -1271,6 +1273,8 @@ export default function Home() {
  <span>Xでシェアする</span>
  </a>
  </section>
+
+ <CrossSell currentService="AI経営計画書" />
 
  <footer className="border-t border-gray-800 py-6 pb-24 sm:pb-6 text-center text-xs text-white/50">
  <div className="space-x-4 mb-3">
