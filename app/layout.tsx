@@ -3,6 +3,7 @@ import { Noto_Sans_JP } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import FeedbackButton from "@/components/FeedbackButton";
 import "./globals.css";
+import { InstallPrompt } from "@/components/InstallPrompt";
 
 const notoSansJP = Noto_Sans_JP({
   subsets: ["latin"],
@@ -165,6 +166,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={`${notoSansJP.className} antialiased`}>
         {children}
+        <InstallPrompt />
         <footer className="flex justify-center py-2">
           <FeedbackButton serviceName="AI経営計画書" />
         </footer>

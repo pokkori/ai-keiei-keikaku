@@ -3,6 +3,8 @@ import { useState } from "react";
 import Link from "next/link";
 import Script from "next/script";
 import KomojuButton from "@/components/KomojuButton";
+import { StreakBanner } from "@/components/StreakBanner";
+import { UsageCounter } from "@/components/UsageCounter";
 import { THEMES } from "@/lib/design-system-themes";
 const T = THEMES.legal;
 
@@ -474,6 +476,7 @@ function IndustrySampleSection() {
  </div>
 
  <div className="text-center mt-8">
+ <div className="max-w-xs mx-auto mb-4"><UsageCounter /></div>
  <Link href="/tool" className="inline-block bg-emerald-500/100 text-white font-bold px-8 py-4 rounded-xl hover:bg-emerald-400 shadow-xl transition-colors">
  自分の業種で経営計画書を作る →
  </Link>
@@ -746,6 +749,7 @@ export default function Home() {
  </div>
  </div>
  </nav>
+ <StreakBanner />
  {/* Hero */}
  <section className="pt-20 pb-16 px-4 text-center">
  <div className="inline-block bg-emerald-900 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full mb-6">
