@@ -3,42 +3,42 @@ import Link from "next/link";
 import { useState } from "react";
 
 const PROBLEMS = [
-  { icon: "📋", text: "顧問先の経営計画書作成に毎回10時間以上かかる" },
-  { icon: "💼", text: "創業融資・補助金申請の計画書を量産できない" },
-  { icon: "📊", text: "SWOT・収支計画・ピッチ資料の品質が担当者次第" },
-  { icon: "🏦", text: "金融機関提出用の書式に整えるのが手間" },
-  { icon: "🔄", text: "複数クライアントを抱え、作業が並行処理できない" },
-  { icon: "💰", text: "計画書作成を外注すると1件30〜50万円かかる" },
+  { icon: "書類", text: "顧問先の経営計画書作成に毎回10時間以上かかる" },
+  { icon: "業務", text: "創業融資・補助金申請の計画書を量産できない" },
+  { icon: "分析", text: "SWOT・収支計画・ピッチ資料の品質が担当者次第" },
+  { icon: "融資", text: "金融機関提出用の書式に整えるのが手間" },
+  { icon: "更新", text: "複数クライアントを抱え、作業が並行処理できない" },
+  { icon: "収益", text: "計画書作成を外注すると1件30〜50万円かかる" },
 ];
 
 const FEATURES = [
   {
-    icon: "♾",
+    icon: "∞",
     title: "経営計画書 生成無制限",
     desc: "顧問先・支援先の件数に関わらず、月額定額で何件でも生成可能。1件あたりのコストを圧倒的に削減します。",
   },
   {
-    icon: "📑",
+    icon: "書類",
     title: "6種類の出力形式",
     desc: "事業概要・3年収支・SWOT・アクションプラン・投資家ピッチ・競合分析を一括生成。用途別に使い分けられます。",
   },
   {
-    icon: "🏦",
+    icon: "融資",
     title: "日本政策金融公庫・補助金対応",
     desc: "創業計画書・ものづくり補助金・事業再構築補助金の提出様式に合わせた出力形式を選択可能。",
   },
   {
-    icon: "👥",
+    icon: "人員",
     title: "複数担当者共有",
     desc: "事務所・チームのメンバー全員が同じアカウントで利用可能。品質が担当者に依存しない仕組みを実現。",
   },
   {
-    icon: "🚀",
+    icon: "優先",
     title: "優先サポート（24h以内）",
     desc: "個別の業種・用途に合わせた使い方の相談に対応。顧問先への提案資料作成もサポートします。",
   },
   {
-    icon: "📈",
+    icon: "業種",
     title: "業種別プリセット20種",
     desc: "飲食・IT・製造・小売・建設・医療など主要業種のプリセットを搭載。最短3分で計画書ドラフトが完成。",
   },
@@ -94,7 +94,7 @@ export default function BusinessPage() {
             <button onClick={() => setShowModal(false)} className="absolute top-3 right-3 text-gray-400 text-xl">
               ✕
             </button>
-            <div className="text-4xl mb-3 text-center">🏢</div>
+            <div className="text-base font-bold mb-3 text-center text-emerald-700">法人プラン</div>
             <h2 className="text-lg font-bold mb-1 text-center">ビジネスプランに申し込む</h2>
             <p className="text-sm text-gray-500 mb-6 text-center">経営計画書 生成無制限 + 優先サポート</p>
             <a
