@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Noto_Sans_JP } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import Script from "next/script";
 import FeedbackButton from "@/components/FeedbackButton";
 import "./globals.css";
 import { InstallPrompt } from "@/components/InstallPrompt";
@@ -29,13 +30,13 @@ export const metadata: Metadata = {
     siteName: "AI経営計画書作成",
     locale: "ja_JP",
     type: "website",
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "AI経営計画書作成" }],
+    images: [{ url: `${SITE_URL}/og.png`, width: 1200, height: 630, alt: "AI経営計画書作成" }],
   },
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESC,
-    images: ["/og.png"],
+    images: [`${SITE_URL}/og.png`],
   },
   metadataBase: new URL(SITE_URL),
   manifest: "/manifest.json",
@@ -147,7 +148,93 @@ const jsonLd = {
             "text": "はい、税理士・中小企業診断士・経営コンサルタントの方が顧問先向けの計画書作成にご利用いただけます。法人向けの無制限プラン（¥19,800/月）もご用意しています。"
           }
         },
+        {
+          "@type": "Question",
+          "name": "融資申請に使えますか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "日本政策金融公庫・地方銀行・信用金庫への融資申請で必要な創業計画書・企業概要書の形式に対応しています。金融機関が重視する「返済能力」「事業の実現可能性」「市場の成長性」を明示した計画書の骨格を自動生成します。最終提出前は必ず担当者や専門家に確認してください。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "経営計画書の更新頻度はどのくらいですか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "一般的に年1回の全体見直しと、四半期ごとの数値更新が推奨されます。市場環境の変化・新規事業の開始・組織変更の際にも計画書を更新することで、金融機関・取引先への信頼性が向上します。本AIでは既存計画書の内容を入力して改訂版を素早く生成できます。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "複数の計画書を作成・保存できますか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "プレミアムプラン（¥980/月）では複数バージョンの保存・比較が可能です。融資用・補助金用・社内共有用など目的別に異なる計画書を管理できます。PDF出力機能でそのまま提出できる形式で保存できます。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "AI生成の経営計画書と人間が作るものの違いは何ですか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "本AIは業界標準フォーマット・金融機関の審査視点・補助金審査のポイントを学習した上で計画書を生成します。数分で完成するため、ドラフト作成の時間を大幅に削減できます。ただし、事業固有の強みや数値目標は人間が最終確認・加筆することが採択率向上の鍵です。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "英語版の経営計画書（ピッチデック）も作れますか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "日本語で作成した経営計画書を英語に変換する機能があります。海外投資家向けのピッチデック・グローバル展開計画・外国語での融資申請書類作成に活用できます。専門的な金融・法律英語に対応しています。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "経営計画書にKPIや目標数値はどう設定しますか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "売上高・顧客獲得数・粗利率・従業員数などの数値目標を入力すると、AIが年度別のマイルストーンとKPIツリーを自動設定します。根拠のある数値設定ができるよう、業界平均データも参照しながら現実的な目標を提案します。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "競合分析はどのように行われますか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "業種・地域・ターゲット顧客を入力すると、AIが競合他社との差別化ポイント・市場でのポジショニング・参入障壁の分析を生成します。競合との比較表形式で出力されるため、投資家や金融機関への説明が簡単になります。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "農業・飲食・IT等の業種に対応していますか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "製造業・飲食業・小売業・IT・農業・建設業・医療福祉・サービス業など幅広い業種に対応しています。業種特有の規制・補助金・市場トレンドを踏まえた計画書を生成します。業種を選択するだけで業界に合った文章が自動調整されます。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "経営計画書のテンプレートをダウンロードできますか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "プレミアムプランでは日本政策金融公庫形式・補助金申請書形式・投資家向けピッチデック形式など複数のWordテンプレートをダウンロードできます。生成した計画書をそのままWordで編集・印刷することが可能です。"
+          }
+        },
       ],
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "AI経営計画書作成",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web Browser",
+      "url": SITE_URL,
+      "description": DESC,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "JPY",
+        "description": "無料お試し1回・プレミアム¥2,980/回〜"
+      }
     },
   ],
 };
@@ -173,6 +260,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </footer>
         <Analytics />
         <SpeedInsights />
+        {process.env.NEXT_PUBLIC_CLARITY_ID && process.env.NODE_ENV === 'production' && (
+          <Script
+            id="clarity-init"
+            strategy="afterInteractive"
+          >
+            {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${process.env.NEXT_PUBLIC_CLARITY_ID}");`}
+          </Script>
+        )}
+        <Script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID ?? 'ca-pub-XXXXXXXX'}`}
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+          id="adsense-init"
+        />
       </body>
     </html>
   );
