@@ -371,7 +371,7 @@ export default function ToolPage() {
               onClick={print}
               className="text-xs bg-emerald-800 hover:bg-emerald-700 text-emerald-200 px-3 py-1.5 rounded-lg transition flex items-center gap-1"
             >
-              📄 PDFで保存・印刷
+              PDF保存・印刷
             </button>
           )}
         </div>
@@ -482,7 +482,7 @@ export default function ToolPage() {
                   }}
                   className="text-xs bg-emerald-900/50 hover:bg-emerald-800/60 border border-emerald-700 text-emerald-400 px-3 py-1.5 rounded-lg transition flex items-center gap-1"
                 >
-                  📝 {form.industry}テンプレートを使う
+                  {form.industry}テンプレートを使う
                 </button>
               )}
             </div>
@@ -493,7 +493,7 @@ export default function ToolPage() {
               return (
                 <div className="bg-blue-950/60 border border-blue-700/60 rounded-xl p-4">
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="text-blue-300 text-sm font-bold">📊 {form.industry}の業界平均ベンチマーク</span>
+                    <span className="text-blue-300 text-sm font-bold">{form.industry}の業界平均ベンチマーク</span>
                     <span className="text-xs text-blue-400 bg-blue-900/40 px-2 py-0.5 rounded-full">中小企業白書2024版</span>
                   </div>
                   <div className="grid grid-cols-3 gap-3 mb-3">
@@ -512,7 +512,7 @@ export default function ToolPage() {
                   </div>
                   <p className="text-xs text-gray-400 mb-2">{bm.avgSales}</p>
                   <div className="bg-amber-950/40 border border-amber-700/40 rounded-lg p-2">
-                    <p className="text-xs text-amber-300">💡 {bm.tips}</p>
+                    <p className="text-xs text-amber-300">{bm.tips}</p>
                   </div>
                 </div>
               );
@@ -544,11 +544,11 @@ export default function ToolPage() {
                 <label className="block text-xs font-bold mb-1 text-gray-400">現在の課題・懸念事項</label>
                 <div className="flex flex-wrap gap-1.5 mb-2">
                   {[
-                    { label: "📉 売上低迷", value: "売上が前年比20%減少しており、新規顧客獲得が課題です" },
-                    { label: "👥 人材不足", value: "採用が追いつかず、既存スタッフの業務過多が深刻な問題です" },
-                    { label: "💰 資金繰り", value: "売掛金回収が遅く、月末の資金繰りに常に不安があります" },
-                    { label: "🏢 競合対応", value: "低価格競合の台頭で、価格競争に巻き込まれています" },
-                    { label: "📱 DX推進", value: "業務のデジタル化が遅れており、生産性向上が急務です" },
+                    { label: "売上低迷", value: "売上が前年比20%減少しており、新規顧客獲得が課題です" },
+                    { label: "人材不足", value: "採用が追いつかず、既存スタッフの業務過多が深刻な問題です" },
+                    { label: "資金繰り", value: "売掛金回収が遅く、月末の資金繰りに常に不安があります" },
+                    { label: "競合対応", value: "低価格競合の台頭で、価格競争に巻き込まれています" },
+                    { label: "DX推進", value: "業務のデジタル化が遅れており、生産性向上が急務です" },
                   ].map((preset) => (
                     <button
                       key={preset.label}
@@ -611,13 +611,13 @@ export default function ToolPage() {
 
             {/* 融資用途クイック選択 */}
             <div className="bg-gray-800/60 border border-gray-700 rounded-xl p-4">
-              <p className="text-xs font-bold text-gray-400 mb-3">📌 この計画書の主な用途（任意）</p>
+              <p className="text-xs font-bold text-gray-400 mb-3">この計画書の主な用途（任意）</p>
               <div className="grid grid-cols-2 gap-2">
                 {[
-                  { icon: "🏦", label: "銀行・日本公庫 融資申請", value: "日本政策金融公庫・銀行・信用金庫への融資申請" },
-                  { icon: "📋", label: "補助金申請（ものづくり等）", value: "ものづくり補助金・IT導入補助金・小規模事業者持続化補助金の申請" },
-                  { icon: "🏢", label: "社内共有・中期経営計画", value: "社内共有・中期経営計画・投資家向けピッチ資料" },
-                  { icon: "🚀", label: "スタートアップ・資金調達", value: "エンジェル投資家・VCへの事業計画・ピッチデッキ" },
+                  { label: "銀行・日本公庫 融資申請", value: "日本政策金融公庫・銀行・信用金庫への融資申請" },
+                  { label: "補助金申請（ものづくり等）", value: "ものづくり補助金・IT導入補助金・小規模事業者持続化補助金の申請" },
+                  { label: "社内共有・中期経営計画", value: "社内共有・中期経営計画・投資家向けピッチ資料" },
+                  { label: "スタートアップ・資金調達", value: "エンジェル投資家・VCへの事業計画・ピッチデッキ" },
                 ].map((opt) => (
                   <button
                     key={opt.value}
@@ -625,7 +625,6 @@ export default function ToolPage() {
                     onClick={() => set("overview", form.overview.trim() ? form.overview : opt.value)}
                     className="flex items-center gap-2 text-left bg-gray-700 hover:bg-emerald-900/50 border border-gray-600 hover:border-emerald-600 text-gray-300 hover:text-emerald-300 px-3 py-2 rounded-xl text-xs transition"
                   >
-                    <span className="text-base">{opt.icon}</span>
                     <span>{opt.label}</span>
                   </button>
                 ))}
@@ -664,8 +663,8 @@ export default function ToolPage() {
               <div className="bg-emerald-900/30 border border-emerald-700 rounded-xl p-4 text-center">
                 <p className="text-sm text-emerald-200 mb-3">無料回数を使い切りました。</p>
                 <div className="flex gap-3 justify-center">
-                  <button onClick={() => startCheckout("monthly")} className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-5 py-2 rounded-xl text-sm transition">¥1,980/月 使い放題</button>
-                  <button onClick={() => startCheckout("premium")} className="bg-gray-700 hover:bg-gray-600 text-white font-bold px-5 py-2 rounded-xl text-sm transition">¥3,980/月 プレミアム</button>
+                  <button onClick={() => startCheckout("monthly")} aria-label="スタンダードプランに登録する（¥1,980/月・使い放題）" className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-5 py-2 rounded-xl text-sm transition">¥1,980/月 使い放題</button>
+                  <button onClick={() => startCheckout("premium")} aria-label="プレミアムプランに登録する（¥3,980/月）" className="bg-gray-700 hover:bg-gray-600 text-white font-bold px-5 py-2 rounded-xl text-sm transition">¥3,980/月 プレミアム</button>
                 </div>
               </div>
             )}
@@ -821,7 +820,7 @@ export default function ToolPage() {
                   {/* スコアに基づくCTA */}
                   {calcChecklistScore(checklist) >= 80 && (
                     <div className="bg-emerald-900 border border-emerald-600 rounded-xl p-4 text-center">
-                      <p className="text-white font-bold text-sm mb-1">🎉 計画書の完成度が高い状態です！</p>
+                      <p className="text-white font-bold text-sm mb-1">計画書の完成度が高い状態です！</p>
                       <p className="text-emerald-300 text-xs mb-3">今すぐ印刷して金融機関への提出準備をしましょう</p>
                       <button onClick={print} aria-label="経営計画書を印刷・PDF保存して融資申請の準備をする" className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-6 py-2 rounded-xl text-sm transition">
                         印刷して申請準備 →
@@ -886,7 +885,7 @@ export default function ToolPage() {
                 const laPct = laMatch ? parseFloat(laMatch[1]) : 60;
                 return (
                   <div className="mb-6">
-                    <h3 className="text-sm font-bold text-emerald-400 mb-3">📊 {form.industry} 業種別ベンチマーク比較</h3>
+                    <h3 className="text-sm font-bold text-emerald-400 mb-3">{form.industry} 業種別ベンチマーク比較</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
                       {[
                         { label: "利益率（業界平均）", min: pmMin, max: pmMax, unit: "%", color: "#34d399", tip: "この業種の平均的な利益率です。あなたの計画が上回れば審査で有利。" },
@@ -906,7 +905,7 @@ export default function ToolPage() {
                       ))}
                     </div>
                     <div className="bg-amber-950/40 border border-amber-700/40 rounded-xl p-3 mb-4">
-                      <p className="text-xs text-amber-300">💡 融資審査のポイント: {bm.tips}</p>
+                      <p className="text-xs text-amber-300">融資審査のポイント: {bm.tips}</p>
                     </div>
                     <p className="text-xs text-gray-500 mb-4">参考: {bm.avgSales}（中小企業白書2024年版ベース）</p>
                   </div>
@@ -922,23 +921,23 @@ export default function ToolPage() {
               <>
               {/* 次のアクション3選 */}
               <div className="mt-6 bg-white border border-indigo-200 rounded-xl p-4">
-                <p className="text-sm font-bold text-indigo-800 mb-3">📋 次にやるべきこと3選</p>
+                <p className="text-sm font-bold text-indigo-800 mb-3">次にやるべきこと3選</p>
                 <ol className="space-y-2">
                   {[
-                    { icon: "🖨️", text: "この計画書を印刷して金融機関・投資家との面談に持参する" },
-                    { icon: "💰", text: "補助金AIで同じ内容を補助金申請書に転換する（上のボタン）" },
-                    { icon: "📅", text: "計画書の数値目標をカレンダーにマイルストーンとして登録する" },
-                  ].map((item, i) => (
+                    "この計画書を印刷して金融機関・投資家との面談に持参する",
+                    "補助金AIで同じ内容を補助金申請書に転換する（上のボタン）",
+                    "計画書の数値目標をカレンダーにマイルストーンとして登録する",
+                  ].map((text, i) => (
                     <li key={i} className="flex items-start gap-3 text-sm text-gray-700">
-                      <span className="text-lg leading-none">{item.icon}</span>
-                      <span>{i + 1}. {item.text}</span>
+                      <span className="font-bold text-indigo-600">{i + 1}.</span>
+                      <span>{text}</span>
                     </li>
                   ))}
                 </ol>
               </div>
               {/* 補助金AIへのクロスセル */}
               <div className="mt-8 p-5 bg-amber-50 border-2 border-amber-300 rounded-xl">
-                <p className="text-base font-bold text-amber-900 mb-1">💰 この経営計画書で補助金申請もしよう</p>
+                <p className="text-base font-bold text-amber-900 mb-1">この経営計画書で補助金申請もしよう</p>
                 <p className="text-xs text-amber-700 mb-3">ものづくり補助金・IT補助金・小規模事業者持続化補助金の申請書をAIが自動作成。AI採択可能性スコア付き。</p>
                 <a href="https://hojyokin-ai-delta.vercel.app" target="_blank" rel="noopener noreferrer"
                   className="inline-block bg-amber-500 hover:bg-amber-600 text-white text-sm font-bold px-5 py-2.5 rounded-lg transition-colors">
@@ -947,7 +946,7 @@ export default function ToolPage() {
               </div>
               {/* freee会計 A8.netアフィリエイト */}
               <div className="mt-6 bg-emerald-50 border border-emerald-200 rounded-xl p-4">
-                <p className="text-sm font-bold text-emerald-800 mb-3">📊 経営計画書の数字を管理するなら</p>
+                <p className="text-sm font-bold text-emerald-800 mb-3">経営計画書の数字を管理するなら</p>
                 <a
                   href="https://px.a8.net/svt/ejp?a8mat=4AZIOF+3LSINM+3SPO+9FDPYR"
                   target="_blank"
@@ -964,7 +963,7 @@ export default function ToolPage() {
               </div>
               {/* 電力・ガス コスト削減 A8.netアフィリエイト */}
               <div className="mt-6 bg-green-50 border border-green-200 rounded-xl p-4">
-                <p className="text-sm font-bold text-green-800 mb-3">⚡ 法人の電気・ガス料金を見直してコスト削減</p>
+                <p className="text-sm font-bold text-green-800 mb-3">法人の電気・ガス料金を見直してコスト削減</p>
                 <div className="space-y-2">
                   <a
                     href="https://px.a8.net/svt/ejp?a8mat=4AZIOF+8F1NOY+4P4C+HVNAP"
@@ -1004,7 +1003,7 @@ export default function ToolPage() {
       {showUpsellTimer && !isPremium && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4">
           <div className="backdrop-blur-md bg-white/90 border border-white/40 rounded-2xl p-6 max-w-sm w-full shadow-2xl relative">
-            <button onClick={() => { setShowUpsellTimer(false); if (upsellTimerRef.current) clearTimeout(upsellTimerRef.current); }} className="absolute top-3 right-3 text-gray-400 text-xl">✕</button>
+            <button onClick={() => { setShowUpsellTimer(false); if (upsellTimerRef.current) clearTimeout(upsellTimerRef.current); }} aria-label="アップセルモーダルを閉じる" className="absolute top-3 right-3 text-gray-400 text-xl">✕</button>
             <div className="flex justify-center mb-3"><svg viewBox="0 0 48 48" width="40" height="40" className="text-emerald-500" aria-hidden="true"><rect x="4" y="24" width="10" height="20" fill="currentColor"/><rect x="19" y="14" width="10" height="30" fill="currentColor"/><rect x="34" y="4" width="10" height="40" fill="currentColor"/></svg></div>
             <h2 className="text-lg font-bold mb-1 text-center text-gray-900">計画書をもっと活用しましょう</h2>
             <p className="text-sm text-gray-500 mb-2 text-center">月額¥1,980で無制限作成 + 補助金AIも利用可能</p>

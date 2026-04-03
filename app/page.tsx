@@ -1298,7 +1298,7 @@ export default function Home() {
  {showPayjp && (
  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
  <div className="backdrop-blur-md bg-white/[0.07] border border-white/15 rounded-2xl p-6 max-w-sm w-full shadow-xl relative">
- <button onClick={() => setShowPayjp(false)} className="absolute top-3 right-3 text-white/40 text-xl"><svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+ <button onClick={() => setShowPayjp(false)} aria-label="プレミアムプランモーダルを閉じる" className="absolute top-3 right-3 text-white/40 text-xl"><svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
  <div className="text-3xl mb-3 text-center"></div>
  <h2 className="text-lg font-bold mb-2 text-center">プレミアムプラン</h2>
  <p className="text-sm text-white/50 mb-4 text-center">{payjpPlan === "premium" ? "プレミアム — 経営計画書 無制限+高度分析" : "スタンダード — 経営計画書 無制限"}</p>
