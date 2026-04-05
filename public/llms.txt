@@ -1,22 +1,27 @@
-# AI経営計画書作成
+# AI経営計画書
+> AIが中小企業の経営計画書・事業計画書を自動生成するツール
 
-> 経営計画書をAIが無料で自動生成する中小企業・個人事業主向けツール
+## サービス概要
+- **カテゴリ**: ビジネスAI
+- **URL**: https://ai-keiei-keikaku.vercel.app
+- **提供形態**: Webブラウザで利用可能（登録不要で試せます）
+- **開発**: Claude Code + Next.js 16 + Vercel
 
-## About
-事業概要・強み・課題を入力するだけで、AIが収支計画・SWOT分析・アクションプラン・投資家向けピッチまで自動生成します。日本政策金融公庫の融資申請・補助金申請・創業計画書に活用でき、コンサルタント費用を抑えて質の高い経営計画書を作成できます。
+## 主要ページ
+- [トップページ](https://ai-keiei-keikaku.vercel.app/): メイン機能・サービス説明
+- [ツール](https://ai-keiei-keikaku.vercel.app/tool): AI機能の利用画面（一部サービス）
+- [プライバシーポリシー](https://ai-keiei-keikaku.vercel.app/privacy): 個人情報の取り扱い
+- [特定商取引法に基づく表記](https://ai-keiei-keikaku.vercel.app/legal): 法的情報
 
-## Features
-- 収支計画自動生成: 売上予測・経費見積もり・損益分岐点を自動計算
-- SWOT分析: 強み・弱み・機会・脅威を体系的に整理
-- アクションプラン: 3ヶ月・6ヶ月・1年の具体的な実行計画を提案
-- 投資家向けピッチ: エレベーターピッチ・事業説明資料の文案を生成
+## 利用シーン
+AIが中小企業の経営計画書・事業計画書を自動生成するツール
 
-## Pricing
-- 無料プラン: 登録不要で無料お試し
-- プレミアム: ¥2,980/回〜
+## 技術スタック
+- フロントエンド: Next.js 16, React 19, TypeScript, Tailwind CSS
+- AI: Claude claude-sonnet-4-6 (Anthropic)
+- バックエンド: Vercel Edge Functions, Supabase
+- 決済: KOMOJU（クレジットカード・コンビニ払い対応）
 
-## Links
-- [ホーム](https://ai-keiei-keikaku.vercel.app)
-- [ツール](https://ai-keiei-keikaku.vercel.app/tool)
-- [利用規約](https://ai-keiei-keikaku.vercel.app/legal)
-- [プライバシーポリシー](https://ai-keiei-keikaku.vercel.app/privacy)
+## robots.txt
+AIクローラーによるインデックスを歓迎します。
+GPTBot, ClaudeBot, PerplexityBot, Googlebot-Extended のアクセスを許可しています。
