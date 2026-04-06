@@ -91,9 +91,7 @@ export default function BusinessPage() {
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
           <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl relative">
-            <button onClick={() => setShowModal(false)} className="absolute top-3 right-3 text-gray-400 text-xl">
-              ✕
-            </button>
+            <button onClick={() => setShowModal(false)} className="absolute top-3 right-3 text-gray-400 text-xl" aria-label="閉じる"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
             <div className="text-base font-bold mb-3 text-center text-emerald-700">法人プラン</div>
             <h2 className="text-lg font-bold mb-1 text-center">ビジネスプランに申し込む</h2>
             <p className="text-sm text-gray-500 mb-6 text-center">経営計画書 生成無制限 + 優先サポート</p>
