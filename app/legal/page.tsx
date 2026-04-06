@@ -18,7 +18,7 @@ export default function LegalPage() {
   return (
     <main className="min-h-screen bg-gray-950 text-white">
       <nav className="bg-gray-900 border-b border-gray-800 px-6 py-4">
-        <Link href="/" className="font-bold text-emerald-400">📊 AI経営計画書作成</Link>
+        <Link href="/" className="font-bold text-emerald-400">AI経営計画書作成</Link>
       </nav>
       <div className="max-w-2xl mx-auto px-6 py-12">
         <h1 className="text-2xl font-bold mb-2">特定商取引法に基づく表記</h1>

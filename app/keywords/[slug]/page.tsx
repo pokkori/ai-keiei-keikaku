@@ -255,7 +255,15 @@ export default async function KeywordPage({
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           {/* Hero */}
           <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-            <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>📋</div>
+            <div style={{ marginBottom: "1rem", display: "flex", justifyContent: "center" }}>
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                <rect x="10" y="8" width="28" height="34" rx="3" stroke="#8b5cf6" strokeWidth="2.5" fill="none"/>
+                <rect x="18" y="4" width="12" height="8" rx="2" fill="#8b5cf6"/>
+                <line x1="16" y1="20" x2="32" y2="20" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round"/>
+                <line x1="16" y1="27" x2="32" y2="27" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round"/>
+                <line x1="16" y1="34" x2="26" y2="34" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </div>
             <h1 style={{ fontSize: "clamp(1.5rem, 4vw, 2.5rem)", fontWeight: "bold", marginBottom: "1rem", background: "linear-gradient(90deg, #8b5cf6, #06b6d4)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
               {data.h1}
             </h1>
