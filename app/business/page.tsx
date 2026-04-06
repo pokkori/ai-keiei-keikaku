@@ -269,9 +269,9 @@ export default function BusinessPage() {
                   ["月間生成件数", "従量制", "無制限"],
                   ["担当者共有", "1名", "チーム全員"],
                   ["業種別プリセット", "5種", "20種"],
-                  ["請求書払い", "—", "✓"],
-                  ["優先サポート", "—", "✓（24h以内）"],
-                  ["補助金様式対応", "—", "✓"],
+                  ["請求書払い", "—", "○"],
+                  ["優先サポート", "—", "○（24h以内）"],
+                  ["補助金様式対応", "—", "○"],
                 ].map(([label, ind, biz], i) => (
                   <tr key={i} className="hover:bg-gray-50 transition-colors">
                     <td className="px-5 py-4 font-medium text-gray-700">{label}</td>
