@@ -5,6 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import Script from "next/script";
 import FeedbackButton from "@/components/FeedbackButton";
 import CookieBanner from "@/components/CookieBanner";
+import OrbBackground from "@/components/OrbBackground";
 import "./globals.css";
 import { InstallPrompt } from "@/components/InstallPrompt";
 
@@ -254,6 +255,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className={`${notoSansJP.className} antialiased`}>
+        <OrbBackground theme="business" />
+        <div style={{ position: "relative", zIndex: 1 }}>
         {children}
         <InstallPrompt />
         <footer className="flex justify-center py-2">
@@ -278,6 +281,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           strategy="afterInteractive"
           id="adsense-init"
         />
+        </div>
       </body>
     </html>
   );
